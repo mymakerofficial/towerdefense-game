@@ -27,7 +27,7 @@ public class CharacterMovementController : MonoBehaviour
         // cant fly lol
         vector.y = 0;
         
-        transform.position += vector.normalized * speed;
+        transform.position += vector.normalized * speed * Time.deltaTime;
     }
 
     /// <summary>
