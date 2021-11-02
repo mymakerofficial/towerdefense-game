@@ -26,8 +26,6 @@ public class HealthController : MonoBehaviour
     {
         if (amount <= 0) throw new ArgumentOutOfRangeException();
         this.health -= amount;
-        
-        Debug.Log(amount);
 
         if (this.health <= 0) this.Die();
         

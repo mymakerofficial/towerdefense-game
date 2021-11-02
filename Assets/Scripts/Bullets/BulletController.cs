@@ -47,14 +47,15 @@ public class BulletController : MonoBehaviour
     {
         // dont do anything when not active
         if(!active) return;
+        
+        // calculate step distance with delta time
+        float stepDistance = BulletTravel.Velocity * Time.fixedDeltaTime;
 
-        if (BulletTravel.IsHitscan)
-        {
-            BulletTravel.Velocity = BulletTravel.MaxDistance;
-        }
+        // hitscan bullets travel entire distance in one frame
+        if (BulletTravel.IsHitscan) stepDistance = BulletTravel.MaxDistance;
         
         // raycast between current possition and next position
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward, BulletTravel.Velocity);
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward, stepDistance);
         
         
         // loop through all hits
@@ -83,10 +84,10 @@ public class BulletController : MonoBehaviour
         }
         
         // move to next step
-        transform.position += transform.forward * BulletTravel.Velocity;
+        transform.position += transform.forward * stepDistance;
         
         // update distance
-        distance += BulletTravel.Velocity;
+        distance += stepDistance;
 
         // if distance to far destroy
         if (distance >= BulletTravel.MaxDistance)
