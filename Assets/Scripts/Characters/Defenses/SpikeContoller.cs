@@ -18,7 +18,7 @@ public class SpikeContoller : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.GetComponent<CharacterController>()) collisions.Add(col.gameObject);
+        if(col.gameObject.GetComponent<HealthController>()) collisions.Add(col.gameObject);
     }
 
     void OnCollisionExit(Collision col)
@@ -32,12 +32,7 @@ public class SpikeContoller : MonoBehaviour
         {
             GameObject o = collisions[i];
             
-            float a = o.GetComponent<CharacterController>().RecieveDamage(DamageAmount);
-            if (a == 0)
-            {
-                collisions.Remove(o);
-                i++;
-            }
+            o.SendMessage("ApplyDamage",DamageAmount);
         };
     }
 }

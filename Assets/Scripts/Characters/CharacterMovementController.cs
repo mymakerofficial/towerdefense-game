@@ -10,7 +10,7 @@ public class CharacterMovementController : MonoBehaviour
     void Start()
     {
         // check if stuff is missing
-        if (!gameObject.GetComponent<CharacterController>()) throw new Exception("Missing CharacterController!");
+        if (!gameObject.GetComponent<HealthController>()) throw new Exception("Missing CharacterController!");
         if (!gameObject.GetComponent<Rigidbody>()) throw new Exception("A moving character needs a Rigidbody");
     }
 

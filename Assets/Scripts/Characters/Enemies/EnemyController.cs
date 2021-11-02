@@ -15,11 +15,11 @@ public class EnemyController : MonoBehaviour
         movementController = gameObject.GetComponent<CharacterMovementController>();
     }
     
-    void FixedUpdate()
+    void Update()
     {
         // calculate the vector3 direction towards the target
         Vector3 dif = (target.transform.position - transform.position);
         
-        movementController.Move(dif, 0.1f);
+        movementController.Move(dif, 1f);
     }
 }

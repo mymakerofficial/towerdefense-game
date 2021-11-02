@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class HealthController : MonoBehaviour
 {
     [SerializeField]
     private float health;
@@ -19,13 +19,15 @@ public class CharacterController : MonoBehaviour
     /// <summary>
     /// Deals damage to this character
     /// </summary>
-    /// <param name="amount">the amount of damage to deal</param>
+    /// <param name="amount">the amount of damage to apply</param>
     /// <returns>Character helth</returns>
     /// <exception cref="ArgumentOutOfRangeException">amount can <b>not</b> be 0 or less</exception>
-    public float RecieveDamage(float amount)
+    public float ApplyDamage(float amount)
     {
         if (amount <= 0) throw new ArgumentOutOfRangeException();
         this.health -= amount;
+        
+        Debug.Log(amount);
 
         if (this.health <= 0) this.Die();
         
