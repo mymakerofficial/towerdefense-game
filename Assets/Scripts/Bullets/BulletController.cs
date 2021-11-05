@@ -32,21 +32,21 @@ public class BulletController : MonoBehaviour
     [SerializeField] public TravelParameters BulletTravel;
     [SerializeField] public HitParameters BulletHit;
 
-    private bool active;
-    private Vector3 origin;
-    private float distance;
-    private int hitCount;
+    private bool _active;
+    private Vector3 _origin;
+    private float _distance;
+    private int _hitCount;
 
     public void Fire()
     {
-        origin = transform.position;
-        active = true;
+        _origin = transform.position;
+        _active = true;
     }
 
     private void FixedUpdate()
     {
         // dont do anything when not active
-        if(!active) return;
+        if(!_active) return;
         
         // calculate step distance with delta time
         float stepDistance = BulletTravel.Velocity * Time.fixedDeltaTime;
@@ -66,7 +66,7 @@ public class BulletController : MonoBehaviour
             {
                 if (!hit.collider.CompareTag(tag.Name)) continue;
 
-                hitCount++;
+                _hitCount++;
                 
                 if (tag.DealDamage)
                 {
@@ -74,7 +74,7 @@ public class BulletController : MonoBehaviour
                 }
 
                 // destroy bullet when hits solid object or to many objects have been hit
-                if (hitCount < BulletHit.MaxHits) continue; 
+                if (_hitCount < BulletHit.MaxHits) continue; 
                 if (!tag.Solid) continue;
 
                 transform.position = hit.point;
@@ -87,10 +87,10 @@ public class BulletController : MonoBehaviour
         transform.position += transform.forward * stepDistance;
         
         // update distance
-        distance += stepDistance;
+        _distance += stepDistance;
 
         // if distance to far destroy
-        if (distance >= BulletTravel.MaxDistance)
+        if (_distance >= BulletTravel.MaxDistance)
         {
             Disolve();
         }
