@@ -177,6 +177,52 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Editor"",
+            ""id"": ""880c3a8c-3e64-44e4-9044-e623ad643126"",
+            ""actions"": [
+                {
+                    ""name"": ""Next"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a0b1625-5928-4e55-a0f9-1314d6617020"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""623cb45a-6fa9-4b77-9991-3fea6f7a384a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""740fa5f9-e789-4b2e-8a6e-8eea9b0ac7e3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1fd74acf-f987-44ae-9b5b-5148c2b91025"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -186,6 +232,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Jeff_Movement = m_Jeff.FindAction("Movement", throwIfNotFound: true);
         m_Jeff_Rotation = m_Jeff.FindAction("Rotation", throwIfNotFound: true);
         m_Jeff_Shoot = m_Jeff.FindAction("Shoot", throwIfNotFound: true);
+        // Editor
+        m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
+        m_Editor_Next = m_Editor.FindAction("Next", throwIfNotFound: true);
+        m_Editor_Back = m_Editor.FindAction("Back", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -280,10 +330,56 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public JeffActions @Jeff => new JeffActions(this);
+
+    // Editor
+    private readonly InputActionMap m_Editor;
+    private IEditorActions m_EditorActionsCallbackInterface;
+    private readonly InputAction m_Editor_Next;
+    private readonly InputAction m_Editor_Back;
+    public struct EditorActions
+    {
+        private @InputMaster m_Wrapper;
+        public EditorActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Next => m_Wrapper.m_Editor_Next;
+        public InputAction @Back => m_Wrapper.m_Editor_Back;
+        public InputActionMap Get() { return m_Wrapper.m_Editor; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EditorActions set) { return set.Get(); }
+        public void SetCallbacks(IEditorActions instance)
+        {
+            if (m_Wrapper.m_EditorActionsCallbackInterface != null)
+            {
+                @Next.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnNext;
+                @Next.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnNext;
+                @Next.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnNext;
+                @Back.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnBack;
+                @Back.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnBack;
+                @Back.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnBack;
+            }
+            m_Wrapper.m_EditorActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Next.started += instance.OnNext;
+                @Next.performed += instance.OnNext;
+                @Next.canceled += instance.OnNext;
+                @Back.started += instance.OnBack;
+                @Back.performed += instance.OnBack;
+                @Back.canceled += instance.OnBack;
+            }
+        }
+    }
+    public EditorActions @Editor => new EditorActions(this);
     public interface IJeffActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+    }
+    public interface IEditorActions
+    {
+        void OnNext(InputAction.CallbackContext context);
+        void OnBack(InputAction.CallbackContext context);
     }
 }
