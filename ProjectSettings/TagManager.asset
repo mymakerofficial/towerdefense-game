@@ -5,13 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - Defence
   - Tower
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Terrain
   - Water
   - UI
   - Character

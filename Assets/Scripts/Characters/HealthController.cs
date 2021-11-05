@@ -6,14 +6,13 @@ using UnityEngine;
 
 public class HealthController : MonoBehaviour
 {
-    [SerializeField]
-    private float health;
+    private float _health;
     [SerializeField]
     public float MaxHealth;
     
     void Start()
     {
-        health = MaxHealth;
+        _health = MaxHealth;
     }
 
     /// <summary>
@@ -25,11 +24,11 @@ public class HealthController : MonoBehaviour
     public float ApplyDamage(float amount)
     {
         if (amount <= 0) throw new ArgumentOutOfRangeException();
-        this.health -= amount;
+        _health -= amount;
 
-        if (this.health <= 0) this.Die();
+        if (_health <= 0) this.Die();
         
-        return Math.Max(this.health, 0);
+        return Math.Max(_health, 0);
     }
     
     /// <summary>
@@ -41,11 +40,11 @@ public class HealthController : MonoBehaviour
     public float Heal(float amount)
     {
         if (amount <= 0) throw new ArgumentOutOfRangeException();
-        this.health += amount;
+        _health += amount;
 
-        if (this.health > this.MaxHealth) this.health = this.MaxHealth;
+        if (_health > MaxHealth) _health = MaxHealth;
 
-        return this.health;
+        return _health;
     }
 
     /// <summary>
@@ -56,10 +55,10 @@ public class HealthController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public float Health => this.health;
+    public float Health => _health;
 
     /// <summary>
     /// returns a value between 0 and 1
     /// </summary>
-    public float HealthPercent => this.health / this.MaxHealth;
+    public float HealthPercent => _health / MaxHealth;
 }
