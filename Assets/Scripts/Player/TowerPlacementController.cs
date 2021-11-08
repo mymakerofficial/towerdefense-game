@@ -47,17 +47,12 @@ public class TowerPlacementController : MonoBehaviour
         
         // create circle
         _circle = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
+        
+        Reset();
     }
     
     private void OnEnable() => _controls.Enable();
     private void OnDestroy() => _controls.Disable();
-    
-    
-    void Start()
-    {
-        // THIS IS JUST FOR TESTING!!!
-        StartPlacement(Resources.Load<GameObject>("Prefabs/Towers/Spike Blockade/Spike Blockade 1"));
-    }
 
     /// <summary>
     /// This starts the placment sequence
@@ -69,7 +64,8 @@ public class TowerPlacementController : MonoBehaviour
 
         _placement.Object = obj;
 
-        float scale = _placement.Object.GetComponent<TowerDescriptor>().PlacementRadius * 100;
+        float scale = 100;
+        if (_placement.Object.GetComponent<TowerDescriptor>()) scale = _placement.Object.GetComponent<TowerDescriptor>().PlacementRadius * 100;
         _circle.transform.localScale = new Vector3(scale, scale, scale);
         _circle.SetActive(true);
         
@@ -134,7 +130,7 @@ public class TowerPlacementController : MonoBehaviour
     /// <summary>
     /// Resets all the things back to null
     /// </summary>
-    private void Reset()
+    public void Reset()
     {
         // delete dummy if exists
         if(_dummy) Destroy(_dummy);
@@ -231,7 +227,7 @@ public class TowerPlacementController : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, Single.MaxValue, LayerMask.GetMask("Terrain")))
         {
             return hit.point;
         }
