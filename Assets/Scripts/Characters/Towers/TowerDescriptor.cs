@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class TowerDescriptor : MonoBehaviour
 {
-    public string Name;
-    public int Level;
-    public float PlacementRadius;
+    public string name;
+    public string description;
+    public int level;
+    public float placementRadius;
+    public GameObject nextUpgrade;
+    public string levelDescription;
+    public int cost;
+    public int levelUpgradeCost;
 }

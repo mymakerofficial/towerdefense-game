@@ -65,7 +65,7 @@ public class TowerPlacementController : MonoBehaviour
         _placement.Object = obj;
 
         float scale = 100;
-        if (_placement.Object.GetComponent<TowerDescriptor>()) scale = _placement.Object.GetComponent<TowerDescriptor>().PlacementRadius * 100;
+        if (_placement.Object.GetComponent<TowerDescriptor>()) scale = _placement.Object.GetComponent<TowerDescriptor>().placementRadius * 100;
         _circle.transform.localScale = new Vector3(scale, scale, scale);
         _circle.SetActive(true);
         
@@ -178,7 +178,7 @@ public class TowerPlacementController : MonoBehaviour
         {
             float distance =  Vector3.Distance(tower.transform.position, _placement.Position);
             // if distance is smaller then combined radii 
-            if (distance < tower.GetComponent<TowerDescriptor>().PlacementRadius + _placement.Object.GetComponent<TowerDescriptor>().PlacementRadius)
+            if (distance < tower.GetComponent<TowerDescriptor>().placementRadius + _placement.Object.GetComponent<TowerDescriptor>().placementRadius)
             {
                 _placement.Available = false;
                 break; // no need to check others
@@ -226,7 +226,7 @@ public class TowerPlacementController : MonoBehaviour
     private Vector3 RaycastCursorPosition()
     {
         RaycastHit hit;
-        Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Ray ray = _camera.ScreenPointToRay(_controls.Editor.Point.ReadValue<Vector2>());//Mouse.current.position.ReadValue()
         if (Physics.Raycast(ray, out hit, Single.MaxValue, LayerMask.GetMask("Terrain")))
         {
             return hit.point;
