@@ -3,55 +3,120 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public struct MuzzleOffset
-{
-    public Vector3 Position;
-    public Vector3 Rotation;
-}
 
 public class TurretController : MonoBehaviour
 {
-    public float Range;
+    private float _cooldown;
+    private float _rotation;
+    private GameObject _target;
+
+    public GameObject head;
+    public float range;
+    public bool autonomous;
+    public bool active;
+
+    public float Cooldown
+    {
+        get => _cooldown;
+        private set => _cooldown = Math.Min(Math.Max(value, 0), 1);
+    }
     
-    public float Damage;
-    
-    private float cooldown;
-
-    public MuzzleOffset MuzzleOffset;
-
-    public GameObject Head;
-
-    public GameObject Target;
+    public float Rotation
+    {
+        get => _rotation;
+        set => _rotation = value;
+    }
 
     void Start()
     {
-        
+        autonomous = true;
+        _cooldown = 1;
+        active = true;
     }
 
     public void Fire()
     {
-        GameObject bullet = Instantiate(Resources.Load("Prefabs/Bullets/TurretBullet", typeof(GameObject)) as GameObject, Head.transform.position + MuzzleOffset.Position, Quaternion.Euler(Head.transform.localRotation.eulerAngles + MuzzleOffset.Rotation));
+        if (!active) return;
+        if (Cooldown == 0) return;
+        
+        GameObject bullet = Instantiate(
+            Resources.Load<GameObject>("Prefabs/Bullets/Bullet"), 
+            transform.position + new Vector3(0, 1.4f, 0), 
+            Quaternion.Euler(0, _rotation + 90, 0), 
+            GameObject.Find("Bullets").transform
+        );
         bullet.SendMessage("Fire");
 
-        this.cooldown -= 0.5f;
+        Cooldown -= 0.03f;
     }
     
     public void FixedUpdate()
     {
-        Head.transform.LookAt(Target.transform);
-
-        if(cooldown < 1) cooldown += 0.1f;
+        if (!active) return;
         
-        if(cooldown > 0.9f) this.Fire();
+        if (autonomous)
+        {
+            AutonomousAim();
+
+            if (Cooldown > 0.9f && _target) Fire();
+        }
+
+        Cooldown += 0.1f * Time.fixedDeltaTime;
+
+        // TODO Figgure out a way to have this not have hardcoded values
+        head.transform.rotation = Quaternion.Euler(-90, 0, _rotation + 180);
     }
-    
-    void OnDrawGizmosSelected()
+
+    /// <summary>
+    /// Rotate to closest enemy
+    /// </summary>
+    public void AutonomousAim()
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, Range);
-        Gizmos.DrawLine(new Vector3(transform.position.x - Range, transform.position.y, transform.position.z), new Vector3(transform.position.x + Range, transform.position.y, transform.position.z));
-        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y - Range, transform.position.z), new Vector3(transform.position.x, transform.position.y + Range, transform.position.z));
-        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y, transform.position.z - Range), new Vector3(transform.position.x, transform.position.y, transform.position.z + Range));
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        GameObject closest = null;
+        float closestDistance = Single.MaxValue;
+        foreach (var enemy in enemies)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+
+            if (distance > closestDistance) continue; // skip if enemy is not closest
+            if (distance > range) continue; // skip if enemy is outside of range
+
+            closest = enemy;
+            closestDistance = distance;
+        }
+        
+        _target = closest;
+        
+        if(_target) RotateTowards(_target.transform.position);
+    }
+
+    /// <summary>
+    /// Rotate towars a point
+    /// </summary>
+    public void RotateTowards(Vector3 point)
+    {
+        _rotation = AngleTowardsPoint2D(head.transform.position, point);
+    }
+
+    /// <summary>
+    /// Get the angle between two points
+    /// </summary>
+    private float AngleTowardsPoint2D(Vector3 p1, Vector3 p2)
+    {
+        // calculate direction vector
+        Vector2 dir2 = (new Vector2(p1.x, p1.z) -
+                        new Vector2(p2.x, p2.z)).normalized;
+
+        // calculate angle from direction vector
+        float angle = (float)(Math.Atan2(dir2.y, -dir2.x) * (180 / Math.PI));
+
+        return angle;
+    }
+
+    public void SetActive(bool value)
+    {
+        active = value;
     }
 }

@@ -38,7 +38,7 @@ public class JeffContoller : MonoBehaviour
 
     private void Shoot()
     {
-        GameObject bullet = Instantiate(Resources.Load("Prefabs/Bullets/Bullet", typeof(GameObject)) as GameObject, transform.position + new Vector3(0, 0, 1), transform.rotation);
+        GameObject bullet = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/Bullet"), transform.position + new Vector3(0, 0, 1), transform.rotation);
         bullet.SendMessage("Fire");
         
     }

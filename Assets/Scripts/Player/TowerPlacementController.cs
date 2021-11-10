@@ -33,6 +33,8 @@ public class TowerPlacementController : MonoBehaviour
     private GameObject _circle;
     private PlacementMode _mode = PlacementMode.Idle;
 
+    public GameObject parrent;
+
     /// <summary>
     /// Initialize the basics
     /// </summary>
@@ -79,7 +81,7 @@ public class TowerPlacementController : MonoBehaviour
     private void CreateDummy()
     {
         // create dummy object
-        _dummy = Instantiate(_placement.Object);
+        _dummy = Instantiate(_placement.Object, transform);
 
         _dummy.tag = "Untagged"; // dummy can not have tower tag
         
@@ -121,7 +123,7 @@ public class TowerPlacementController : MonoBehaviour
     private void Place()
     {
         // Create real object
-        Instantiate(_placement.Object, _placement.Position, _placement.Rotation);
+        Instantiate(_placement.Object, _placement.Position, _placement.Rotation, parrent.transform);
         
         // Place next one
         StartPlacement(_placement.Object);

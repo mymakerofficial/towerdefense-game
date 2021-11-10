@@ -24,14 +24,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1422610889946738639}
-  m_LocalRotation: {x: -0, y: -0.97555774, z: -0, w: 0.21974328}
-  m_LocalPosition: {x: -1.064, y: 1.27, z: -9.955}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1422610890872642320}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -154.612, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1422610889946738624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46,14 +46,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletTravel:
     MaxDistance: 100
-    Velocity: 50
+    Velocity: 25
     IsHitscan: 0
   BulletHit:
     Tags:
     - Name: Enemy
       Solid: 0
       DealDamage: 1
-    MaxHits: 3
+    MaxHits: 1
     ContactDamage: 5
 --- !u!1 &1422610890872642335
 GameObject:

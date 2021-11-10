@@ -74,8 +74,7 @@ public class BulletController : MonoBehaviour
                 }
 
                 // destroy bullet when hits solid object or to many objects have been hit
-                if (_hitCount < BulletHit.MaxHits) continue; 
-                if (!tag.Solid) continue;
+                if (_hitCount < BulletHit.MaxHits && !tag.Solid) continue;
 
                 transform.position = hit.point;
                 Disolve();
