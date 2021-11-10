@@ -18,7 +18,7 @@ public class TurretController : MonoBehaviour
     public float Cooldown
     {
         get => _cooldown;
-        private set => _cooldown = Math.Min(Math.Max(value, 0), 1);
+        private set => _cooldown = Mathf.Clamp(value, 0, 1);
     }
     
     public float Rotation
