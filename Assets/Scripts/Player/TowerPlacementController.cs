@@ -122,9 +122,16 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void Place()
     {
-        // Create real object
-        Instantiate(_placement.Object, _placement.Position, _placement.Rotation, parrent.transform);
-        
+        long requiredCredits = _placement.Object.GetComponent<TowerDescriptor>().cost;
+
+        if (GameObject.Find("GameDirector").GetComponent<CreditController>().CurrentCredits >= requiredCredits)
+        {
+            GameObject.Find("GameDirector").SendMessage("WithdrawCredit", requiredCredits);
+            
+            // Create real object
+            Instantiate(_placement.Object, _placement.Position, _placement.Rotation, parrent.transform);
+        }
+
         // Place next one
         StartPlacement(_placement.Object);
     }
