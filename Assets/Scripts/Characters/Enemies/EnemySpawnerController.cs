@@ -26,7 +26,7 @@ public class EnemySpawnerController : MonoBehaviour
     {
         if (Cooldown > 0.9f) SpawnEnemy();
         
-        Cooldown += 0.5f * Time.fixedDeltaTime;
+        Cooldown += 0.7f * Time.fixedDeltaTime;
     }
 
     public void SpawnEnemy()

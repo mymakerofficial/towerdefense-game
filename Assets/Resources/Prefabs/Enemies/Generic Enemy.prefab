@@ -166,6 +166,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb9e52f5e75985340bdb910455433d86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  behaviours:
+  - Name: Blockade
+    MinDistance: 4
+    AttackWhenInRang: 1
+    AttackWhenDamaged: 1
+    MoveTowardsWhenInRange: 0
+    MoveTowardsWhenDamaged: 0
+  - Name: Turret
+    MinDistance: 10
+    AttackWhenInRang: 1
+    AttackWhenDamaged: 1
+    MoveTowardsWhenInRange: 0
+    MoveTowardsWhenDamaged: 0
 --- !u!114 &2577514617457882207
 MonoBehaviour:
   m_ObjectHideFlags: 0

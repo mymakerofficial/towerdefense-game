@@ -66,7 +66,7 @@ MonoBehaviour:
   placementRadius: 1.12
   nextUpgrade: {fileID: 4152713646383364980, guid: 64d77eb15ce49294188e4626f0d975cf, type: 3}
   levelDescription: 
-  cost: 100
+  cost: 10
   levelUpgradeCost: 0
 --- !u!65 &6930934805300468472
 BoxCollider:
@@ -91,7 +91,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.875, y: 0.65, z: 0.125}
+  m_Extents: {x: 1.27, y: 0.65, z: 0.9}
   m_MoveThreshold: 0.0001
   m_Carve: 1
   m_CarveOnlyStationary: 1

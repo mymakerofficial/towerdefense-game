@@ -1842,7 +1842,7 @@ GameObject:
   - component: {fileID: 1793292036}
   m_Layer: 0
   m_Name: Stronghold
-  m_TagString: Untagged
+  m_TagString: Stronghold
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
