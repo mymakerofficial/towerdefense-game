@@ -20,15 +20,24 @@ public struct EnemyBehaviour
 public class GenericEnemyController : MonoBehaviour
 {
     public EnemyBehaviour behaviour;
+    public GameObject bulletType;
 
     private GameObject _activeMovementTarget;
     private GameObject _activeAttackTarget;
     private NavMeshAgent _agent;
+    private float _cooldown;
 
     private static GameObject _stronghold;
     
+    public float Cooldown
+    {
+        get => _cooldown;
+        set => _cooldown = Mathf.Clamp(value, 0, 1);
+    }
+    
     void Start()
     {
+        _cooldown = 1;
         _stronghold = GameObject.FindGameObjectsWithTag("Stronghold")[0];
         _agent = GetComponent<NavMeshAgent>();
         InvokeRepeating("UpdateTarget", 0, 1);
@@ -81,14 +90,48 @@ public class GenericEnemyController : MonoBehaviour
     private void FixedUpdate()
     {
         _agent.destination = _activeMovementTarget.transform.position;
+
+        
+        // this is not final by any means
+        if (_activeAttackTarget != null && Cooldown > 0.9f )
+        {
+            float angle = AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
+            GameObject bullet = Instantiate(
+                Resources.Load<GameObject>("Prefabs/Bullets/GenericEnemyBullet"), 
+                transform.position + new Vector3(0, 1.4f, 0), 
+                Quaternion.Euler(0, angle + 90, 0), 
+                GameObject.Find("Bullets").transform
+            );
+            bullet.SendMessage("Fire");
+            Cooldown -= 0.05f;
+        }
+        
+        Cooldown += 0.1f * Time.fixedDeltaTime;
+        
+        Debug.Log(Cooldown);
     }
     
-    void OnDrawGizmosSelected()
+    /// <summary>
+    /// Get the angle between two points
+    /// </summary>
+    private float AngleTowardsPoint2D(Vector3 p1, Vector3 p2) // TODO This method is duplicated and needs to be moved into sepperate script
+    {
+        // calculate direction vector
+        Vector2 dir2 = (new Vector2(p1.x, p1.z) -
+                        new Vector2(p2.x, p2.z)).normalized;
+
+        // calculate angle from direction vector
+        float angle = (float)(Math.Atan2(dir2.y, -dir2.x) * (180 / Math.PI));
+
+        return angle;
+    }
+    
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(_activeMovementTarget.transform.position, 0.5f);
+        if(_activeMovementTarget != null) Gizmos.DrawSphere(_activeMovementTarget.transform.position, 0.5f);
         
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(_activeAttackTarget.transform.position, 0.5f);
+        if(_activeAttackTarget != null) Gizmos.DrawSphere(_activeAttackTarget.transform.position, 0.5f);
     }
 }
