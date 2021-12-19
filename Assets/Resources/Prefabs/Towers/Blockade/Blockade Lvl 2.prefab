@@ -67,7 +67,7 @@ MonoBehaviour:
   nextUpgrade: {fileID: 0}
   levelDescription: Now with spikes!
   cost: 0
-  levelUpgradeCost: 10
+  levelUpgradeCost: 30
 --- !u!65 &-4641902990795244941
 BoxCollider:
   m_ObjectHideFlags: 0

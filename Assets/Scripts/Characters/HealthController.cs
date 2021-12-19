@@ -10,9 +10,17 @@ public class HealthController : MonoBehaviour
     [SerializeField]
     public float MaxHealth;
     
+    private int _fullHealthCredits;
+    
     void Start()
     {
-        _health = MaxHealth;
+        Health = MaxHealth;
+
+        var enemyDescriptor = GetComponent<EnemyDescriptor>();
+        if (enemyDescriptor)
+        {
+            _fullHealthCredits = enemyDescriptor.fullHealthCredits;
+        }
     }
 
     /// <summary>
@@ -24,11 +32,15 @@ public class HealthController : MonoBehaviour
     public float ApplyDamage(float amount)
     {
         if (amount <= 0) throw new ArgumentOutOfRangeException();
-        _health -= amount;
+        Health -= amount;
 
-        if (_health <= 0) this.Die();
+        // calculate credits to add to balance from damage
+        float creditDropAmount = _fullHealthCredits * (amount / MaxHealth);
+        GameObject.Find("GameDirector").SendMessage("DepositCredit", (long)creditDropAmount);
+
+        if (Health == 0) Die();
         
-        return Math.Max(_health, 0);
+        return Health;
     }
     
     /// <summary>
@@ -40,11 +52,9 @@ public class HealthController : MonoBehaviour
     public float Heal(float amount)
     {
         if (amount <= 0) throw new ArgumentOutOfRangeException();
-        _health += amount;
+        Health += amount;
 
-        if (_health > MaxHealth) _health = MaxHealth;
-
-        return _health;
+        return Health;
     }
 
     /// <summary>
@@ -55,10 +65,14 @@ public class HealthController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public float Health => _health;
+    public float Health
+    {
+        get => _health;
+        private set => _health = Mathf.Clamp(value, 0, MaxHealth);
+    }
 
     /// <summary>
     /// returns a value between 0 and 1
     /// </summary>
-    public float HealthPercent => _health / MaxHealth;
+    public float HealthPercent => Health / MaxHealth;
 }

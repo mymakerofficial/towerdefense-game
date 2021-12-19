@@ -14,13 +14,13 @@ public struct TravelParameters
 [Serializable]
 public struct HitParameters
 {
-    public List<Tag> Tags;
+    public List<BulletTargetTag> Tags;
     public int MaxHits; // amount of hits before bullet is destroyed
     public float ContactDamage; // the amount of damage to deal to the hit object
 }
 
 [Serializable]
-public struct Tag
+public struct BulletTargetTag
 {
     public string Name; // tag
     public bool Solid; // will instantly destroy the bullet

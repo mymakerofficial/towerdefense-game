@@ -91,6 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2577514617457882194}
   - component: {fileID: 2577514617457882193}
+  - component: {fileID: 1098374446360030090}
   - component: {fileID: 2577514617457882192}
   - component: {fileID: 2577514617457882207}
   - component: {fileID: 4927150603594342777}
@@ -138,6 +139,21 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1098374446360030090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2577514617457882195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e15cd8cca087ea64fbb7f150bbcc7df3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: generic
+  description: generic
+  fullHealthCredits: 8
 --- !u!114 &2577514617457882192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +166,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb9e52f5e75985340bdb910455433d86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  behaviours:
+  - Name: Blockade
+    MinDistance: 4
+    AttackWhenInRang: 1
+    AttackWhenDamaged: 1
+    MoveTowardsWhenInRange: 0
+    MoveTowardsWhenDamaged: 0
+  - Name: Turret
+    MinDistance: 10
+    AttackWhenInRang: 1
+    AttackWhenDamaged: 1
+    MoveTowardsWhenInRange: 0
+    MoveTowardsWhenDamaged: 0
 --- !u!114 &2577514617457882207
 MonoBehaviour:
   m_ObjectHideFlags: 0

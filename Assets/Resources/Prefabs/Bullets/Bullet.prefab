@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletTravel:
     MaxDistance: 100
-    Velocity: 25
+    Velocity: 50
     IsHitscan: 0
   BulletHit:
     Tags:

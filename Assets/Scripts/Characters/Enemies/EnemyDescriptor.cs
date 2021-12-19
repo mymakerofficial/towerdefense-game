@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class EnemyDescriptor : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public string name;
+    public string description;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int fullHealthCredits;
 }
