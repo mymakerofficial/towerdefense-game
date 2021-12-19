@@ -90,6 +90,7 @@ public class GenericEnemyController : MonoBehaviour
     private void FixedUpdate()
     {
         _agent.destination = _activeMovementTarget.transform.position;
+        
 
         
         // this is not final by any means
@@ -129,9 +130,19 @@ public class GenericEnemyController : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        if(_activeMovementTarget != null) Gizmos.DrawSphere(_activeMovementTarget.transform.position, 0.5f);
+        if(_activeMovementTarget != null) Gizmos.DrawSphere(_activeMovementTarget.transform.position, 0.2f);
         
         Gizmos.color = Color.red;
-        if(_activeAttackTarget != null) Gizmos.DrawSphere(_activeAttackTarget.transform.position, 0.5f);
+        Gizmos.DrawLine(transform.position, _activeAttackTarget.transform.position);
+        if(_activeAttackTarget != null) Gizmos.DrawSphere(_activeAttackTarget.transform.position, 0.2f);
+
+        Gizmos.color = Color.green;
+        for (int i = 0; i < _agent.path.corners.Length; i++)
+        {
+            Vector3 current = _agent.path.corners[i];
+            Vector3 last = i == 0 ? transform.position : _agent.path.corners[i - 1];
+            
+            Gizmos.DrawLine(last, current);
+        }
     }
 }

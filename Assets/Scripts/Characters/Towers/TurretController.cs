@@ -119,4 +119,14 @@ public class TurretController : MonoBehaviour
     {
         active = value;
     }
+    
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        if (_target != null)
+        {
+            Gizmos.DrawLine(transform.position, _target.transform.position);
+            Gizmos.DrawSphere(_target.transform.position, 0.2f);
+        }
+    }
 }
