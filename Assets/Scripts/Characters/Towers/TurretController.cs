@@ -9,6 +9,7 @@ public class TurretController : MonoBehaviour
     private float _cooldown;
     private float _rotation;
     private GameObject _target;
+    private Vector3 _lastTargetPos;
 
     public GameObject head;
     public float range;
@@ -73,7 +74,7 @@ public class TurretController : MonoBehaviour
     public void AutonomousAim()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
+        
         GameObject closest = null;
         float closestDistance = Single.MaxValue;
         foreach (var enemy in enemies)
@@ -86,10 +87,33 @@ public class TurretController : MonoBehaviour
             closest = enemy;
             closestDistance = distance;
         }
-        
+
+        var item = Resources.Load<GameObject>("Prefabs/Bullets/Bullet").GetComponent<BulletController>().BulletTravel
+            .Velocity;
         _target = closest;
+        if (_lastTargetPos==default)
+        {
+            this._lastTargetPos = _target.transform.position;
+            if (_target)
+            {
+                RotateTowards( this._lastTargetPos);
+            }
+            return;
+        }
+
+        float posX = (_target.transform.position.x - _lastTargetPos.x);
+        float posY = (_target.transform.position.y - _lastTargetPos.y);
+        float posZ = (_target.transform.position.z - _lastTargetPos.z);
         
-        if(_target) RotateTowards(_target.transform.position);
+        //vector describe the additional vector in time
+        var calcPos = (new Vector3(posX, posY, posZ));
+        if (_target)
+        {
+            
+            RotateTowards(calcPos+_target.transform.position);
+        }
+        this._lastTargetPos = _target.transform.position;
+
     }
 
     /// <summary>
