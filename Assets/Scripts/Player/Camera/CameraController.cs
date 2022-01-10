@@ -16,18 +16,33 @@ public class CameraController : MonoBehaviour
     private Vector2 _mouseMoveStartPosition;
 
     public float startZoom;
+    [Header("Far")]
     public float boomFar;
     public float dollyFar;
     public float tiltFar;
+    [Header("Near")]
     public float boomNear;
     public float dollyNear;
     public float tiltNear;
+    [Header("Behaviour")]
     public AnimationCurve zoomCurve;
     public float movementEasing;
     public float movementSpeed;
     public float scrollSpeed;
     public float mouseMovementSpeed;
 
+    /// <summary>
+    /// Is the camera beeing moved with mouse
+    /// </summary>
+    public bool MouseMoveActive => _mouseMove;
+    /// <summary>
+    /// Start position for mouse movement
+    /// </summary>
+    public Vector2 MouseMoveStartPosition => _mouseMoveStartPosition;
+    /// <summary>
+    /// Actuall zoom of the camera
+    /// </summary>
+    public float Zoom => zoom;
 
     private void Awake()
     {
@@ -55,14 +70,23 @@ public class CameraController : MonoBehaviour
     private void OnEnable() => _controls.Enable();
     private void OnDestroy() => _controls.Disable();
     
+    /// <summary>
+    /// Zoom value before curve 
+    /// </summary>
     private float absoluteZoom
     {
         get => _absoluteZoom;
         set => _absoluteZoom = Mathf.Clamp(value, 0, 1);
     }
 
+    /// <summary>
+    /// Actual zoom value after curve
+    /// </summary>
     private float zoom => zoomCurve.Evaluate(absoluteZoom);
 
+    /// <summary>
+    /// Calculated position of camera
+    /// </summary>
     private Vector3 positionCurrent
     {
         get
@@ -73,6 +97,9 @@ public class CameraController : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Calculated rotation of camera
+    /// </summary>
     private Vector3 rotationCurrent
     {
         get
@@ -84,6 +111,7 @@ public class CameraController : MonoBehaviour
 
     void Scroll(InputAction.CallbackContext ctx)
     {
+        // increase scroll velocity in direction of scroll
         _scrollVel += -Mathf.Clamp(ctx.ReadValue<Vector2>().y, -1, 1) * scrollSpeed;
     }
     
@@ -98,13 +126,17 @@ public class CameraController : MonoBehaviour
         // movement with everything that is not the mouse
         _position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
 
+        // smooth translation for position
         transform.position += (positionCurrent - transform.position) * movementEasing;
 
+        // smooth translation for rotation
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles +
                                               (rotationCurrent - transform.rotation.eulerAngles) * movementEasing);
 
+        // change absolute zoom
         absoluteZoom += _scrollVel * (Time.fixedDeltaTime / 0.016f);
 
+        // move scroll velocity to 0
         _scrollVel -= _scrollVel / 10 * (Time.fixedDeltaTime / 0.016f);
     }
 }
