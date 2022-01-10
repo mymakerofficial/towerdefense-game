@@ -820,6 +820,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Button"",
+                    ""id"": ""bed6d511-de1f-4bf0-ac74-8f54df9c979d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MouseMoveButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""4e9a38cb-5dbf-4160-bb70-b63643ef3ed7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -871,6 +887,50 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""name"": ""right"",
                     ""id"": ""98ff77bd-3849-4d75-9fc1-4897efad65c3"",
                     ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""652b6adb-14c4-4ca4-af6f-3dcfb38171f0"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ac16049d-3d81-4b0c-988a-e3de2e6104eb"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""86a19d7d-af13-4fe0-b43e-e6fb8c2429cf"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""2d2b9535-7802-4e1f-989e-325019c68a42"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -934,61 +994,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Keyboard 2"",
-                    ""id"": ""50f4fb5b-bb4f-4ce9-898a-3f2b4dba805c"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""652b6adb-14c4-4ca4-af6f-3dcfb38171f0"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""ac16049d-3d81-4b0c-988a-e3de2e6104eb"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""86a19d7d-af13-4fe0-b43e-e6fb8c2429cf"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""2d2b9535-7802-4e1f-989e-325019c68a42"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""c3f66ff1-4697-424a-bdc2-6825598c82ce"",
                     ""path"": ""<Mouse>/scroll"",
@@ -1007,6 +1012,39 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0551ff28-b07a-4ec0-b983-1f052e91d6ed"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""440e50c3-d9a8-42c8-ab7f-701b8941b040"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6a542ee-64b3-4db2-a1c4-06309c96c902"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMoveButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1042,6 +1080,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
         m_Camera_Scroll = m_Camera.FindAction("Scroll", throwIfNotFound: true);
+        m_Camera_MousePosition = m_Camera.FindAction("MousePosition", throwIfNotFound: true);
+        m_Camera_MouseMoveButton = m_Camera.FindAction("MouseMoveButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1304,12 +1344,16 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private ICameraActions m_CameraActionsCallbackInterface;
     private readonly InputAction m_Camera_Move;
     private readonly InputAction m_Camera_Scroll;
+    private readonly InputAction m_Camera_MousePosition;
+    private readonly InputAction m_Camera_MouseMoveButton;
     public struct CameraActions
     {
         private @InputMaster m_Wrapper;
         public CameraActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Camera_Move;
         public InputAction @Scroll => m_Wrapper.m_Camera_Scroll;
+        public InputAction @MousePosition => m_Wrapper.m_Camera_MousePosition;
+        public InputAction @MouseMoveButton => m_Wrapper.m_Camera_MouseMoveButton;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1325,6 +1369,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Scroll.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
                 @Scroll.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
                 @Scroll.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
+                @MousePosition.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnMousePosition;
+                @MouseMoveButton.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnMouseMoveButton;
+                @MouseMoveButton.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnMouseMoveButton;
+                @MouseMoveButton.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnMouseMoveButton;
             }
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
@@ -1335,6 +1385,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Scroll.started += instance.OnScroll;
                 @Scroll.performed += instance.OnScroll;
                 @Scroll.canceled += instance.OnScroll;
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
+                @MouseMoveButton.started += instance.OnMouseMoveButton;
+                @MouseMoveButton.performed += instance.OnMouseMoveButton;
+                @MouseMoveButton.canceled += instance.OnMouseMoveButton;
             }
         }
     }
@@ -1369,5 +1425,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
+        void OnMouseMoveButton(InputAction.CallbackContext context);
     }
 }
