@@ -1439,13 +1439,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6646c3f76e35ea54cacd76697d9d0f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startZoom: 0.7
-  boomFar: 20
+  startZoom: 0.5
+  boomFar: 30
   dollyFar: -3
   tiltFar: 80
-  boomNear: 10
-  dollyNear: -8
-  tiltNear: 40
+  boomNear: 15
+  dollyNear: 0
+  tiltNear: 70
   zoomCurve:
     serializedVersion: 2
     m_Curve:
@@ -1458,33 +1458,6 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    - serializedVersion: 3
-      time: 0.08227802
-      value: 0.47838116
-      inSlope: 0.27455962
-      outSlope: 0.27455962
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 1
-    - serializedVersion: 3
-      time: 0.26848444
-      value: 0.73364735
-      inSlope: 0.7130646
-      outSlope: 0.7130646
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.74452674
-      value: 0.8918504
-      inSlope: 0.02660194
-      outSlope: 0.02660194
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.7989384
     - serializedVersion: 3
       time: 1
       value: 1
