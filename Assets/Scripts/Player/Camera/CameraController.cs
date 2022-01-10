@@ -39,10 +39,6 @@ public class CameraController : MonoBehaviour
     /// Start position for mouse movement
     /// </summary>
     public Vector2 MouseMoveStartPosition => _mouseMoveStartPosition;
-    /// <summary>
-    /// Actuall zoom of the camera
-    /// </summary>
-    public float Zoom => zoom;
 
     private void Awake()
     {
@@ -82,7 +78,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Actual zoom value after curve
     /// </summary>
-    private float zoom => zoomCurve.Evaluate(absoluteZoom);
+    public float Zoom => zoomCurve.Evaluate(absoluteZoom);
 
     /// <summary>
     /// Calculated position of camera
@@ -91,8 +87,8 @@ public class CameraController : MonoBehaviour
     {
         get
         {
-            float boom = Mathf.Lerp(boomNear, boomFar, zoom);
-            float dolly = Mathf.Lerp(dollyNear, dollyFar, zoom);
+            float boom = Mathf.Lerp(boomNear, boomFar, Zoom);
+            float dolly = Mathf.Lerp(dollyNear, dollyFar, Zoom);
             return new Vector3(_position.x, boom, _position.y + dolly);
         }
     }
@@ -104,7 +100,7 @@ public class CameraController : MonoBehaviour
     {
         get
         {
-            float x = Mathf.Lerp(tiltNear, tiltFar, zoom);
+            float x = Mathf.Lerp(tiltNear, tiltFar, Zoom);
             return new Vector3(x, 0, 0);
         }
     }
