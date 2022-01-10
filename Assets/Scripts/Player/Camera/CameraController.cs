@@ -12,6 +12,8 @@ public class CameraController : MonoBehaviour
     private float _absoluteZoom;
     private Vector2 _position;
     private float _scrollVel;
+    private bool _mouseMove;
+    private Vector2 _mouseMoveStartPosition;
 
     public float startZoom;
     public float boomFar;
@@ -24,13 +26,28 @@ public class CameraController : MonoBehaviour
     public float movementEasing;
     public float movementSpeed;
     public float scrollSpeed;
+    public float mouseMovementSpeed;
 
 
     private void Awake()
     {
         _controls = new InputMaster();
         
+        // scroll... duh'
         _controls.Camera.Scroll.performed += ctx => Scroll(ctx);
+        
+        // activate mouse movement and store mouse starting position
+        _controls.Camera.MouseMoveButton.performed += ctx =>
+        {
+            _mouseMove = true;
+            _mouseMoveStartPosition = _controls.Camera.MousePosition.ReadValue<Vector2>();
+        };
+        
+        // stop mousemovement
+        _controls.Camera.MouseMoveButton.canceled += ctx =>
+        {
+            _mouseMove = false;
+        };
 
         absoluteZoom = startZoom;
     }
@@ -72,6 +89,13 @@ public class CameraController : MonoBehaviour
     
     void FixedUpdate()
     {
+        // movement with mouse
+        if (_mouseMove == true)
+        {
+            _position += (_controls.Camera.MousePosition.ReadValue<Vector2>() - _mouseMoveStartPosition) * mouseMovementSpeed;
+        }
+        
+        // movement with everything that is not the mouse
         _position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
 
         transform.position += (positionCurrent - transform.position) * movementEasing;

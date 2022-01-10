@@ -1473,6 +1473,7 @@ MonoBehaviour:
   movementEasing: 0.1
   movementSpeed: 0.8
   scrollSpeed: 0.01
+  mouseMovementSpeed: 0.005
 --- !u!1 &1501588097
 GameObject:
   m_ObjectHideFlags: 0
