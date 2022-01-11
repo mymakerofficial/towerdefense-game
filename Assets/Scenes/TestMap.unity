@@ -1471,9 +1471,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementEasing: 0.1
-  movementSpeed: 0.8
+  movementSpeed: 1
   scrollSpeed: 0.01
-  mouseMovementSpeed: 0.005
+  mouseMovementSpeed: 0.003
 --- !u!1 &1501588097
 GameObject:
   m_ObjectHideFlags: 0
