@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 10
+  MaxHealth: 1000
 --- !u!114 &7463916891102011178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,8 +79,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.24, y: 1.3, z: 1.22}
-  m_Center: {x: 0, y: 0.65, z: 0}
+  m_Size: {x: 2.24, y: 1.8, z: 1.22}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!208 &367342719628291735
 NavMeshObstacle:
   m_ObjectHideFlags: 0
