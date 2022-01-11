@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 
@@ -97,22 +98,7 @@ public class TurretController : MonoBehaviour
     /// </summary>
     public void RotateTowards(Vector3 point)
     {
-        _rotation = AngleTowardsPoint2D(head.transform.position, point);
-    }
-
-    /// <summary>
-    /// Get the angle between two points
-    /// </summary>
-    private float AngleTowardsPoint2D(Vector3 p1, Vector3 p2)
-    {
-        // calculate direction vector
-        Vector2 dir2 = (new Vector2(p1.x, p1.z) -
-                        new Vector2(p2.x, p2.z)).normalized;
-
-        // calculate angle from direction vector
-        float angle = (float)(Math.Atan2(dir2.y, -dir2.x) * (180 / Math.PI));
-
-        return angle;
+        _rotation = GeneralMath.AngleTowardsPoint2D(head.transform.position, point);
     }
 
     public void SetActive(bool value)

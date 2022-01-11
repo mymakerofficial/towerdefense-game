@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.AI;
 using Object = UnityEngine.Object;
@@ -96,7 +97,7 @@ public class GenericEnemyController : MonoBehaviour
         // this is not final by any means
         if (_activeAttackTarget != null && Cooldown > 0.9f )
         {
-            float angle = AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
+            float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
             GameObject bullet = Instantiate(
                 Resources.Load<GameObject>("Prefabs/Bullets/GenericEnemyBullet"), 
                 transform.position + new Vector3(0, 1.4f, 0), 
@@ -112,20 +113,7 @@ public class GenericEnemyController : MonoBehaviour
         Debug.Log(Cooldown);
     }
     
-    /// <summary>
-    /// Get the angle between two points
-    /// </summary>
-    private float AngleTowardsPoint2D(Vector3 p1, Vector3 p2) // TODO This method is duplicated and needs to be moved into sepperate script
-    {
-        // calculate direction vector
-        Vector2 dir2 = (new Vector2(p1.x, p1.z) -
-                        new Vector2(p2.x, p2.z)).normalized;
-
-        // calculate angle from direction vector
-        float angle = (float)(Math.Atan2(dir2.y, -dir2.x) * (180 / Math.PI));
-
-        return angle;
-    }
+ 
     
     void OnDrawGizmos()
     {
