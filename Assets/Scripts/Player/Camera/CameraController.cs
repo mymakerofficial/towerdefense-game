@@ -116,7 +116,9 @@ public class CameraController : MonoBehaviour
         // movement with mouse
         if (_mouseMove == true)
         {
-            _position += (_controls.Camera.MousePosition.ReadValue<Vector2>() - _mouseMoveStartPosition) * mouseMovementSpeed;
+            var mv = (_controls.Camera.MousePosition.ReadValue<Vector2>() - _mouseMoveStartPosition) * mouseMovementSpeed;
+            _position.x += Mathf.Clamp(mv.x, -movementSpeed, movementSpeed);
+            _position.y += Mathf.Clamp(mv.y, -movementSpeed, movementSpeed);
         }
         
         // movement with everything that is not the mouse
