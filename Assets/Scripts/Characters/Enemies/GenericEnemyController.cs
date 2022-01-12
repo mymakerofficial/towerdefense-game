@@ -109,8 +109,6 @@ public class GenericEnemyController : MonoBehaviour
         }
         
         Cooldown += 0.1f * Time.fixedDeltaTime;
-        
-        Debug.Log(Cooldown);
     }
     
  
@@ -119,10 +117,13 @@ public class GenericEnemyController : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         if(_activeMovementTarget != null) Gizmos.DrawSphere(_activeMovementTarget.transform.position, 0.2f);
-        
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, _activeAttackTarget.transform.position);
-        if(_activeAttackTarget != null) Gizmos.DrawSphere(_activeAttackTarget.transform.position, 0.2f);
+
+        if (_activeAttackTarget)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, _activeAttackTarget.transform.position);
+            if(_activeAttackTarget != null) Gizmos.DrawSphere(_activeAttackTarget.transform.position, 0.2f);
+        }
 
         Gizmos.color = Color.green;
         for (int i = 0; i < _agent.path.corners.Length; i++)
