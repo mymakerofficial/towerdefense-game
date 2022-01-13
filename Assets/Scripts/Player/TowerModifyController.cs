@@ -14,6 +14,7 @@ public class TowerModifyController : MonoBehaviour
     private GameObject _selectedTower;
 
     public float SelectRadiusFactor = 1.5f;
+    public GameObject UiElement;
 
     public GameObject SelectedTower => _selectedTower;
     
@@ -67,6 +68,7 @@ public class TowerModifyController : MonoBehaviour
         {
             _selectedTower = _closeTower;
             _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
+            UiElement.SetActive(true);
         }
     }
 
@@ -74,14 +76,50 @@ public class TowerModifyController : MonoBehaviour
     {
         _selectedTower = null;
         _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/SelectCircle"));
+        UiElement.SetActive(false);
+    }
+
+    public int SellCreditAmount
+    {
+        get
+        {
+            if (_selectedTower == null) return 0;
+            return (int)(_selectedTower.GetComponent<TowerDescriptor>().cost *
+                         _selectedTower.GetComponent<HealthController>().HealthPercent);
+        }
+    }
+
+    public void Sell()
+    {
+        Destroy(_selectedTower);
+        GameObject.Find("GameDirector").SendMessage("DepositCredit", SellCreditAmount);
+        UnSelect();
+    }
+
+    public int UpgradeCreditAmount
+    {
+        get
+        {
+            if (_selectedTower == null) return 0;
+            return _selectedTower.GetComponent<TowerDescriptor>().levelUpgradeCost;
+        }
+    }
+    
+    public void Upgrade()
+    {
+        
     }
 
     private void FindCloseset()
     {
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower"); // get every tower in the scene
+        
+        // return if there are no towers in the scene
+        if(towers.Length == 0) return;
 
         Vector3 point = RaycastCursorPosition();
         
+        // look for closest tower
         float closestDistance = float.MaxValue;
         GameObject closest = null;
         foreach (GameObject tower in towers)
@@ -94,8 +132,10 @@ public class TowerModifyController : MonoBehaviour
             }
         }
         
+        // return if there was nothing found (this should be impossible but better save then sorry)
         if(closest == null) return;
 
+        // set if in radius
         if (closestDistance < closest.GetComponent<TowerDescriptor>().placementRadius * SelectRadiusFactor)
         {
             _closeTower = closest;
@@ -110,7 +150,7 @@ public class TowerModifyController : MonoBehaviour
     /// Raycasts a point from the mouse position
     /// </summary>
     /// <returns>Raycasted point</returns>
-    private Vector3 RaycastCursorPosition()
+    private Vector3 RaycastCursorPosition() //TODO This is a repeat (TowerPlacementController)
     {
         RaycastHit hit;
         Ray ray = _camera.ScreenPointToRay(_controls.Editor.Point.ReadValue<Vector2>());//Mouse.current.position.ReadValue()
