@@ -109,7 +109,8 @@ public class TowerModifyController : MonoBehaviour
         get
         {
             if (_selectedTower == null) return 0;
-            return _selectedTower.GetComponent<TowerDescriptor>().levelUpgradeCost;
+            if (_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade == null) return 0;
+            return _selectedTower.GetComponent<TowerDescriptor>().nextUpgrade.GetComponent<TowerDescriptor>().levelUpgradeCost;
         }
     }
     
@@ -117,12 +118,17 @@ public class TowerModifyController : MonoBehaviour
     {
         if (_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade)
         {
-            GameObject newTower = Instantiate(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade, _selectedTower.transform.parent);
-            newTower.transform.position = _selectedTower.transform.position;
-            newTower.transform.rotation = _selectedTower.transform.rotation;
+            if (GameObject.Find("GameDirector").GetComponent<CreditController>()
+                .CheckSufficientCredits(UpgradeCreditAmount))
+            {
+                GameObject.Find("GameDirector").SendMessage("WithdrawCredit", UpgradeCreditAmount);
+                GameObject newTower = Instantiate(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade, _selectedTower.transform.parent);
+                newTower.transform.position = _selectedTower.transform.position;
+                newTower.transform.rotation = _selectedTower.transform.rotation;
             
-            Destroy(_selectedTower);
-            UnSelect();
+                Destroy(_selectedTower);
+                UnSelect();
+            }
         }
     }
 
