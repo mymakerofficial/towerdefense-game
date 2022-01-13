@@ -69,6 +69,14 @@ public class TowerModifyController : MonoBehaviour
             _selectedTower = _closeTower;
             _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
             UiElement.SetActive(true);
+            UiElement.transform.Find("Name").GetComponent<UnityEngine.UI.Text>().text =
+                _closeTower.GetComponent<TowerDescriptor>().name;
+            UiElement.transform.Find("Description").GetComponent<UnityEngine.UI.Text>().text =
+                _closeTower.GetComponent<TowerDescriptor>().description;
+            UiElement.transform.Find("Upgrade").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
+                $"Upgrade -{UpgradeCreditAmount}c";
+            UiElement.transform.Find("Sell").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
+                $"Sell +{SellCreditAmount}c";
         }
     }
 
@@ -107,7 +115,15 @@ public class TowerModifyController : MonoBehaviour
     
     public void Upgrade()
     {
-        
+        if (_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade)
+        {
+            GameObject newTower = Instantiate(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade, _selectedTower.transform.parent);
+            newTower.transform.position = _selectedTower.transform.position;
+            newTower.transform.rotation = _selectedTower.transform.rotation;
+            
+            Destroy(_selectedTower);
+            UnSelect();
+        }
     }
 
     private void FindCloseset()
