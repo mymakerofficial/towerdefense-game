@@ -7,21 +7,19 @@ using UnityEngine;
 using UnityEngine.AI;
 using Object = UnityEngine.Object;
 
-[Serializable]
-public struct EnemyBehaviour
-{
-    public float MinAttackDistance;
-    public bool AttackWhenInRang;
-    public bool AttackWhenDamaged;
-    public float MinMoveDistance;
-    public bool MoveTowardsWhenInRange;
-    public bool MoveTowardsWhenDamaged;
-}
 
 public class GenericEnemyController : MonoBehaviour
 {
-    public EnemyBehaviour behaviour;
-    public GameObject bulletType;
+    [Header("Attack Behaviour")]
+    public float AttackRange;
+    public bool AttackWhenInRang;
+    public bool AttackWhenDamaged; //TODO Attack when damaged
+    [Header("Move Behaviour")]
+    public float MoveRange;
+    public bool MoveTowardsWhenInRange;
+    public bool MoveTowardsWhenDamaged; //TODO Move towards when damaged
+    [Header("Attack")]
+    public GameObject FireGameObject;
 
     private GameObject _activeMovementTarget;
     private GameObject _activeAttackTarget;
@@ -71,7 +69,7 @@ public class GenericEnemyController : MonoBehaviour
         }
         
         // set pathfinding target
-        if (success && closestDistance < behaviour.MinMoveDistance && behaviour.MoveTowardsWhenInRange)
+        if (success && closestDistance < MoveRange && MoveTowardsWhenInRange)
         {
             _activeMovementTarget = closest;
         }
@@ -82,7 +80,7 @@ public class GenericEnemyController : MonoBehaviour
         }
         
         // set target to attack
-        if (success && closestDistance < behaviour.MinAttackDistance  && behaviour.AttackWhenInRang)
+        if (success && closestDistance < AttackRange  && AttackWhenInRang)
         {
             _activeAttackTarget = closest;
         }
@@ -94,12 +92,12 @@ public class GenericEnemyController : MonoBehaviour
         
 
         
-        // this is not final by any means
+        // TODO improve cooldown
         if (_activeAttackTarget != null && Cooldown > 0.9f )
         {
             float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
             GameObject bullet = Instantiate(
-                Resources.Load<GameObject>("Prefabs/Bullets/GenericEnemyBullet"), 
+                FireGameObject, 
                 transform.position + new Vector3(0, 1.4f, 0), 
                 Quaternion.Euler(0, angle + 90, 0), 
                 GameObject.Find("Bullets").transform
@@ -133,5 +131,14 @@ public class GenericEnemyController : MonoBehaviour
             
             Gizmos.DrawLine(last, current);
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, MoveRange);
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, AttackRange);
     }
 }

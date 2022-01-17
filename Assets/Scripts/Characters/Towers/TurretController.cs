@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 public class TurretController : MonoBehaviour
@@ -11,10 +12,12 @@ public class TurretController : MonoBehaviour
     private float _rotation;
     private GameObject _target;
 
-    public GameObject head;
-    public float range;
-    public bool autonomous;
-    public bool active;
+    [Header("Geometry")]
+    [FormerlySerializedAs("head")] public GameObject Head;
+    [Header("Config")]
+    [FormerlySerializedAs("range")] public float Range;
+    public GameObject BulletGameObject;
+    public bool Active;
 
     public float Cooldown
     {
@@ -30,18 +33,17 @@ public class TurretController : MonoBehaviour
 
     void Start()
     {
-        autonomous = true;
         _cooldown = 1;
-        active = true;
+        Active = true;
     }
 
     public void Fire()
     {
-        if (!active) return;
+        if (!Active) return;
         if (Cooldown == 0) return;
         
         GameObject bullet = Instantiate(
-            Resources.Load<GameObject>("Prefabs/Bullets/Bullet"), 
+            BulletGameObject, 
             transform.position + new Vector3(0, 1.4f, 0), 
             Quaternion.Euler(0, _rotation + 90, 0), 
             GameObject.Find("Bullets").transform
@@ -53,19 +55,16 @@ public class TurretController : MonoBehaviour
     
     public void FixedUpdate()
     {
-        if (!active) return;
+        if (!Active) return;
         
-        if (autonomous)
-        {
-            AutonomousAim();
+        AutonomousAim();
 
-            if (Cooldown > 0.9f && _target) Fire();
-        }
+        if (Cooldown > 0.9f && _target) Fire();
 
         Cooldown += 0.1f * Time.fixedDeltaTime;
 
         // TODO Figgure out a way to have this not have hardcoded values
-        head.transform.rotation = Quaternion.Euler(-90, 0, _rotation + 180);
+        Head.transform.rotation = Quaternion.Euler(-90, 0, _rotation + 180);
     }
 
     /// <summary>
@@ -82,7 +81,7 @@ public class TurretController : MonoBehaviour
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
 
             if (distance > closestDistance) continue; // skip if enemy is not closest
-            if (distance > range) continue; // skip if enemy is outside of range
+            if (distance > Range) continue; // skip if enemy is outside of range
 
             closest = enemy;
             closestDistance = distance;
@@ -98,12 +97,12 @@ public class TurretController : MonoBehaviour
     /// </summary>
     public void RotateTowards(Vector3 point)
     {
-        _rotation = GeneralMath.AngleTowardsPoint2D(head.transform.position, point);
+        _rotation = GeneralMath.AngleTowardsPoint2D(Head.transform.position, point);
     }
 
     public void SetActive(bool value)
     {
-        active = value;
+        Active = value;
     }
     
     void OnDrawGizmos()

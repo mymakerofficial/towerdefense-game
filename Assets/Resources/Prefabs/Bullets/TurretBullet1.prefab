@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1422610889946738625}
   - component: {fileID: 1422610889946738624}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: TurretBullet1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,17 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d269701ec5c02a841b30c0a021a38116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletTravel:
-    MaxDistance: 100
-    Velocity: 50
-    IsHitscan: 0
-  BulletHit:
-    Tags:
-    - Name: Enemy
-      Solid: 0
-      DealDamage: 1
-    MaxHits: 1
-    ContactDamage: 5
+  MaxTravelDistance: 40
+  TravelVelocity: 50
+  IsHitscan: 0
+  MaxHits: 1
+  DamageOnContact: 4
+  TargetTags:
+  - Name: Tower
+    Solid: 0
+    DealDamage: 0
+  - Name: Enemy
+    Solid: 1
+    DealDamage: 1
 --- !u!1 &1422610890872642335
 GameObject:
   m_ObjectHideFlags: 0
