@@ -99,16 +99,19 @@ public class GenericEnemyController : MonoBehaviour
     private void Attack()
     {
         _cooldown = AttackCooldownSec;
-        
-        float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
-        GameObject bullet = Instantiate(
-            FireGameObject, 
-            transform.position + new Vector3(0, 1.4f, 0), 
-            Quaternion.Euler(0, angle + 90, 0), 
-            GameObject.Find("Bullets").transform
-        );
-        bullet.SendMessage("Fire");
-        
+
+        if (FireGameObject)
+        {
+            float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
+            GameObject bullet = Instantiate(
+                FireGameObject, 
+                transform.position + new Vector3(0, 1.4f, 0), 
+                Quaternion.Euler(0, angle + 90, 0), 
+                GameObject.Find("Bullets").transform
+            );
+            bullet.SendMessage("Fire");
+        }
+
         if (SelfDestructOnAttack)
         {
             CommitDie();
