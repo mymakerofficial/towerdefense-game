@@ -173,6 +173,8 @@ MonoBehaviour:
   MoveTowardsWhenInRange: 0
   MoveTowardsWhenDamaged: 0
   FireGameObject: {fileID: 1422610889946738639, guid: 47170d9a244773a499b5073104cb56f2, type: 3}
+  AttackCooldownSec: 1
+  SelfDestructOnAttack: 0
 --- !u!114 &2577514617457882207
 MonoBehaviour:
   m_ObjectHideFlags: 0

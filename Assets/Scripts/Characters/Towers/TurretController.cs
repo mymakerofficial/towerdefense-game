@@ -16,6 +16,7 @@ public class TurretController : MonoBehaviour
     [FormerlySerializedAs("head")] public GameObject Head;
     [Header("Config")]
     [FormerlySerializedAs("range")] public float Range;
+    public float CooldownSec;
     public GameObject BulletGameObject;
     public bool Active;
 
@@ -33,15 +34,13 @@ public class TurretController : MonoBehaviour
 
     void Start()
     {
-        _cooldown = 1;
         Active = true;
     }
 
     public void Fire()
     {
         if (!Active) return;
-        if (Cooldown == 0) return;
-        
+
         GameObject bullet = Instantiate(
             BulletGameObject, 
             transform.position + new Vector3(0, 1.4f, 0), 
@@ -50,7 +49,7 @@ public class TurretController : MonoBehaviour
         );
         bullet.SendMessage("Fire");
 
-        Cooldown -= 0.03f;
+        Cooldown = CooldownSec;
     }
     
     public void FixedUpdate()
@@ -59,12 +58,17 @@ public class TurretController : MonoBehaviour
         
         AutonomousAim();
 
-        if (Cooldown > 0.9f && _target) Fire();
-
-        Cooldown += 0.1f * Time.fixedDeltaTime;
-
         // TODO Figgure out a way to have this not have hardcoded values
         Head.transform.rotation = Quaternion.Euler(-90, 0, _rotation + 180);
+        
+        if (_cooldown > 0)
+        {
+            _cooldown -= Time.fixedDeltaTime;
+        }
+        else if(_target)
+        {
+            Fire();
+        }
     }
 
     /// <summary>

@@ -63,8 +63,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Turret
   description: Shoots at enemies
-  level: 1
   placementRadius: 1.5
+  level: 1
   nextUpgrade: {fileID: 0}
   levelDescription: 
   cost: 100
@@ -83,6 +83,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Head: {fileID: 2401913209852526855}
   Range: 10
+  CooldownSec: 0.3
   BulletGameObject: {fileID: 1422610889946738639, guid: beb90da1680cc454b87303d00b08ee0b, type: 3}
   Active: 0
 --- !u!65 &3333053906344147755

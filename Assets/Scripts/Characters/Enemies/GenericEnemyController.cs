@@ -20,6 +20,8 @@ public class GenericEnemyController : MonoBehaviour
     public bool MoveTowardsWhenDamaged; //TODO Move towards when damaged
     [Header("Attack")]
     public GameObject FireGameObject;
+    public float AttackCooldownSec;
+    public bool SelfDestructOnAttack; // yes it does what you think it does
 
     private GameObject _activeMovementTarget;
     private GameObject _activeAttackTarget;
@@ -27,13 +29,7 @@ public class GenericEnemyController : MonoBehaviour
     private float _cooldown;
 
     private static GameObject _stronghold;
-    
-    public float Cooldown
-    {
-        get => _cooldown;
-        set => _cooldown = Mathf.Clamp(value, 0, 1);
-    }
-    
+
     void Start()
     {
         _cooldown = 1;
@@ -90,26 +86,42 @@ public class GenericEnemyController : MonoBehaviour
     {
         _agent.destination = _activeMovementTarget.transform.position;
         
-
-        
-        // TODO improve cooldown
-        if (_activeAttackTarget != null && Cooldown > 0.9f )
+        if (_cooldown > 0)
         {
-            float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
-            GameObject bullet = Instantiate(
-                FireGameObject, 
-                transform.position + new Vector3(0, 1.4f, 0), 
-                Quaternion.Euler(0, angle + 90, 0), 
-                GameObject.Find("Bullets").transform
-            );
-            bullet.SendMessage("Fire");
-            Cooldown -= 0.05f;
+            _cooldown -= Time.fixedDeltaTime;
         }
-        
-        Cooldown += 0.1f * Time.fixedDeltaTime;
+        else if(_activeAttackTarget != null)
+        {
+            Attack();
+        }
     }
-    
- 
+
+    private void Attack()
+    {
+        _cooldown = AttackCooldownSec;
+        
+        float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
+        GameObject bullet = Instantiate(
+            FireGameObject, 
+            transform.position + new Vector3(0, 1.4f, 0), 
+            Quaternion.Euler(0, angle + 90, 0), 
+            GameObject.Find("Bullets").transform
+        );
+        bullet.SendMessage("Fire");
+        
+        if (SelfDestructOnAttack)
+        {
+            CommitDie();
+        }
+    }
+
+    /// <summary>
+    /// you know what... i think you know what this does...
+    /// </summary>
+    private void CommitDie()
+    {
+        Destroy(gameObject);
+    }
     
     void OnDrawGizmos()
     {
