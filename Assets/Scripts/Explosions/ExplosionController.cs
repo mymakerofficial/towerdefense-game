@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class ExplosionController : MonoBehaviour
 {
-    [SerializeField]
-    public float damage;
+    public float Damage;
+    public float Radius;
+    public List<string> DealDamageTo;
+    public float DelaySec;
     
-    [SerializeField]
-    public float radius;
-    
-    // Start is called before the first frame update
     void Start()
     {
         Explode();
@@ -19,10 +17,16 @@ public class ExplosionController : MonoBehaviour
 
     public void Explode()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, 6);
+        // get all colliders in radius
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, Radius);
         foreach (var hitCollider in hitColliders)
         {
-            hitCollider.SendMessage("AddDamage", damage);
+            GameObject obj = hitCollider.gameObject; // get gameobject from collider
+
+            if (DealDamageTo.Contains(obj.tag)) // check if tag is in list of tags to apply damage to
+            {
+                obj.SendMessage("ApplyDamage", Damage);
+            }
         }
         
         Destroy(gameObject);
@@ -31,9 +35,6 @@ public class ExplosionController : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, radius);
-        Gizmos.DrawLine(new Vector3(transform.position.x - radius, transform.position.y, transform.position.z), new Vector3(transform.position.x + radius, transform.position.y, transform.position.z));
-        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y - radius, transform.position.z), new Vector3(transform.position.x, transform.position.y + radius, transform.position.z));
-        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y, transform.position.z - radius), new Vector3(transform.position.x, transform.position.y, transform.position.z + radius));
+        Gizmos.DrawWireSphere(transform.position, Radius);
     }
 }

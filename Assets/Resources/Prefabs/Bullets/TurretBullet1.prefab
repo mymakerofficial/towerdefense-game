@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1422610889946738625}
   - component: {fileID: 1422610889946738624}
   m_Layer: 0
-  m_Name: GenericEnemyBullet
+  m_Name: TurretBullet1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,14 +48,14 @@ MonoBehaviour:
   TravelVelocity: 50
   IsHitscan: 0
   MaxHits: 1
-  DamageOnContact: 10
+  DamageOnContact: 4
   TargetTags:
   - Name: Tower
-    Solid: 1
-    DealDamage: 1
+    Solid: 0
+    DealDamage: 0
   - Name: Enemy
     Solid: 1
-    DealDamage: 0
+    DealDamage: 1
 --- !u!1 &1422610890872642335
 GameObject:
   m_ObjectHideFlags: 0
