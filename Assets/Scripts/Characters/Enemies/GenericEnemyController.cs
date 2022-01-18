@@ -84,7 +84,7 @@ public class GenericEnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _agent.destination = _activeMovementTarget.transform.position;
+        if(_activeMovementTarget) _agent.destination = _activeMovementTarget.transform.position;
         
         if (_cooldown > 0)
         {
