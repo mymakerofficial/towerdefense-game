@@ -72,7 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: explosion generic
   description: explosion generic
-  fullHealthCredits: 8
+  fullHealthCredits: 10
 --- !u!114 &6034153033960322301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 40
+  MaxHealth: 22
 --- !u!136 &3753878433242767828
 CapsuleCollider:
   m_ObjectHideFlags: 0

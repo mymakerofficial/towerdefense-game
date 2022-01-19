@@ -48,7 +48,7 @@ MonoBehaviour:
   TravelVelocity: 50
   IsHitscan: 0
   MaxHits: 1
-  DamageOnContact: 4
+  DamageOnContact: 6
   TargetTags:
   - Name: Tower
     Solid: 0

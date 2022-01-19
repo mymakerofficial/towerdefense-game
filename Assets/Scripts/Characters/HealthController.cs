@@ -36,7 +36,7 @@ public class HealthController : MonoBehaviour
 
         // calculate credits to add to balance from damage
         float creditDropAmount = _fullHealthCredits * (amount / MaxHealth);
-        GameObject.Find("GameDirector").SendMessage("DepositCredit", (long)creditDropAmount);
+        GameObject.Find("GameDirector").SendMessage("DepositCredit", (long)Math.Round(creditDropAmount));
 
         if (Health == 0) Die();
         
