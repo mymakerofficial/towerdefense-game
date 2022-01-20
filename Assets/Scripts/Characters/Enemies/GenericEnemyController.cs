@@ -35,7 +35,7 @@ public class GenericEnemyController : MonoBehaviour
         _cooldown = 1;
         _stronghold = GameObject.FindGameObjectsWithTag("Stronghold")[0];
         _agent = GetComponent<NavMeshAgent>();
-        InvokeRepeating("UpdateTarget", 0, 1);
+        InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
     
     /// <summary>
@@ -43,31 +43,13 @@ public class GenericEnemyController : MonoBehaviour
     /// </summary>
     void UpdateTarget()
     {
-        List<GameObject> targets = GameObject.FindGameObjectsWithTag("Tower").ToList();
-
-        targets.Add(_stronghold); // add stronghold so it gets attacked when closest
-        
-        bool success = false;
-        GameObject closest = null;
-        float closestDistance = Single.MaxValue;
-        
-        // loop through all towers
-        foreach (GameObject t in targets)
-        {
-            float distance = Vector3.Distance(transform.position, t.transform.position);
-
-            if (distance > closestDistance) continue; // skip if not closest
-
-            // save closest
-            success = true;
-            closest = t;
-            closestDistance = distance;
-        }
+        GameObject closestMove = FindClosest(true);
+        GameObject closestAttack = FindClosest(false);
         
         // set pathfinding target
-        if (success && closestDistance < MoveRange && MoveTowardsWhenInRange)
+        if (closestMove != null && Vector3.Distance(transform.position, closestMove.transform.position) < MoveRange && MoveTowardsWhenInRange)
         {
-            _activeMovementTarget = closest;
+            _activeMovementTarget = closestMove;
         }
         else
         {
@@ -76,16 +58,60 @@ public class GenericEnemyController : MonoBehaviour
         }
         
         // set target to attack
-        if (success && closestDistance < AttackRange  && AttackWhenInRang)
+        if (closestAttack != null && Vector3.Distance(transform.position, closestAttack.transform.position) < AttackRange  && AttackWhenInRang)
         {
-            _activeAttackTarget = closest;
+            _activeAttackTarget = closestAttack;
         }
+        
+        if(_activeMovementTarget) _agent.destination = _activeMovementTarget.transform.position;
+    }
+
+    private GameObject FindClosest(bool checkForCompletePath)
+    {
+        List<GameObject> targets = GameObject.FindGameObjectsWithTag("Tower").ToList();
+
+        targets.Add(_stronghold); // add stronghold so it gets attacked when closest
+
+        bool success = false;
+        GameObject closest = null;
+        float closestDistance = Single.MaxValue;
+        
+        // loop through all towers
+        foreach (GameObject target in targets)
+        {
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+
+            if (distance > closestDistance) continue;// skip if not closest
+
+            if (checkForCompletePath)
+            {
+                RaycastHit hit;
+                if(Physics.Raycast(transform.position, target.transform.position - transform.position,out hit))
+                {
+                    if (hit.collider.gameObject != target) // check if hit is not target
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            // save closest
+            success = true;
+            closest = target;
+            closestDistance = distance;
+        }
+
+        if (!success)
+        {
+            return null;
+        }
+
+        return closest;
     }
 
     private void FixedUpdate()
     {
-        if(_activeMovementTarget) _agent.destination = _activeMovementTarget.transform.position;
-        
+
         if (_cooldown > 0)
         {
             _cooldown -= Time.fixedDeltaTime;
@@ -139,6 +165,7 @@ public class GenericEnemyController : MonoBehaviour
         }
 
         Gizmos.color = Color.green;
+        Gizmos.DrawSphere(_agent.path.corners[_agent.path.corners.Length-1], 0.2f);
         for (int i = 0; i < _agent.path.corners.Length; i++)
         {
             Vector3 current = _agent.path.corners[i];
