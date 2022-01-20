@@ -27,6 +27,7 @@ public class GenericEnemyController : MonoBehaviour
     private GameObject _activeAttackTarget;
     private NavMeshAgent _agent;
     private float _cooldown;
+    private GameObject _lastCheckpoint;
 
     private static GameObject _stronghold;
 
@@ -35,7 +36,7 @@ public class GenericEnemyController : MonoBehaviour
         _cooldown = 1;
         _stronghold = GameObject.FindGameObjectsWithTag("Stronghold")[0];
         _agent = GetComponent<NavMeshAgent>();
-        InvokeRepeating("UpdateTarget", 0, 1);
+        InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
     
     /// <summary>
@@ -43,49 +44,107 @@ public class GenericEnemyController : MonoBehaviour
     /// </summary>
     void UpdateTarget()
     {
+        GameObject closestMove = FindClosest(true);
+        GameObject closestAttack = FindClosest(false);
+        
+        // set pathfinding target
+        if (closestMove != null && Vector3.Distance(transform.position, closestMove.transform.position) < MoveRange && MoveTowardsWhenInRange)
+        {
+            _activeMovementTarget = closestMove;
+        }
+        else
+        {
+            // move towars next checkpoint by default
+            _activeMovementTarget = NextCheckpoint();
+        }
+        
+        // set target to attack
+        if (closestAttack != null && Vector3.Distance(transform.position, closestAttack.transform.position) < AttackRange  && AttackWhenInRang)
+        {
+            _activeAttackTarget = closestAttack;
+        }
+        
+        if(_activeMovementTarget) _agent.destination = _activeMovementTarget.transform.position;
+    }
+
+    private GameObject NextCheckpoint()
+    {
+        List<GameObject> checkpoints = GameObject.FindGameObjectsWithTag("Checkpoint").ToList();
+
+        checkpoints.Add(_stronghold);
+
+        
+        GameObject top = null;
+        float topValue = Single.MaxValue;
+        foreach (var checkpoint in checkpoints)
+        {
+            float distanceToSelf = Vector3.Distance(transform.position, checkpoint.transform.position);
+            float distanceToStronghold = Vector3.Distance(checkpoint.transform.position, _stronghold.transform.position);
+
+            float value = distanceToSelf + distanceToStronghold / 1.5f; // 1.5 = random value that where i found out it works
+            
+            if (distanceToSelf < 3)
+            {
+                _lastCheckpoint = checkpoint;
+                continue;
+            }
+            if (_lastCheckpoint == checkpoint) continue; // dont go back to last checkpoint
+            if (value > topValue) continue;
+            
+
+            top = checkpoint;
+            topValue = value;
+        }
+
+        return top;
+    }
+
+    private GameObject FindClosest(bool checkForCompletePath)
+    {
         List<GameObject> targets = GameObject.FindGameObjectsWithTag("Tower").ToList();
 
         targets.Add(_stronghold); // add stronghold so it gets attacked when closest
-        
+
         bool success = false;
         GameObject closest = null;
         float closestDistance = Single.MaxValue;
         
         // loop through all towers
-        foreach (GameObject t in targets)
+        foreach (GameObject target in targets)
         {
-            float distance = Vector3.Distance(transform.position, t.transform.position);
+            float distance = Vector3.Distance(transform.position, target.transform.position);
 
-            if (distance > closestDistance) continue; // skip if not closest
+            if (distance > closestDistance) continue;// skip if not closest
+
+            if (checkForCompletePath)
+            {
+                RaycastHit hit;
+                if(Physics.Raycast(transform.position, target.transform.position - transform.position,out hit))
+                {
+                    if (hit.collider.gameObject != target) // check if hit is not target
+                    {
+                        continue;
+                    }
+                }
+            }
 
             // save closest
             success = true;
-            closest = t;
+            closest = target;
             closestDistance = distance;
         }
-        
-        // set pathfinding target
-        if (success && closestDistance < MoveRange && MoveTowardsWhenInRange)
+
+        if (!success)
         {
-            _activeMovementTarget = closest;
+            return null;
         }
-        else
-        {
-            // move towars stronghold by default
-            _activeMovementTarget = _stronghold;
-        }
-        
-        // set target to attack
-        if (success && closestDistance < AttackRange  && AttackWhenInRang)
-        {
-            _activeAttackTarget = closest;
-        }
+
+        return closest;
     }
 
     private void FixedUpdate()
     {
-        if(_activeMovementTarget) _agent.destination = _activeMovementTarget.transform.position;
-        
+
         if (_cooldown > 0)
         {
             _cooldown -= Time.fixedDeltaTime;
@@ -139,6 +198,7 @@ public class GenericEnemyController : MonoBehaviour
         }
 
         Gizmos.color = Color.green;
+        Gizmos.DrawSphere(_agent.path.corners[_agent.path.corners.Length-1], 0.2f);
         for (int i = 0; i < _agent.path.corners.Length; i++)
         {
             Vector3 current = _agent.path.corners[i];
