@@ -27,6 +27,7 @@ public class GenericEnemyController : MonoBehaviour
     private GameObject _activeAttackTarget;
     private NavMeshAgent _agent;
     private float _cooldown;
+    private GameObject _lastCheckpoint;
 
     private static GameObject _stronghold;
 
@@ -53,8 +54,8 @@ public class GenericEnemyController : MonoBehaviour
         }
         else
         {
-            // move towars stronghold by default
-            _activeMovementTarget = _stronghold;
+            // move towars next checkpoint by default
+            _activeMovementTarget = NextCheckpoint();
         }
         
         // set target to attack
@@ -64,6 +65,38 @@ public class GenericEnemyController : MonoBehaviour
         }
         
         if(_activeMovementTarget) _agent.destination = _activeMovementTarget.transform.position;
+    }
+
+    private GameObject NextCheckpoint()
+    {
+        List<GameObject> checkpoints = GameObject.FindGameObjectsWithTag("Checkpoint").ToList();
+
+        checkpoints.Add(_stronghold);
+
+        
+        GameObject top = null;
+        float topValue = Single.MaxValue;
+        foreach (var checkpoint in checkpoints)
+        {
+            float distanceToSelf = Vector3.Distance(transform.position, checkpoint.transform.position);
+            float distanceToStronghold = Vector3.Distance(checkpoint.transform.position, _stronghold.transform.position);
+
+            float value = distanceToSelf + distanceToStronghold / 1.5f; // 1.5 = random value that where i found out it works
+            
+            if (distanceToSelf < 3)
+            {
+                _lastCheckpoint = checkpoint;
+                continue;
+            }
+            if (_lastCheckpoint == checkpoint) continue; // dont go back to last checkpoint
+            if (value > topValue) continue;
+            
+
+            top = checkpoint;
+            topValue = value;
+        }
+
+        return top;
     }
 
     private GameObject FindClosest(bool checkForCompletePath)
