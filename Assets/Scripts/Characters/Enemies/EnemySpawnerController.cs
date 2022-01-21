@@ -5,37 +5,72 @@ using UnityEngine;
 public class EnemySpawnerController : MonoBehaviour
 {
     private float _cooldown;
+    private bool _active;
+    private bool _firstStart = true;
+    private int _count;
+    private bool _autostart = true;
+    
+    [Space]
+    [Space]
+    public GameObject Parrent; // game ogject to instatiate enemy in
+    
+    [Header("Spawn")]
+    public GameObject EnemyObject; // game object to instantiate
+    [Space]
+    public float Interval;
+    public float StartDelay;
 
-    public GameObject parrent; // game ogject to instatiate enemy in
-    public GameObject enemyType; // game object to instantiate
-    public bool active;
-    
-    public float Cooldown
-    {
-        get => _cooldown;
-        private set => _cooldown = Mathf.Clamp(value, 0, 1);
-    }
-    
+    [Header("Amount")] 
+    public int Amount;
+    public bool InfiniteAmount;
+
     void Start()
     {
-        _cooldown = 1;
-        active = true;
+        
     }
     
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if (Cooldown > 0.9f) SpawnEnemy();
-        
-        Cooldown += 0.7f * Time.fixedDeltaTime;
+        if (_active)
+        {
+            if (_cooldown > 0)
+            {
+                _cooldown -= Time.fixedDeltaTime;
+            }
+            else
+            {
+                SpawnEnemy();
+                _cooldown = Interval;
+                _count++;
+            }
+        }
+        else
+        {
+            _count = 0;
+            
+            if (_firstStart)
+            {
+                _cooldown = StartDelay;
+                _firstStart = false;
+            }
+            
+            if (_cooldown >= 0)
+            {
+                _cooldown -= Time.fixedDeltaTime;
+            }
+            else if (_autostart)
+            {
+                _autostart = false;
+                _active = true;
+                _cooldown = 0;
+            }
+        }
+
+        if (_count >= Amount) _active = false;
     }
 
     public void SpawnEnemy()
     {
-        if (!active) return;
-        if (Cooldown == 0) return;
-        
-        Instantiate(enemyType, transform.position, transform.rotation, parrent.transform);
-
-        Cooldown = 0;
+        Instantiate(EnemyObject, transform.position, transform.rotation, Parrent.transform);
     }
 }
