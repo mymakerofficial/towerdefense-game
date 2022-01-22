@@ -5,23 +5,24 @@ using System.Linq;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 
 public class GenericEnemyController : MonoBehaviour
 {
-    [Header("Attack Behaviour")]
-    public float AttackRange;
-    public bool AttackWhenInRang;
-    public bool AttackWhenDamaged; //TODO Attack when damaged
+    [Header("Attack Behaviour")] 
+    [FormerlySerializedAs("AttackRange")] public float attackRange;
+    [FormerlySerializedAs("AttackWhenInRang")] public bool attackWhenInRang;
+    [FormerlySerializedAs("AttackWhenDamaged")] public bool attackWhenDamaged; //TODO Attack when damaged
     [Header("Move Behaviour")]
-    public float MoveRange;
-    public bool MoveTowardsWhenInRange;
-    public bool MoveTowardsWhenDamaged; //TODO Move towards when damaged
+    [FormerlySerializedAs("MoveRange")] public float moveRange;
+    [FormerlySerializedAs("MoveTowardsWhenInRange")] public bool moveTowardsWhenInRange;
+    [FormerlySerializedAs("MoveTowardsWhenDamaged")] public bool moveTowardsWhenDamaged; //TODO Move towards when damaged
     [Header("Attack")]
-    public GameObject FireGameObject;
-    public float AttackCooldownSec;
-    public bool SelfDestructOnAttack; // yes it does what you think it does
+    [FormerlySerializedAs("FireGameObject")] public GameObject fireGameObject;
+    [FormerlySerializedAs("AttackCooldownSec")] public float attackCooldownSec;
+    [FormerlySerializedAs("SelfDestructOnAttack")] public bool selfDestructOnAttack; // yes it does what you think it does
 
     private GameObject _activeMovementTarget;
     private GameObject _activeAttackTarget;
@@ -48,7 +49,7 @@ public class GenericEnemyController : MonoBehaviour
         GameObject closestAttack = FindClosest(false);
         
         // set pathfinding target
-        if (closestMove != null && Vector3.Distance(transform.position, closestMove.transform.position) < MoveRange && MoveTowardsWhenInRange)
+        if (closestMove != null && Vector3.Distance(transform.position, closestMove.transform.position) < moveRange && moveTowardsWhenInRange)
         {
             _activeMovementTarget = closestMove;
         }
@@ -59,7 +60,7 @@ public class GenericEnemyController : MonoBehaviour
         }
         
         // set target to attack
-        if (closestAttack != null && Vector3.Distance(transform.position, closestAttack.transform.position) < AttackRange  && AttackWhenInRang)
+        if (closestAttack != null && Vector3.Distance(transform.position, closestAttack.transform.position) < attackRange  && attackWhenInRang)
         {
             _activeAttackTarget = closestAttack;
         }
@@ -146,7 +147,7 @@ public class GenericEnemyController : MonoBehaviour
     {
         if (_activeAttackTarget != null)
         {
-            if (Vector3.Distance(transform.position, _activeAttackTarget.transform.position) > AttackRange)
+            if (Vector3.Distance(transform.position, _activeAttackTarget.transform.position) > attackRange)
                 _activeAttackTarget = null;
            
             if (_cooldown > 0)
@@ -165,13 +166,13 @@ public class GenericEnemyController : MonoBehaviour
     {
         if(_activeAttackTarget == null) return;
         
-        _cooldown = AttackCooldownSec;
+        _cooldown = attackCooldownSec;
 
-        if (FireGameObject)
+        if (fireGameObject)
         {
             float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
             GameObject bullet = Instantiate(
-                FireGameObject, 
+                fireGameObject, 
                 transform.position + new Vector3(0, 1.4f, 0), 
                 Quaternion.Euler(0, angle + 90, 0), 
                 GameObject.Find("Bullets").transform
@@ -179,7 +180,7 @@ public class GenericEnemyController : MonoBehaviour
             bullet.SendMessage("Fire");
         }
 
-        if (SelfDestructOnAttack)
+        if (selfDestructOnAttack)
         {
             CommitDie();
         }
@@ -219,9 +220,9 @@ public class GenericEnemyController : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, MoveRange);
+        Gizmos.DrawWireSphere(transform.position, moveRange);
         
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, AttackRange);
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
