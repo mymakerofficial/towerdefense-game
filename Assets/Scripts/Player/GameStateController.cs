@@ -14,6 +14,8 @@ public class GameStateController : MonoBehaviour
 {
     private GameState _gameState;
     private float _buildingTimer;
+    private bool _firstWave;
+    private bool _waitForWaveEnd;
 
     [Header("BuildingPhase")]
     public int buildingTime;
@@ -28,29 +30,46 @@ public class GameStateController : MonoBehaviour
 
     public GameState GameState => _gameState;
     public float BuildingTimer => _buildingTimer;
+    public bool FirstWave => _firstWave;
+    public bool BuildingPhaseIsTimed => !_firstWave;
     
     void Start()
     {
+        _firstWave = true;
         StartBuilding();
     }
 
     public void StartBuilding()
     {
-        _gameState = GameState.BuildingPhase;
-
         _buildingTimer = buildingTime;
+        
+        _gameState = GameState.BuildingPhase;
     }
 
     public void StartEnemyWave()
     {
         _gameState = GameState.EnemyWavePhase;
+        _waitForWaveEnd = false;
         
         waveController.SendMessage("StartNextWave");
     }
 
+    public void WaitForWaveEnd()
+    {
+        _waitForWaveEnd = true;
+    }
+
+    public void EndWave()
+    {
+        _firstWave = false;
+        _waitForWaveEnd = false;
+        
+        StartBuilding();
+    }
+
     private void FixedUpdate()
     {
-        if (_gameState == GameState.BuildingPhase)
+        if (_gameState == GameState.BuildingPhase && BuildingPhaseIsTimed)
         {
             if (_buildingTimer > 0)
             {
@@ -64,7 +83,10 @@ public class GameStateController : MonoBehaviour
 
         if (_gameState == GameState.EnemyWavePhase)
         {
-            
+            if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
+            {
+                EndWave();
+            }
         }
     }
 }

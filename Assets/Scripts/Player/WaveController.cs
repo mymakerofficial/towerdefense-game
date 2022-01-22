@@ -83,6 +83,9 @@ public class WaveController : MonoBehaviour
     public GameObject enemyParrent;
     public Vector3 spawnerPosition;
 
+    [Header("GameDirector")] 
+    public GameObject gameDirector;
+
     public Wave CurrentWave => waves[_currentWaveIndex];
 
     public WaveSection CurrentSection => CurrentWave.sections[_currentSectionIndex];
@@ -135,6 +138,8 @@ public class WaveController : MonoBehaviour
     private void StopWave()
     {
         _active = false;
+        
+        gameDirector.SendMessage("WaitForWaveEnd");
         
         Debug.Log($"Stopped wave {_currentWaveIndex}");
     }
