@@ -8,10 +8,10 @@ using Debug = UnityEngine.Debug;
 
 public struct Placement
 {
-    public GameObject Object;
-    public Vector3 Position;
-    public Quaternion Rotation;
-    public bool Available;
+    public GameObject tower;
+    public Vector3 position;
+    public Quaternion rotation;
+    public bool available;
 }
 
 public enum PlacementMode
@@ -33,7 +33,10 @@ public class TowerPlacementController : MonoBehaviour
     private GameObject _circle;
     private PlacementMode _mode = PlacementMode.Idle;
 
+    [Space]
     public GameObject parrent;
+    [Space]
+    public float distanceToMapObjects;
 
     /// <summary>
     /// Initialize the basics
@@ -64,10 +67,10 @@ public class TowerPlacementController : MonoBehaviour
     {
         Reset();
 
-        _placement.Object = obj;
+        _placement.tower = obj;
 
         float scale = 100;
-        if (_placement.Object.GetComponent<TowerDescriptor>()) scale = _placement.Object.GetComponent<TowerDescriptor>().placementRadius * 100;
+        if (_placement.tower.GetComponent<TowerDescriptor>()) scale = _placement.tower.GetComponent<TowerDescriptor>().placementRadius * 100;
         _circle.transform.localScale = new Vector3(scale, scale, scale);
         _circle.SetActive(true);
         
@@ -81,7 +84,7 @@ public class TowerPlacementController : MonoBehaviour
     private void CreateDummy()
     {
         // create dummy object
-        _dummy = Instantiate(_placement.Object, transform);
+        _dummy = Instantiate(_placement.tower, transform);
 
         _dummy.tag = "Untagged"; // dummy can not have tower tag
         
@@ -100,7 +103,7 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void Next()
     {
-        if(!_placement.Available || _mode == PlacementMode.Idle) return;
+        if(!_placement.available || _mode == PlacementMode.Idle) return;
         
         _mode++; // next step
 
@@ -122,18 +125,18 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void Place()
     {
-        long requiredCredits = _placement.Object.GetComponent<TowerDescriptor>().cost;
+        long requiredCredits = _placement.tower.GetComponent<TowerDescriptor>().cost;
 
         if (GameObject.Find("GameDirector").GetComponent<CreditController>().CurrentCredits >= requiredCredits)
         {
             GameObject.Find("GameDirector").SendMessage("WithdrawCredit", requiredCredits);
             
             // Create real object
-            Instantiate(_placement.Object, _placement.Position, _placement.Rotation, parrent.transform);
+            Instantiate(_placement.tower, _placement.position, _placement.rotation, parrent.transform);
         }
 
         // Place next one
-        StartPlacement(_placement.Object);
+        StartPlacement(_placement.tower);
     }
 
     /// <summary>
@@ -151,10 +154,10 @@ public class TowerPlacementController : MonoBehaviour
         _mode = PlacementMode.Idle;
 
         // reset all values
-        _placement.Object = null;
-        _placement.Position = Vector3.zero;
-        _placement.Rotation = new Quaternion();
-        _placement.Available = true;
+        _placement.tower = null;
+        _placement.position = Vector3.zero;
+        _placement.rotation = new Quaternion();
+        _placement.available = true;
     }
     
     void FixedUpdate()
@@ -177,30 +180,44 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void UpdatePosition()
     {
-        _placement.Position = RaycastCursorPosition();
+        _placement.position = RaycastCursorPosition();
             
         // check if position is to close to other towers
-        _placement.Available = true;
+        _placement.available = true;
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower"); // get every tower in the scene
 
         foreach (GameObject tower in towers)
         {
-            float distance =  Vector3.Distance(tower.transform.position, _placement.Position);
+            float distance =  Vector3.Distance(tower.transform.position, _placement.position);
             // if distance is smaller then combined radii 
-            if (distance < tower.GetComponent<TowerDescriptor>().placementRadius + _placement.Object.GetComponent<TowerDescriptor>().placementRadius)
+            if (distance < tower.GetComponent<TowerDescriptor>().placementRadius + _placement.tower.GetComponent<TowerDescriptor>().placementRadius)
             {
-                _placement.Available = false;
+                _placement.available = false;
                 break; // no need to check others
             }
         }
-            
+        
+        // check for collision with map objects 
+        Collider[] hitColliders = Physics.OverlapSphere(_placement.position, _placement.tower.GetComponent<TowerDescriptor>().placementRadius + distanceToMapObjects);
+        foreach (var hitCollider in hitColliders)
+        {
+            GameObject obj = hitCollider.gameObject; // get gameobject from collider
+
+            if (obj.layer == LayerMask.NameToLayer("Map"))
+            {
+                _placement.available = false;
+                break; // no need to check others
+            }
+        }
+        
+
         // set positions
-        _dummy.transform.position = _placement.Position;
-        _circle.transform.position = _placement.Position + new Vector3(0, 0.1f, 0);
+        _dummy.transform.position = _placement.position;
+        _circle.transform.position = _placement.position + new Vector3(0, 0.1f, 0);
 
         // change circle texture
         // TODO Optimize this!
-        if (_placement.Available)
+        if (_placement.available)
         {
             _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
         }
@@ -218,14 +235,14 @@ public class TowerPlacementController : MonoBehaviour
         Vector3 hitPoint = RaycastCursorPosition();
         
         // calculate angle
-        Vector2 dir2 = (new Vector2(_placement.Position.x, _placement.Position.z) -
+        Vector2 dir2 = (new Vector2(_placement.position.x, _placement.position.z) -
                         new Vector2(hitPoint.x, hitPoint.z)).normalized;
 
         float angle = (float)(Math.Atan2(dir2.y, -dir2.x) * (180 / Math.PI) + 90);
             
-        _placement.Rotation = Quaternion.Euler(0, angle, 0);
+        _placement.rotation = Quaternion.Euler(0, angle, 0);
             
-        _dummy.transform.rotation = _placement.Rotation;
+        _dummy.transform.rotation = _placement.rotation;
     }
 
     /// <summary>
