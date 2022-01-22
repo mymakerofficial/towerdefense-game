@@ -139,9 +139,9 @@ public class WaveController : MonoBehaviour
     {
         _active = false;
         
-        gameDirector.SendMessage("WaitForWaveEnd");
-        
         Debug.Log($"Stopped wave {_currentWaveIndex}");
+        
+        gameDirector.SendMessage("WaitForWaveEnd");
     }
 
     void DeleteOldSpawners()
