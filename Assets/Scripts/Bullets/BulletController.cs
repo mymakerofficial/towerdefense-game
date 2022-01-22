@@ -2,42 +2,43 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public struct TravelParameters
 {
-    public float MaxDistance; // how far the bullet can travel
-    public float Velocity; // bullet travel speed 
-    public bool IsHitscan; // bullet has no travel time
+    [FormerlySerializedAs("MaxDistance")] public float maxDistance; // how far the bullet can travel
+    [FormerlySerializedAs("Velocity")] public float velocity; // bullet travel speed 
+    [FormerlySerializedAs("IsHitscan")] public bool isHitscan; // bullet has no travel time
 }
 
 [Serializable]
 public struct HitParameters
 {
-    public List<BulletTargetTag> Tags;
-    public int MaxHits; // amount of hits before bullet is destroyed
-    public float ContactDamage; // the amount of damage to deal to the hit object
+    [FormerlySerializedAs("Tags")] public List<BulletTargetTag> tags;
+    [FormerlySerializedAs("MaxHits")] public int maxHits; // amount of hits before bullet is destroyed
+    [FormerlySerializedAs("ContactDamage")] public float contactDamage; // the amount of damage to deal to the hit object
 }
 
 [Serializable]
 public struct BulletTargetTag
 {
-    public string Name; // tag
-    public bool Solid; // will instantly destroy the bullet
-    public bool DealDamage; // bullet will deal damage to object
+    [FormerlySerializedAs("Name")] public string name; // tag
+    [FormerlySerializedAs("Solid")] public bool solid; // will instantly destroy the bullet
+    [FormerlySerializedAs("DealDamage")] public bool dealDamage; // bullet will deal damage to object
 }
 
 public class BulletController : MonoBehaviour
 {
     [Header("Bullet Travel")]
-    public float MaxTravelDistance; // how far the bullet can travel
-    public float TravelVelocity; // bullet travel speed 
-    public bool IsHitscan; // bullet has no travel time
+    [FormerlySerializedAs("MaxTravelDistance")] public float maxTravelDistance; // how far the bullet can travel
+    [FormerlySerializedAs("TravelVelocity")] public float travelVelocity; // bullet travel speed 
+    [FormerlySerializedAs("IsHitscan")] public bool isHitscan; // bullet has no travel time
     
     [Header("Bullet Hit")]
-    public int MaxHits; // amount of hits before bullet is destroyed
-    public float DamageOnContact; // the amount of damage to deal to the hit object
-    public List<BulletTargetTag> TargetTags;
+    [FormerlySerializedAs("MaxHits")] public int maxHits; // amount of hits before bullet is destroyed
+    [FormerlySerializedAs("DamageOnContact")] public float damageOnContact; // the amount of damage to deal to the hit object
+    [FormerlySerializedAs("TargetTags")] public List<BulletTargetTag> targetTags;
 
     private bool _active;
     private Vector3 _origin;
@@ -56,10 +57,10 @@ public class BulletController : MonoBehaviour
         if(!_active) return;
         
         // calculate step distance with delta time
-        float stepDistance = TravelVelocity * Time.fixedDeltaTime;
+        float stepDistance = travelVelocity * Time.fixedDeltaTime;
 
         // hitscan bullets travel entire distance in one frame
-        if (IsHitscan) stepDistance = MaxTravelDistance;
+        if (isHitscan) stepDistance = maxTravelDistance;
         
         // raycast between current possition and next position
         RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward, stepDistance);
@@ -69,19 +70,19 @@ public class BulletController : MonoBehaviour
         foreach (var hit in hits)
         {
             // check tags
-            foreach (var tag in TargetTags)
+            foreach (var tag in targetTags)
             {
-                if (!hit.collider.CompareTag(tag.Name)) continue;
+                if (!hit.collider.CompareTag(tag.name)) continue;
 
                 _hitCount++;
                 
-                if (tag.DealDamage)
+                if (tag.dealDamage)
                 {
-                    hit.collider.gameObject.SendMessage("ApplyDamage", DamageOnContact);
+                    hit.collider.gameObject.SendMessage("ApplyDamage", damageOnContact);
                 }
 
                 // destroy bullet when hits solid object or to many objects have been hit
-                if (_hitCount < MaxHits && !tag.Solid) continue;
+                if (_hitCount < maxHits && !tag.solid) continue;
 
                 transform.position = hit.point;
                 Disolve();
@@ -96,7 +97,7 @@ public class BulletController : MonoBehaviour
         _distance += stepDistance;
 
         // if distance to far destroy
-        if (_distance >= MaxTravelDistance)
+        if (_distance >= maxTravelDistance)
         {
             Disolve();
         }
