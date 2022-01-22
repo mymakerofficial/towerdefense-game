@@ -6,27 +6,28 @@ public class EnemySpawnerController : MonoBehaviour
 {
     private float _cooldown;
     private bool _active;
-    private bool _firstStart = true;
     private int _count;
-    private bool _autostart = true;
-    
+
     [Space]
     [Space]
-    public GameObject Parrent; // game ogject to instatiate enemy in
+    public GameObject parrent; // game ogject to instatiate enemy in
     
     [Header("Spawn")]
-    public GameObject EnemyObject; // game object to instantiate
+    public GameObject enemyObject; // game object to instantiate
     [Space]
-    public float Interval;
-    public float StartDelay;
+    public float interval;
+    public float startDelay;
+    [Space]
+    public bool autostart = true;
 
     [Header("Amount")] 
-    public int Amount;
-    public bool InfiniteAmount;
+    public int amount;
+    public bool infiniteAmount;
 
     void Start()
     {
-        
+        _cooldown = startDelay;
+        _active = false;
     }
     
     private void FixedUpdate()
@@ -40,37 +41,30 @@ public class EnemySpawnerController : MonoBehaviour
             else
             {
                 SpawnEnemy();
-                _cooldown = Interval;
+                _cooldown = interval;
                 _count++;
             }
+            
+            if (_count >= amount && !infiniteAmount) _active = false;
         }
         else
         {
             _count = 0;
-            
-            if (_firstStart)
-            {
-                _cooldown = StartDelay;
-                _firstStart = false;
-            }
-            
+
             if (_cooldown >= 0)
             {
                 _cooldown -= Time.fixedDeltaTime;
             }
-            else if (_autostart)
+            else if (autostart)
             {
-                _autostart = false;
                 _active = true;
                 _cooldown = 0;
             }
         }
-
-        if (_count >= Amount) _active = false;
     }
 
     public void SpawnEnemy()
     {
-        Instantiate(EnemyObject, transform.position, transform.rotation, Parrent.transform);
+        Instantiate(enemyObject, transform.position, transform.rotation, parrent.transform);
     }
 }

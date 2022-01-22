@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class Wave
 {
-    public List<WaveSection> Sections;
+    public List<WaveSection> sections;
     
     public float Duration
     {
@@ -15,7 +15,7 @@ public class Wave
         {
             float sum = 0;
             
-            foreach (var section in Sections)
+            foreach (var section in sections)
             {
                 sum += section.Duration;
             }
@@ -28,7 +28,7 @@ public class Wave
 [Serializable]
 public class WaveSection
 {
-    public List<WaveEnemy> Enemies;
+    public List<WaveEnemy> enemies;
 
     public float Duration
     {
@@ -36,9 +36,9 @@ public class WaveSection
         {
             float top = 0;
             
-            foreach (var enemy in Enemies)
+            foreach (var enemy in enemies)
             {
-                float duration = enemy.Duration + enemy.StartDelay;
+                float duration = enemy.Duration + enemy.startDelay;
 
                 if (duration > top) top = duration;
             }
@@ -52,17 +52,17 @@ public class WaveSection
 public class WaveEnemy
 {
     [Header("Enemy")]
-    public GameObject Enemy;
-    public int Amount;
+    public GameObject enemy;
+    public int amount;
     [Header("Timing")]
-    public float Interval;
-    public float StartDelay;
+    public float interval;
+    public float startDelay;
 
     public float Duration
     {
         get
         {
-            return Interval * Amount;
+            return interval * amount;
         }
     }
 }
@@ -83,9 +83,12 @@ public class WaveController : MonoBehaviour
     public GameObject enemyParrent;
     public Vector3 spawnerPosition;
 
+    [Header("GameDirector")] 
+    public GameObject gameDirector;
+
     public Wave CurrentWave => waves[_currentWaveIndex];
 
-    public WaveSection CurrentSection => CurrentWave.Sections[_currentSectionIndex];
+    public WaveSection CurrentSection => CurrentWave.sections[_currentSectionIndex];
 
     public int CurrentWaveIndex => _currentWaveIndex;
     public int CurrentSectionIndex => _currentSectionIndex;
@@ -100,7 +103,8 @@ public class WaveController : MonoBehaviour
         if(_active) return; // dont start a wave while one is already running
         
         _currentWaveIndex = index; // set current wave
-        _nextWaveIndex = index + 1 % waves.Count; // set next wave
+        _nextWaveIndex = index + 1; // set next wave
+        if (_nextWaveIndex > waves.Count - 1) _nextWaveIndex = 0;
 
         _active = true; // set active
 
@@ -113,7 +117,7 @@ public class WaveController : MonoBehaviour
     {
         DeleteOldSpawners();
 
-        if (index >= CurrentWave.Sections.Count) // check if selected section is out of range and stop wave
+        if (index >= CurrentWave.sections.Count) // check if selected section is out of range and stop wave
         {
             StopWave();
             return;
@@ -121,9 +125,9 @@ public class WaveController : MonoBehaviour
         
         _currentSectionIndex = index; // set current section
 
-        Debug.Log($"Started section {index}");
-            
-        foreach (var enemy in CurrentSection.Enemies) // create all spawners for this section
+        Debug.Log($"Started wave {_currentWaveIndex}, section {_currentSectionIndex}");
+
+        foreach (var enemy in CurrentSection.enemies) // create all spawners for this section
         {
             CreateSpawner(enemy);
         }
@@ -134,6 +138,8 @@ public class WaveController : MonoBehaviour
     private void StopWave()
     {
         _active = false;
+        
+        gameDirector.SendMessage("WaitForWaveEnd");
         
         Debug.Log($"Stopped wave {_currentWaveIndex}");
     }
@@ -157,17 +163,17 @@ public class WaveController : MonoBehaviour
         // setup gameobject
         obj.transform.SetParent(spawnerParrent.transform);
         obj.transform.position = spawnerPosition;
-        obj.name = $"EnemySpawner ({enemy.Enemy.GetComponent<EnemyDescriptor>().name})";
+        obj.name = $"EnemySpawner ({enemy.enemy.GetComponent<EnemyDescriptor>().name})";
         
         // add controller
         EnemySpawnerController controller = obj.AddComponent<EnemySpawnerController>();
 
         // set controller
-        controller.EnemyObject = enemy.Enemy;
-        controller.Interval = enemy.Interval;
-        controller.StartDelay = enemy.StartDelay;
-        controller.Amount = enemy.Amount;
-        controller.Parrent = enemyParrent;
+        controller.enemyObject = enemy.enemy;
+        controller.interval = enemy.interval;
+        controller.startDelay = enemy.startDelay;
+        controller.amount = enemy.amount;
+        controller.parrent = enemyParrent;
 
         return obj;
     }
