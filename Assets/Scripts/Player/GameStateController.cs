@@ -28,6 +28,9 @@ public class GameStateController : MonoBehaviour
     public GameObject towers;
     public GameObject bullets;
 
+    [Header("Stronghold")] 
+    public GameObject stronghold;
+
     public GameState GameState => _gameState;
     public float BuildingTimer => _buildingTimer;
     public bool FirstWave => _firstWave;
@@ -44,6 +47,8 @@ public class GameStateController : MonoBehaviour
         _buildingTimer = buildingTime;
         
         _gameState = GameState.BuildingPhase;
+        
+        Debug.Log("Starting building phase");
     }
 
     public void StartEnemyWave()
@@ -51,12 +56,16 @@ public class GameStateController : MonoBehaviour
         _gameState = GameState.EnemyWavePhase;
         _waitForWaveEnd = false;
         
+        Debug.Log("Starting enemy wave phase");
+
         waveController.SendMessage("StartNextWave");
     }
 
     public void WaitForWaveEnd()
     {
         _waitForWaveEnd = true;
+        
+        Debug.Log("Waiting for all enemies to despawn");
     }
 
     public void EndWave()
@@ -64,7 +73,17 @@ public class GameStateController : MonoBehaviour
         _firstWave = false;
         _waitForWaveEnd = false;
         
+        Debug.Log("Ended enemy wave phase");
+        
         StartBuilding();
+    }
+
+    private void GameOver()
+    {
+        _gameState = GameState.GameOver;
+        _waitForWaveEnd = false;
+        
+        Debug.Log("Game Over");
     }
 
     private void FixedUpdate()
@@ -86,6 +105,11 @@ public class GameStateController : MonoBehaviour
             if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
             {
                 EndWave();
+            }
+
+            if (stronghold.GetComponent<StrongholdController>().HealthPercent == 0)
+            {
+                GameOver();
             }
         }
     }

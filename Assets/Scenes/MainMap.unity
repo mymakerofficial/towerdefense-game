@@ -13532,9 +13532,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92393ce55c616ab478bf8c0a21f4f223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyParrent: {fileID: 1025087702}
-  AffectDistance: 2.5
-  FullHealth: 10
+  enemyParrent: {fileID: 1025087702}
+  affectDistance: 2.5
+  fullHealth: 10
 --- !u!1001 &1342465722
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22274,6 +22274,7 @@ MonoBehaviour:
   enemies: {fileID: 1025087702}
   towers: {fileID: 1392174334}
   bullets: {fileID: 1392174334}
+  stronghold: {fileID: 1339811765}
 --- !u!4 &2101572677 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e45b0b82aabdc104b9af6de374d41917, type: 3}

@@ -2,14 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class StrongholdController : MonoBehaviour
 {
     [Header("Enemies")]
-    public GameObject EnemyParrent;
-    public float AffectDistance;
+    public GameObject enemyParrent;
+    public float affectDistance;
     [Header("Health")]
-    public int FullHealth;
+    public int fullHealth;
     
     private int _health;
 
@@ -21,14 +22,14 @@ public class StrongholdController : MonoBehaviour
         }
         private set
         {
-            if (_health + value >= 0)
+            if (value >= 0)
             {
                 _health = value;
             }
         }
     }
 
-    public float HealthPercent => FullHealth / Health;
+    public float HealthPercent =>  (float)Health / (float)fullHealth;
 
     private void Start()
     {
@@ -37,17 +38,19 @@ public class StrongholdController : MonoBehaviour
 
     public void Reset()
     {
-        Health = FullHealth;
+        Health = fullHealth;
     }
 
     private void FixedUpdate()
     {
-        foreach (Transform enemyTransform in EnemyParrent.transform) // loop through all enemies
+        foreach (Transform enemyTransform in enemyParrent.transform) // loop through all enemies
         {
-            if (Vector3.Distance(transform.position, enemyTransform.position) < AffectDistance) // check if enemy is in range
+            if (Vector3.Distance(transform.position, enemyTransform.position) < affectDistance) // check if enemy is in range
             {
                 Destroy(enemyTransform.gameObject);
                 Health--;
+                
+                Debug.Log($"Stronghold Health: {HealthPercent*100}%");
             }
         }
 
@@ -60,6 +63,6 @@ public class StrongholdController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, AffectDistance);
+        Gizmos.DrawWireSphere(transform.position, affectDistance);
     }
 }
