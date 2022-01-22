@@ -23896,6 +23896,26 @@ PrefabInstance:
       propertyPath: distanceToMapObjects
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: protectedZones.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: protectedZones.Array.data[0].radius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: protectedZones.Array.data[1].radius
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: protectedZones.Array.data[0].position.z
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: protectedZones.Array.data[1].position.z
+      value: -50
+      objectReference: {fileID: 0}
     - target: {fileID: 2467957537997868515, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
       propertyPath: m_RootOrder
       value: 1
