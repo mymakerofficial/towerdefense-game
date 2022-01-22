@@ -14,6 +14,13 @@ public struct Placement
     public bool available;
 }
 
+[Serializable]
+public struct ProtectedZone
+{
+    public Vector3 position;
+    public float radius;
+}
+
 public enum PlacementMode
 {
     Idle,
@@ -37,6 +44,8 @@ public class TowerPlacementController : MonoBehaviour
     public GameObject parrent;
     [Space]
     public float distanceToMapObjects;
+    [Space]
+    public List<ProtectedZone> protectedZones;
 
     /// <summary>
     /// Initialize the basics
@@ -210,6 +219,17 @@ public class TowerPlacementController : MonoBehaviour
             }
         }
         
+        // check for protected zones
+        foreach (var zone in protectedZones)
+        {
+            if (Vector3.Distance(zone.position, _placement.position) <
+                zone.radius + _placement.tower.GetComponent<TowerDescriptor>().placementRadius)
+            {
+                _placement.available = false;
+                break; // no need to check others
+            }
+        }
+        
 
         // set positions
         _dummy.transform.position = _placement.position;
@@ -258,5 +278,14 @@ public class TowerPlacementController : MonoBehaviour
             return hit.point;
         }
         return Vector3.zero;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        foreach (var zone in protectedZones)
+        {
+            Gizmos.DrawWireSphere(zone.position, zone.radius);
+        }
     }
 }
