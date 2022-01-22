@@ -44,18 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d269701ec5c02a841b30c0a021a38116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxTravelDistance: 40
-  TravelVelocity: 50
-  IsHitscan: 0
-  MaxHits: 1
-  DamageOnContact: 6
-  TargetTags:
-  - Name: Tower
-    Solid: 0
-    DealDamage: 0
-  - Name: Enemy
-    Solid: 1
-    DealDamage: 1
+  maxTravelDistance: 40
+  travelVelocity: 50
+  isHitscan: 0
+  maxHits: 1
+  damageOnContact: 6
+  targetTags:
+  - name: Enemy
+    solid: 1
+    dealDamage: 1
 --- !u!1 &1422610890872642335
 GameObject:
   m_ObjectHideFlags: 0
