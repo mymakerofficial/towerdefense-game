@@ -144,19 +144,27 @@ public class GenericEnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        if (_cooldown > 0)
+        if (_activeAttackTarget != null)
         {
-            _cooldown -= Time.fixedDeltaTime;
+            if (Vector3.Distance(transform.position, _activeAttackTarget.transform.position) > AttackRange)
+                _activeAttackTarget = null;
+           
+            if (_cooldown > 0)
+            {
+               _cooldown -= Time.fixedDeltaTime;
+            }
+            else
+            {
+               Attack();
+            } 
         }
-        else if(_activeAttackTarget != null)
-        {
-            Attack();
-        }
+        
     }
 
     private void Attack()
     {
+        if(_activeAttackTarget == null) return;
+        
         _cooldown = AttackCooldownSec;
 
         if (FireGameObject)
