@@ -23892,6 +23892,10 @@ PrefabInstance:
       propertyPath: parrent
       value: 
       objectReference: {fileID: 1392174334}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: distanceToMapObjects
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 2467957537997868515, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
       propertyPath: m_RootOrder
       value: 1
