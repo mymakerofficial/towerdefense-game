@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2577514617024648590}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1, z: 1.5}
   m_Children: []
   m_Father: {fileID: 2577514617457882194}
   m_RootOrder: 0
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 2577514617457882207}
   - component: {fileID: 4927150603594342777}
   m_Layer: 6
-  m_Name: Generic Enemy
+  m_Name: Tank Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,9 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e15cd8cca087ea64fbb7f150bbcc7df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: generic
-  description: generic
-  fullHealthCredits: 10
+  name: tank
+  description: tank
+  fullHealthCredits: 6
 --- !u!114 &2577514617457882192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,8 +172,8 @@ MonoBehaviour:
   moveRange: 0
   moveTowardsWhenInRange: 0
   moveTowardsWhenDamaged: 0
-  fireGameObject: {fileID: 1422610889946738639, guid: 47170d9a244773a499b5073104cb56f2, type: 3}
-  attackCooldownSec: 1
+  fireGameObject: {fileID: 0}
+  attackCooldownSec: 0
   selfDestructOnAttack: 0
 --- !u!114 &2577514617457882207
 MonoBehaviour:
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 42
+  MaxHealth: 124
 --- !u!136 &4927150603594342777
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -198,7 +198,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 1
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}

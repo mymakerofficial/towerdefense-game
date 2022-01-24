@@ -46,8 +46,7 @@ public class GenericEnemyController : MonoBehaviour
     void UpdateTarget()
     {
         GameObject closestMove = FindClosest(true);
-        GameObject closestAttack = FindClosest(false);
-        
+
         // set pathfinding target
         if (closestMove != null && Vector3.Distance(transform.position, closestMove.transform.position) < moveRange && moveTowardsWhenInRange)
         {
@@ -59,13 +58,18 @@ public class GenericEnemyController : MonoBehaviour
             _activeMovementTarget = NextCheckpoint();
         }
         
-        // set target to attack
-        if (closestAttack != null && Vector3.Distance(transform.position, closestAttack.transform.position) < attackRange  && attackWhenInRang)
-        {
-            _activeAttackTarget = closestAttack;
-        }
-        
         if(_activeMovementTarget) _agent.destination = _activeMovementTarget.transform.position;
+
+        if (fireGameObject != null)
+        {
+            GameObject closestAttack = FindClosest(false);
+        
+            // set target to attack
+            if (closestAttack != null && Vector3.Distance(transform.position, closestAttack.transform.position) < attackRange  && attackWhenInRang)
+            {
+                _activeAttackTarget = closestAttack;
+            }
+        }
     }
 
     private GameObject NextCheckpoint()
