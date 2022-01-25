@@ -5756,6 +5756,41 @@ MonoBehaviour:
   - sections:
     - enemies:
       - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 10
+        interval: 1
+        startDelay: 1
+  - sections:
+    - enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 6
+        interval: 1
+        startDelay: 0
+    - enemies:
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 6
+        interval: 1
+        startDelay: 1
+    - enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
+        amount: 20
+        interval: 0.5
+        startDelay: 0
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 20
+        interval: 0.5
+        startDelay: 1
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 5
+        interval: 2
+        startDelay: 0
+    - enemies:
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 30
+        interval: 0.5
+        startDelay: 1
+  - sections:
+    - enemies:
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
         amount: 6
         interval: 2
         startDelay: 0
@@ -5797,26 +5832,6 @@ MonoBehaviour:
       - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
         amount: 20
         interval: 0.1
-        startDelay: 1
-  - sections:
-    - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
-        amount: 6
-        interval: 1
-        startDelay: 0
-    - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
-        amount: 20
-        interval: 0.5
-        startDelay: 0
-      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 20
-        interval: 0.5
-        startDelay: 1
-    - enemies:
-      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 30
-        interval: 0.5
         startDelay: 1
   spawnerParrent: {fileID: 104990955}
   enemyParrent: {fileID: 1025087702}
@@ -10843,7 +10858,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1025087702}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -34.47639, y: -69.40492, z: 120.7261}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -14412,7 +14427,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1392174334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -34.47639, y: -69.40492, z: 120.7261}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -22477,7 +22492,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137013153}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.0053134, y: 5.8320093, z: -4.4782715}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

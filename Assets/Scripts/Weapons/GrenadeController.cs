@@ -29,17 +29,17 @@ public class GrenadeController : MonoBehaviour
         return vel * dir.normalized;
     }
 
-    void Fire(GameObject target)
+    public void Fire(GameObject target)
     {
         _target = target.transform.position;
-        
+
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         rigidbody.AddForce(CalculateVelocity(target.transform.position) * rigidbody.mass, ForceMode.Impulse);
     }
 
     void Explode()
     {
-        Instantiate(explosion, transform.parent).SendMessage("Fire");
+        Instantiate(explosion, transform.position, transform.rotation, transform.parent).SendMessage("Fire");
         Destroy(gameObject);
     }
 

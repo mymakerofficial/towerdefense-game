@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 120
-  Radius: 7
+  Radius: 4
   DealDamageTo:
   - Tower
 --- !u!1 &6399894182098623516

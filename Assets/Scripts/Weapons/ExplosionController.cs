@@ -2,24 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ExplosionController : MonoBehaviour
 {
-    public float Damage;
-    public float Radius;
-    public List<string> DealDamageTo;
+    [FormerlySerializedAs("Damage")] public float damage;
+    [FormerlySerializedAs("Radius")] public float radius;
+    [FormerlySerializedAs("DealDamageTo")] public List<string> dealDamageTo;
 
     public void Fire()
     {
         // get all colliders in radius
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, Radius);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
         foreach (var hitCollider in hitColliders)
         {
             GameObject obj = hitCollider.gameObject; // get gameobject from collider
 
-            if (DealDamageTo.Contains(obj.tag)) // check if tag is in list of tags to apply damage to
+            if (dealDamageTo.Contains(obj.tag)) // check if tag is in list of tags to apply damage to
             {
-                obj.SendMessage("ApplyDamage", Damage);
+                obj.SendMessage("ApplyDamage", damage);
             }
         }
         
@@ -29,6 +30,6 @@ public class ExplosionController : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, Radius);
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 }
