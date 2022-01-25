@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 2577514617457882207}
   - component: {fileID: 4927150603594342777}
   m_Layer: 6
-  m_Name: Generic Enemy
+  m_Name: Grenade Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,8 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e15cd8cca087ea64fbb7f150bbcc7df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: generic
-  description: generic
+  name: granade
+  description: granade
   fullHealthCredits: 10
 --- !u!114 &2577514617457882192
 MonoBehaviour:
@@ -168,14 +168,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackRange: 10
   attackWhenInRang: 1
-  attackWhenDamaged: 1
-  moveRange: 0
-  moveTowardsWhenInRange: 0
+  attackWhenDamaged: 0
+  moveRange: 30
+  moveTowardsWhenInRange: 1
   moveTowardsWhenDamaged: 0
-  fireGameObject: {fileID: 1422610889946738639, guid: 47170d9a244773a499b5073104cb56f2, type: 3}
-  fireCallOptions: 1
-  fireOffset: {x: 0, y: 1.4, z: 0}
-  attackCooldownSec: 1
+  fireGameObject: {fileID: 5305491943199489257, guid: 04286757831240340ae6214f7855eec1, type: 3}
+  fireCallOptions: 2
+  fireOffset: {x: 0, y: 2, z: 0}
+  attackCooldownSec: 2
   selfDestructOnAttack: 0
 --- !u!114 &2577514617457882207
 MonoBehaviour:

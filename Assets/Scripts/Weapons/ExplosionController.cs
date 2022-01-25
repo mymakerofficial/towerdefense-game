@@ -8,14 +8,8 @@ public class ExplosionController : MonoBehaviour
     public float Damage;
     public float Radius;
     public List<string> DealDamageTo;
-    public float DelaySec;
-    
-    void Start()
-    {
-        Explode();
-    }
 
-    public void Explode()
+    public void Fire()
     {
         // get all colliders in radius
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, Radius);

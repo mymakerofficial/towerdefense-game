@@ -85,15 +85,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb9e52f5e75985340bdb910455433d86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackRange: 3
-  AttackWhenInRang: 1
-  AttackWhenDamaged: 0
-  MoveRange: 20
-  MoveTowardsWhenInRange: 1
-  MoveTowardsWhenDamaged: 1
-  FireGameObject: {fileID: 6399894181811631949, guid: 1b4da318e0c399f4e9b00e7c7f59ad2c, type: 3}
-  AttackCooldownSec: 1
-  SelfDestructOnAttack: 1
+  attackRange: 3
+  attackWhenInRang: 1
+  attackWhenDamaged: 0
+  moveRange: 20
+  moveTowardsWhenInRange: 1
+  moveTowardsWhenDamaged: 1
+  fireGameObject: {fileID: 6399894181811631949, guid: 1b4da318e0c399f4e9b00e7c7f59ad2c, type: 3}
+  fireCallOptions: 1
+  attackCooldownSec: 1
+  selfDestructOnAttack: 1
 --- !u!114 &6034153033960322290
 MonoBehaviour:
   m_ObjectHideFlags: 0

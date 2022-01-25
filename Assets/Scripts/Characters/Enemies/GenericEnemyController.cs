@@ -5,9 +5,17 @@ using System.Linq;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
+[Serializable]
+public enum FireCallOptions
+{
+    None,
+    CallFire,
+    SendTarget
+}
 
 public class GenericEnemyController : MonoBehaviour
 {
@@ -21,6 +29,10 @@ public class GenericEnemyController : MonoBehaviour
     [FormerlySerializedAs("MoveTowardsWhenDamaged")] public bool moveTowardsWhenDamaged; //TODO Move towards when damaged
     [Header("Attack")]
     [FormerlySerializedAs("FireGameObject")] public GameObject fireGameObject;
+    public FireCallOptions fireCallOptions;
+    [Space]
+    public Vector3 fireOffset;
+    [Space]
     [FormerlySerializedAs("AttackCooldownSec")] public float attackCooldownSec;
     [FormerlySerializedAs("SelfDestructOnAttack")] public bool selfDestructOnAttack; // yes it does what you think it does
 
@@ -175,13 +187,23 @@ public class GenericEnemyController : MonoBehaviour
         if (fireGameObject)
         {
             float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
+            
             GameObject bullet = Instantiate(
                 fireGameObject, 
-                transform.position + new Vector3(0, 1.4f, 0), 
+                transform.position + fireOffset, 
                 Quaternion.Euler(0, angle + 90, 0), 
                 GameObject.Find("Bullets").transform
             );
-            bullet.SendMessage("Fire");
+            
+            switch (fireCallOptions)
+            {
+                case FireCallOptions.CallFire:
+                    bullet.SendMessage("Fire");
+                    break;
+                case FireCallOptions.SendTarget:
+                    bullet.SendMessage("Fire", _activeAttackTarget);
+                    break;
+            }
         }
 
         if (selfDestructOnAttack)

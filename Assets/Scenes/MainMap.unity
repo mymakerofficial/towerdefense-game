@@ -5755,6 +5755,12 @@ MonoBehaviour:
   waves:
   - sections:
     - enemies:
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 6
+        interval: 2
+        startDelay: 0
+  - sections:
+    - enemies:
       - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
         amount: 10
         interval: 1
