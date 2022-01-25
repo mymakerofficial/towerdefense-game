@@ -172,6 +172,7 @@ MonoBehaviour:
   moveRange: 30
   moveTowardsWhenInRange: 1
   moveTowardsWhenDamaged: 0
+  stopDistance: 7
   fireGameObject: {fileID: 5305491943199489257, guid: 04286757831240340ae6214f7855eec1, type: 3}
   fireCallOptions: 2
   fireOffset: {x: 0, y: 2, z: 0}

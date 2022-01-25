@@ -27,6 +27,7 @@ public class GenericEnemyController : MonoBehaviour
     [FormerlySerializedAs("MoveRange")] public float moveRange;
     [FormerlySerializedAs("MoveTowardsWhenInRange")] public bool moveTowardsWhenInRange;
     [FormerlySerializedAs("MoveTowardsWhenDamaged")] public bool moveTowardsWhenDamaged; //TODO Move towards when damaged
+    public float stopDistance;
     [Header("Attack")]
     [FormerlySerializedAs("FireGameObject")] public GameObject fireGameObject;
     public FireCallOptions fireCallOptions;
@@ -58,19 +59,26 @@ public class GenericEnemyController : MonoBehaviour
     void UpdateTarget()
     {
         GameObject closestMove = FindClosest(true);
+        
 
         // set pathfinding target
         if (closestMove != null && Vector3.Distance(transform.position, closestMove.transform.position) < moveRange && moveTowardsWhenInRange)
         {
             _activeMovementTarget = closestMove;
+            
+            // calculate position infront of target with stop distance
+            Vector3 dif = transform.position - _activeMovementTarget.transform.position;
+            Vector3 targetPos = _activeMovementTarget.transform.position + dif.normalized * stopDistance;
+            // set destination
+            _agent.destination = targetPos;
         }
         else
         {
             // move towars next checkpoint by default
             _activeMovementTarget = NextCheckpoint();
+            
+            _agent.destination = _activeMovementTarget.transform.position;
         }
-        
-        if(_activeMovementTarget) _agent.destination = _activeMovementTarget.transform.position;
 
         if (fireGameObject != null)
         {
@@ -135,12 +143,15 @@ public class GenericEnemyController : MonoBehaviour
 
             if (checkForCompletePath)
             {
-                RaycastHit hit;
-                if(Physics.Raycast(transform.position, target.transform.position - transform.position,out hit))
+                if (distance > stopDistance) // no need to check if its gonna stop anyways
                 {
-                    if (hit.collider.gameObject != target) // check if hit is not target
+                    RaycastHit hit;
+                    if(Physics.Raycast(transform.position, target.transform.position - transform.position,out hit))
                     {
-                        continue;
+                        if (hit.collider.gameObject != target) // check if hit is not target
+                        {
+                            continue;
+                        }
                     }
                 }
             }
