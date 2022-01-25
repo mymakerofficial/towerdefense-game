@@ -32,6 +32,25 @@ public class CameraController : MonoBehaviour
     public float mouseMovementSpeed;
 
     /// <summary>
+    /// checks invalid positions
+    /// </summary>
+    public Vector2 Position
+    {
+        get
+        {
+            return _position;
+        }
+        set
+        {
+            if (value.x<0.9 && value.x>-4.3 &&
+                value.y<55 && value.y>-48)
+            {
+                _position = value;
+            }
+        }
+    }
+    
+    /// <summary>
     /// Is the camera beeing moved with mouse
     /// </summary>
     public bool MouseMoveActive => _mouseMove;
@@ -119,14 +138,15 @@ public class CameraController : MonoBehaviour
             var mv = (_controls.Camera.MousePosition.ReadValue<Vector2>() - _mouseMoveStartPosition) * mouseMovementSpeed;
             _position.x += Mathf.Clamp(mv.x, -movementSpeed, movementSpeed);
             _position.y += Mathf.Clamp(mv.y, -movementSpeed, movementSpeed);
+            
         }
         
         // movement with everything that is not the mouse
-        _position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
+        Position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
 
         // smooth translation for position
         transform.position += (positionCurrent - transform.position) * movementEasing;
-
+        
         // smooth translation for rotation
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles +
                                               (rotationCurrent - transform.rotation.eulerAngles) * movementEasing);
@@ -136,5 +156,8 @@ public class CameraController : MonoBehaviour
 
         // move scroll velocity to 0
         _scrollVel -= _scrollVel / 10 * (Time.fixedDeltaTime / 0.016f);
+        
+        Debug.Log($"absoluteZoom({absoluteZoom}) ");
     }
+    
 }
