@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: tank
   description: tank
-  fullHealthCredits: 6
+  fullHealthCredits: 24
 --- !u!114 &2577514617457882192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,7 +172,10 @@ MonoBehaviour:
   moveRange: 0
   moveTowardsWhenInRange: 0
   moveTowardsWhenDamaged: 0
+  stopDistance: 0
   fireGameObject: {fileID: 0}
+  fireCallOptions: 0
+  fireOffset: {x: 0, y: 0, z: 0}
   attackCooldownSec: 0
   selfDestructOnAttack: 0
 --- !u!114 &2577514617457882207

@@ -5755,48 +5755,23 @@ MonoBehaviour:
   waves:
   - sections:
     - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
         amount: 10
         interval: 1
         startDelay: 1
   - sections:
     - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
-        amount: 6
-        interval: 1
-        startDelay: 0
-    - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
-        amount: 6
-        interval: 1
-        startDelay: 1
-    - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
-        amount: 20
-        interval: 0.5
-        startDelay: 0
       - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 20
-        interval: 0.5
-        startDelay: 1
-      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
-        amount: 5
-        interval: 2
-        startDelay: 0
-    - enemies:
-      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 30
-        interval: 0.5
-        startDelay: 1
-  - sections:
-    - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
         amount: 6
         interval: 2
         startDelay: 0
   - sections:
     - enemies:
       - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
+        amount: 10
+        interval: 1
+        startDelay: 0
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
         amount: 10
         interval: 1
         startDelay: 1
@@ -5832,6 +5807,35 @@ MonoBehaviour:
       - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
         amount: 20
         interval: 0.1
+        startDelay: 1
+  - sections:
+    - enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 6
+        interval: 1
+        startDelay: 0
+    - enemies:
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 6
+        interval: 1
+        startDelay: 1
+    - enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
+        amount: 20
+        interval: 0.5
+        startDelay: 0
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 20
+        interval: 0.5
+        startDelay: 1
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 5
+        interval: 2
+        startDelay: 0
+    - enemies:
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 10
+        interval: 0.5
         startDelay: 1
   spawnerParrent: {fileID: 104990955}
   enemyParrent: {fileID: 1025087702}
