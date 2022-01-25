@@ -69,6 +69,7 @@ public class GenericEnemyController : MonoBehaviour
             // calculate position infront of target with stop distance
             Vector3 dif = transform.position - _activeMovementTarget.transform.position;
             Vector3 targetPos = _activeMovementTarget.transform.position + dif.normalized * stopDistance;
+
             // set destination
             _agent.destination = targetPos;
         }
@@ -128,7 +129,7 @@ public class GenericEnemyController : MonoBehaviour
     {
         List<GameObject> targets = GameObject.FindGameObjectsWithTag("Tower").ToList();
 
-        targets.Add(_stronghold); // add stronghold so it gets attacked when closest
+        //targets.Add(_stronghold); // add stronghold so it gets attacked when closest
 
         bool success = false;
         GameObject closest = null;
