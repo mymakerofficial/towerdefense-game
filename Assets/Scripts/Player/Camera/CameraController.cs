@@ -8,13 +8,16 @@ using UnityEngine.InputSystem;
 public class CameraController : MonoBehaviour
 {
     private InputMaster _controls;
+    private GameStateController _gameState;
 
     private float _absoluteZoom;
     private Vector2 _position;
     private float _scrollVel;
     private bool _mouseMove;
     private Vector2 _mouseMoveStartPosition;
+    private float _distanceToStrongholdOnGameOver;
 
+    [Space]
     public float startZoom;
     [Header("Far")]
     public float boomFar;
@@ -30,6 +33,11 @@ public class CameraController : MonoBehaviour
     public float movementSpeed;
     public float scrollSpeed;
     public float mouseMovementSpeed;
+    [Header("GameOver")] 
+    public Vector3 gameOverPosition;
+    public Vector3 gameOverRotation;
+    public float gameOverTransitionEasing;
+    
 
     /// <summary>
     /// Is the camera beeing moved with mouse
@@ -60,7 +68,12 @@ public class CameraController : MonoBehaviour
             _mouseMove = false;
         };
 
-        absoluteZoom = startZoom;
+        AbsoluteZoom = startZoom;
+    }
+
+    void Start()
+    {
+        _gameState = GameObject.Find("GameDirector").GetComponent<GameStateController>();
     }
 
     private void OnEnable() => _controls.Enable();
@@ -69,7 +82,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Zoom value before curve 
     /// </summary>
-    private float absoluteZoom
+    private float AbsoluteZoom
     {
         get => _absoluteZoom;
         set => _absoluteZoom = Mathf.Clamp(value, 0, 1);
@@ -78,12 +91,12 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Actual zoom value after curve
     /// </summary>
-    public float Zoom => zoomCurve.Evaluate(absoluteZoom);
+    public float Zoom => zoomCurve.Evaluate(AbsoluteZoom);
 
     /// <summary>
     /// Calculated position of camera
     /// </summary>
-    private Vector3 positionCurrent
+    private Vector3 PositionCurrent
     {
         get
         {
@@ -96,7 +109,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Calculated rotation of camera
     /// </summary>
-    private Vector3 rotationCurrent
+    private Vector3 RotationCurrent
     {
         get
         {
@@ -113,26 +126,46 @@ public class CameraController : MonoBehaviour
     
     void FixedUpdate()
     {
-        // movement with mouse
-        if (_mouseMove == true)
+        if (_gameState.GameActive)
         {
-            var mv = (_controls.Camera.MousePosition.ReadValue<Vector2>() - _mouseMoveStartPosition) * mouseMovementSpeed;
-            _position.x += Mathf.Clamp(mv.x, -movementSpeed, movementSpeed);
-            _position.y += Mathf.Clamp(mv.y, -movementSpeed, movementSpeed);
-        }
+            // movement with mouse
+            if (_mouseMove)
+            {
+                var mv = (_controls.Camera.MousePosition.ReadValue<Vector2>() - _mouseMoveStartPosition) * mouseMovementSpeed;
+                _position.x += Mathf.Clamp(mv.x, -movementSpeed, movementSpeed);
+                _position.y += Mathf.Clamp(mv.y, -movementSpeed, movementSpeed);
+            }
         
-        // movement with everything that is not the mouse
-        _position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
+            // movement with everything that is not the mouse
+            _position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
+        }
+
+        Vector3 targetPosition = PositionCurrent;
+        Vector3 targetRotation = RotationCurrent;
+        float easing = movementEasing;
+
+        // overwrite position, rotation and easing when gameover
+        if (_gameState.GameState == GameState.GameOver)
+        {
+            if (_distanceToStrongholdOnGameOver == 0)
+            {
+                // save distance to target position
+                _distanceToStrongholdOnGameOver = Vector3.Distance(transform.position, gameOverPosition);
+            }
+            targetPosition = gameOverPosition;
+            targetRotation = gameOverRotation;
+            easing = gameOverTransitionEasing / (_distanceToStrongholdOnGameOver / 100);
+        }
 
         // smooth translation for position
-        transform.position += (positionCurrent - transform.position) * movementEasing;
+        transform.position += (targetPosition - transform.position) * easing;
 
         // smooth translation for rotation
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles +
-                                              (rotationCurrent - transform.rotation.eulerAngles) * movementEasing);
+                                              (targetRotation - transform.rotation.eulerAngles) * easing);
 
         // change absolute zoom
-        absoluteZoom += _scrollVel * (Time.fixedDeltaTime / 0.016f);
+        AbsoluteZoom += _scrollVel * (Time.fixedDeltaTime / 0.016f);
 
         // move scroll velocity to 0
         _scrollVel -= _scrollVel / 10 * (Time.fixedDeltaTime / 0.016f);

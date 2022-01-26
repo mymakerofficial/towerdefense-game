@@ -13,6 +13,7 @@ public enum GameState {
 public class GameStateController : MonoBehaviour
 {
     private GameState _gameState;
+    private bool _paused;
     private float _buildingTimer;
     private bool _firstWave;
     private bool _waitForWaveEnd;
@@ -35,7 +36,9 @@ public class GameStateController : MonoBehaviour
     public float BuildingTimer => _buildingTimer;
     public bool FirstWave => _firstWave;
     public bool BuildingPhaseIsTimed => !_firstWave;
-    
+    public bool Paused => _paused;
+    public bool GameActive => _gameState == GameState.BuildingPhase || _gameState == GameState.EnemyWavePhase && !_paused;
+
     void Start()
     {
         _firstWave = true;
