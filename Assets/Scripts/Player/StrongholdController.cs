@@ -50,13 +50,8 @@ public class StrongholdController : MonoBehaviour
                 Destroy(enemyTransform.gameObject);
                 Health--;
                 
-                Debug.Log($"Stronghold Health: {HealthPercent*100}%");
+                if(Health != 0) Debug.Log($"Stronghold Health: {HealthPercent*100}%");
             }
-        }
-
-        if (Health == 0)
-        {
-            // TODO end game
         }
     }
 

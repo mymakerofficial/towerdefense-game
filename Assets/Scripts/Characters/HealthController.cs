@@ -40,13 +40,17 @@ public class HealthController : MonoBehaviour
     {
         if (amount <= 0) throw new ArgumentOutOfRangeException();
         Health -= amount;
+        
+        CharacterClassifier classifier = new CharacterClassifier(null, null);
+        if(GetComponent<EnemyDescriptor>()) classifier = CharacterClassifier.FromEnemy(GetComponent<EnemyDescriptor>());
+        if(GetComponent<TowerDescriptor>()) classifier = CharacterClassifier.FromTower(GetComponent<TowerDescriptor>());
 
         // calculate credits to add to balance from damage
         float creditDropAmount = _fullHealthCredits * (amount / maxHealth);
-        GameObject.Find("GameDirector").GetComponent<CreditController>().DepositCredit((long)Math.Round(creditDropAmount), CreditTransactionType.EnemyDamage);
+        GameObject.Find("GameDirector").GetComponent<CreditController>().DepositCredit((long)Math.Round(creditDropAmount), CreditTransactionType.EnemyDamage, classifier);
         
         // report damage
-        GameObject.Find("GameDirector").GetComponent<GameStatisticsController>().ReportDamageTransaction(amount, _faction, Health == 0);
+        GameObject.Find("GameDirector").GetComponent<GameStatisticsController>().ReportDamageTransaction(amount, classifier, Health == 0);
 
         if (Health == 0) Die();
         

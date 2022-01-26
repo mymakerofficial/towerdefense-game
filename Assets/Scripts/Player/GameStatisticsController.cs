@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public enum CharacterFaction
@@ -9,48 +10,67 @@ public enum CharacterFaction
     Enemy
 }
 
+public class CharacterClassifier
+{
+    public CharacterFaction ?Faction { get; }
+    public string Name { get; }
+    public int Level { get; }
+
+    public CharacterClassifier(CharacterFaction ?faction, string name, int level = 0)
+    {
+        Faction = faction;
+        Name = name;
+        Level = level;
+    }
+
+    public static CharacterClassifier FromEnemy(EnemyDescriptor descriptor)
+    {
+        if (descriptor == null) return null;
+        return new CharacterClassifier(CharacterFaction.Enemy, descriptor.name);
+    }
+    
+    public static CharacterClassifier FromTower(TowerDescriptor descriptor)
+    {
+        if (descriptor == null) return null;
+        return new CharacterClassifier(CharacterFaction.Tower, descriptor.name, descriptor.level);
+    }
+}
+
 [Serializable]
 public abstract class Transaction
 {
-    private float _amount;
-    private GameState _activeGameState;
+    public float Amount { get; }
+    [CanBeNull] public CharacterClassifier ItemClassification { get; }
 
-    public float Amount => _amount;
-    public GameState ActiveGameState => _activeGameState;
-
-    protected Transaction(float amount, GameState activeGameState)
+    protected Transaction(float amount, [CanBeNull] CharacterClassifier classifier = null)
     {
-        _amount = amount;
-        _activeGameState = activeGameState;
+        Amount = amount;
+        ItemClassification = classifier;
     }
 }
 
 [Serializable]
 public class CreditTransaction : Transaction
 {
-    private CreditTransactionType _type;
+    public CreditTransactionType Type { get; }
 
-    public CreditTransactionType Type => _type;
-    
-    public CreditTransaction(float amount, GameState activeGameState, CreditTransactionType type) : base(amount, activeGameState)
+    public GameState ActiveGameState { get; }
+
+    public CreditTransaction(float amount, [CanBeNull] CharacterClassifier classifier, GameState activeGameState, CreditTransactionType type) : base(amount, classifier)
     {
-        _type = type;
+        Type = type;
+        ActiveGameState = activeGameState;
     }
 }
 
 [Serializable]
 public class DamageTransaction : Transaction
 {
-    private CharacterFaction _recieverFaction;
-    private bool _fatal;
+    public bool Fatal { get; }
 
-    public CharacterFaction RecieverFaction => _recieverFaction;
-    public bool Fatal => _fatal;
-    
-    public DamageTransaction(float amount, GameState activeGameState, CharacterFaction reciever, bool fatal) : base(amount, activeGameState)
+    public DamageTransaction(float amount, [CanBeNull] CharacterClassifier classifier, bool fatal) : base(amount, classifier)
     {
-        _recieverFaction = reciever;
-        _fatal = fatal;
+        Fatal = fatal;
     }
 }
 
@@ -70,14 +90,14 @@ public class GameStatisticsController : MonoBehaviour
         _damageTransactions = new List<DamageTransaction>();
     }
 
-    public void ReportCreditTransaction(float amount, CreditTransactionType type)
+    public void ReportCreditTransaction(float amount, CreditTransactionType type, CharacterClassifier classifier)
     {
-        _creditTransactions.Add(new CreditTransaction(amount, _gameStateController.GameState, type));
+        _creditTransactions.Add(new CreditTransaction(amount, classifier, _gameStateController.GameState, type));
     }   
     
-    public void ReportDamageTransaction(float amount, CharacterFaction faction, bool fatal)
+    public void ReportDamageTransaction(float amount, CharacterClassifier classifier, bool fatal)
     {
-        _damageTransactions.Add(new DamageTransaction(amount, _gameStateController.GameState, faction, fatal));
+        _damageTransactions.Add(new DamageTransaction(amount, classifier, fatal));
     }
 
     public void CalculateStatistics()
@@ -106,23 +126,23 @@ public class GameStatisticsController : MonoBehaviour
                 creditsNegativ += creditTransaction.Amount;
             }
 
-            switch (creditTransaction.Type)
+            if (creditTransaction.Type == CreditTransactionType.TowerBought)
             {
-                case CreditTransactionType.TowerBought:
-                    towersBought++;
-                    break;
-                case CreditTransactionType.TowerSold:
-                    towersSold++;
-                    break;
-                case CreditTransactionType.TowerUpgrade:
-                    towersUpgraded++;
-                    break;
+                towersBought++;
+            }
+            else if (creditTransaction.Type == CreditTransactionType.TowerSold)
+            {
+                towersSold++;
+            }
+            else if (creditTransaction.Type == CreditTransactionType.TowerUpgrade)
+            {
+                towersUpgraded++;
             }
         }
         
         foreach (var damageTransaction in _damageTransactions)
         {
-            if (damageTransaction.RecieverFaction == CharacterFaction.Enemy)
+            if (damageTransaction.ItemClassification.Faction == CharacterFaction.Enemy)
             {
                 damageToEnemies += damageTransaction.Amount;
 

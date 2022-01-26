@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -32,14 +33,14 @@ public class CreditController : MonoBehaviour
     /// <param name="transactionType"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public long DepositCredit(long amount, CreditTransactionType transactionType = CreditTransactionType.Unknown)
+    public long DepositCredit(long amount, CreditTransactionType transactionType = CreditTransactionType.Unknown, [CanBeNull] CharacterClassifier classifier = null)
     {
         if (amount < 0)
         {
             throw new ArgumentOutOfRangeException($"can not deposit negative amount");
         }
         
-        gameObject.GetComponent<GameStatisticsController>().ReportCreditTransaction(amount, transactionType);
+        gameObject.GetComponent<GameStatisticsController>().ReportCreditTransaction(amount, transactionType, classifier);
 
         _credit += amount;
         return _credit;
@@ -53,7 +54,7 @@ public class CreditController : MonoBehaviour
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="InsufficientCreditException"></exception>
-    public long WithdrawCredit(long amount, CreditTransactionType transactionType = CreditTransactionType.Unknown)
+    public long WithdrawCredit(long amount, CreditTransactionType transactionType = CreditTransactionType.Unknown, [CanBeNull] CharacterClassifier classifier = null)
     {
         if (amount < 0)
         {
@@ -65,7 +66,7 @@ public class CreditController : MonoBehaviour
             throw new InsufficientCreditException("not enough credit",amount,_credit);
         }
         
-        gameObject.GetComponent<GameStatisticsController>().ReportCreditTransaction(-amount, transactionType);
+        gameObject.GetComponent<GameStatisticsController>().ReportCreditTransaction(-amount, transactionType, classifier);
 
         _credit -= amount;
         return _credit;

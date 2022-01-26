@@ -138,7 +138,7 @@ public class TowerPlacementController : MonoBehaviour
 
         if (GameObject.Find("GameDirector").GetComponent<CreditController>().CurrentCredits >= requiredCredits)
         {
-            GameObject.Find("GameDirector").GetComponent<CreditController>().WithdrawCredit(requiredCredits, CreditTransactionType.TowerBought);
+            GameObject.Find("GameDirector").GetComponent<CreditController>().WithdrawCredit(requiredCredits, CreditTransactionType.TowerBought, CharacterClassifier.FromTower(_placement.tower.GetComponent<TowerDescriptor>()));
             
             // Create real object
             Instantiate(_placement.tower, _placement.position, _placement.rotation, parrent.transform);

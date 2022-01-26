@@ -100,7 +100,7 @@ public class TowerModifyController : MonoBehaviour
     public void Sell()
     {
         Destroy(_selectedTower);
-        GameObject.Find("GameDirector").GetComponent<CreditController>().DepositCredit(SellCreditAmount, CreditTransactionType.TowerSold);
+        GameObject.Find("GameDirector").GetComponent<CreditController>().DepositCredit(SellCreditAmount, CreditTransactionType.TowerSold, CharacterClassifier.FromTower(_selectedTower.GetComponent<TowerDescriptor>()));
         UnSelect();
     }
 
@@ -121,7 +121,7 @@ public class TowerModifyController : MonoBehaviour
             if (GameObject.Find("GameDirector").GetComponent<CreditController>()
                 .CheckSufficientCredits(UpgradeCreditAmount))
             {
-                GameObject.Find("GameDirector").GetComponent<CreditController>().WithdrawCredit(UpgradeCreditAmount, CreditTransactionType.TowerUpgrade);
+                GameObject.Find("GameDirector").GetComponent<CreditController>().WithdrawCredit(UpgradeCreditAmount, CreditTransactionType.TowerUpgrade, CharacterClassifier.FromTower(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade.GetComponent<TowerDescriptor>()));
                 
                 GameObject newTower = Instantiate(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade, _selectedTower.transform.parent);
                 newTower.transform.position = _selectedTower.transform.position;
