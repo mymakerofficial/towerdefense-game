@@ -3,23 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class HealthController : MonoBehaviour
 {
     private float _health;
-    [SerializeField]
-    public float MaxHealth;
-    
     private int _fullHealthCredits;
+    private CharacterFaction _faction;
     
+    [Header("Health")]
+    [FormerlySerializedAs("MaxHealth")] public float maxHealth;
+
     void Start()
     {
-        Health = MaxHealth;
+        Health = maxHealth;
 
         var enemyDescriptor = GetComponent<EnemyDescriptor>();
         if (enemyDescriptor)
         {
             _fullHealthCredits = enemyDescriptor.fullHealthCredits;
+            _faction = CharacterFaction.Enemy;
+        }
+        else
+        {
+            _faction = CharacterFaction.Tower;
         }
     }
 
@@ -35,8 +42,11 @@ public class HealthController : MonoBehaviour
         Health -= amount;
 
         // calculate credits to add to balance from damage
-        float creditDropAmount = _fullHealthCredits * (amount / MaxHealth);
-        GameObject.Find("GameDirector").SendMessage("DepositCredit", (long)Math.Round(creditDropAmount));
+        float creditDropAmount = _fullHealthCredits * (amount / maxHealth);
+        GameObject.Find("GameDirector").GetComponent<CreditController>().DepositCredit((long)Math.Round(creditDropAmount), CreditTransactionType.EnemyDamage);
+        
+        // report damage
+        GameObject.Find("GameDirector").GetComponent<GameStatisticsController>().ReportDamageTransaction(amount, _faction, Health == 0);
 
         if (Health == 0) Die();
         
@@ -68,11 +78,11 @@ public class HealthController : MonoBehaviour
     public float Health
     {
         get => _health;
-        private set => _health = Mathf.Clamp(value, 0, MaxHealth);
+        private set => _health = Mathf.Clamp(value, 0, maxHealth);
     }
 
     /// <summary>
     /// returns a value between 0 and 1
     /// </summary>
-    public float HealthPercent => Health / MaxHealth;
+    public float HealthPercent => Health / maxHealth;
 }

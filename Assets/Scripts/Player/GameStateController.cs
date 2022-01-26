@@ -87,6 +87,8 @@ public class GameStateController : MonoBehaviour
         _waitForWaveEnd = false;
         
         Debug.Log("Game Over");
+        
+        gameObject.SendMessage("CalculateStatistics");
     }
 
     private void FixedUpdate()

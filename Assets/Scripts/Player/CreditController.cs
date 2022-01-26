@@ -4,10 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+public enum CreditTransactionType
+{
+    Unknown,
+    EnemyDamage,
+    TowerBought,
+    TowerUpgrade,
+    TowerSold
+}
+
 public class CreditController : MonoBehaviour
 {
     private long _credit;
-    [SerializeField]
+    [Space]
     public long startCredit;
 
     public long CurrentCredits => _credit;
@@ -20,14 +29,17 @@ public class CreditController : MonoBehaviour
     /// add the amount to the credit 
     /// </summary>
     /// <param name="amount"></param>
+    /// <param name="transactionType"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public long DepositCredit(long amount)
+    public long DepositCredit(long amount, CreditTransactionType transactionType = CreditTransactionType.Unknown)
     {
-        if (amount <0)
+        if (amount < 0)
         {
             throw new ArgumentOutOfRangeException($"can not deposit negative amount");
         }
+        
+        gameObject.GetComponent<GameStatisticsController>().ReportCreditTransaction(amount, transactionType);
 
         _credit += amount;
         return _credit;
@@ -37,20 +49,23 @@ public class CreditController : MonoBehaviour
     /// Subtract the credit by the amount
     /// </summary>
     /// <param name="amount"></param>
+    /// <param name="transactionType"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="InsufficientCreditException"></exception>
-    public long WithdrawCredit(long amount)
+    public long WithdrawCredit(long amount, CreditTransactionType transactionType = CreditTransactionType.Unknown)
     {
         if (amount < 0)
         {
             throw new ArgumentOutOfRangeException($"can not deposit negative amount");
         }
 
-        if (_credit- amount < 0)
+        if (_credit - amount < 0)
         {
             throw new InsufficientCreditException("not enough credit",amount,_credit);
         }
+        
+        gameObject.GetComponent<GameStatisticsController>().ReportCreditTransaction(-amount, transactionType);
 
         _credit -= amount;
         return _credit;
