@@ -73,6 +73,7 @@ public class GameStateController : MonoBehaviour
         
         // reset all Controllers
         waveController.GetComponent<WaveController>().Reset();
+        stronghold.GetComponent<StrongholdController>().Reset();
         GetComponent<GameStatisticsController>().Reset();
         GetComponent<CreditController>().Start();
         Start();
