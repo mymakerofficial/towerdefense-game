@@ -32,6 +32,11 @@ public class GameStateController : MonoBehaviour
     [Header("Stronghold")] 
     public GameObject stronghold;
 
+    [Header("UI")] 
+    public GameObject canvas;
+    public GameObject gameOverCanvas;
+    
+
     public GameState GameState => _gameState;
     public float BuildingTimer => _buildingTimer;
     public bool FirstWave => _firstWave;
@@ -51,6 +56,9 @@ public class GameStateController : MonoBehaviour
         
         _gameState = GameState.BuildingPhase;
         
+        canvas.SetActive(true);
+        gameOverCanvas.SetActive(false);
+        
         Debug.Log("Starting building phase");
     }
 
@@ -58,6 +66,9 @@ public class GameStateController : MonoBehaviour
     {
         _gameState = GameState.EnemyWavePhase;
         _waitForWaveEnd = false;
+        
+        canvas.SetActive(true);
+        gameOverCanvas.SetActive(false);
         
         Debug.Log("Starting enemy wave phase");
 
@@ -77,6 +88,8 @@ public class GameStateController : MonoBehaviour
         _waitForWaveEnd = false;
         
         Debug.Log("Ended enemy wave phase");
+            
+        gameObject.SendMessage("ReportWaveEnd");
         
         StartBuilding();
     }
@@ -85,6 +98,9 @@ public class GameStateController : MonoBehaviour
     {
         _gameState = GameState.GameOver;
         _waitForWaveEnd = false;
+        
+        canvas.SetActive(false);
+        gameOverCanvas.SetActive(true);
         
         Debug.Log("Game Over");
         
