@@ -4008,6 +4008,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 8385345858846927386, guid: 4f5a1945776289240bd7c33eed797f79, type: 3}
+      propertyPath: limitFar.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385345858846927386, guid: 4f5a1945776289240bd7c33eed797f79, type: 3}
+      propertyPath: limitNear.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385345858846927386, guid: 4f5a1945776289240bd7c33eed797f79, type: 3}
+      propertyPath: limitNear.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385345858846927386, guid: 4f5a1945776289240bd7c33eed797f79, type: 3}
       propertyPath: gameOverPosition.x
       value: 7
       objectReference: {fileID: 0}

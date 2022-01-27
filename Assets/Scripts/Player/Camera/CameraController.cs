@@ -17,6 +17,21 @@ public class CameraController : MonoBehaviour
     private Vector2 _mouseMoveStartPosition;
     private float _distanceToStrongholdOnGameOver;
 
+    private Vector2 Position
+    {
+        get => _position;
+        set
+        {
+            float limitX = Mathf.Lerp(limitNear.x, limitFar.x, Zoom);
+            float limitY = Mathf.Lerp(limitNear.y, limitFar.y, Zoom);
+
+            _position = new Vector2(
+                Mathf.Clamp(value.x, -limitX, limitX),
+                Mathf.Clamp(value.y, -limitY, limitY)
+            );
+        }
+    }
+
     [Space]
     public float startZoom;
     [Header("Far")]
@@ -33,6 +48,9 @@ public class CameraController : MonoBehaviour
     public float movementSpeed;
     public float scrollSpeed;
     public float mouseMovementSpeed;
+    [Header("Move Limits")] 
+    public Vector2 limitFar;
+    public Vector2 limitNear;
     [Header("GameOver")] 
     public Vector3 gameOverPosition;
     public Vector3 gameOverRotation;
@@ -102,7 +120,7 @@ public class CameraController : MonoBehaviour
         {
             float boom = Mathf.Lerp(boomNear, boomFar, Zoom);
             float dolly = Mathf.Lerp(dollyNear, dollyFar, Zoom);
-            return new Vector3(_position.x, boom, _position.y + dolly);
+            return new Vector3(Position.x, boom, Position.y + dolly);
         }
     }
     
@@ -132,12 +150,14 @@ public class CameraController : MonoBehaviour
             if (_mouseMove)
             {
                 var mv = (_controls.Camera.MousePosition.ReadValue<Vector2>() - _mouseMoveStartPosition) * mouseMovementSpeed;
-                _position.x += Mathf.Clamp(mv.x, -movementSpeed, movementSpeed);
-                _position.y += Mathf.Clamp(mv.y, -movementSpeed, movementSpeed);
+                Position = new Vector2(
+                    Position.x + Mathf.Clamp(mv.x, -movementSpeed, movementSpeed),
+                    Position.y + Mathf.Clamp(mv.y, -movementSpeed, movementSpeed)
+                );
             }
         
             // movement with everything that is not the mouse
-            _position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
+            Position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
         }
 
         Vector3 targetPosition = PositionCurrent;
