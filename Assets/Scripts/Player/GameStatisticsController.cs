@@ -120,6 +120,8 @@ public class GameStatisticsController : MonoBehaviour
         _wavesSurvived = 0;
     }
 
+    public void Reset() => Start();
+
     public void ReportCreditTransaction(float amount, CreditTransactionType type, CharacterClassifier classifier)
     {
         _creditTransactions.Add(new CreditTransaction(amount, classifier, _gameStateController.GameState, type));

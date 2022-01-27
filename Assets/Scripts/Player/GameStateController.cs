@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum GameState {
@@ -48,6 +49,33 @@ public class GameStateController : MonoBehaviour
     {
         _firstWave = true;
         StartBuilding();
+    }
+
+    /// <summary>
+    /// Reset entire game to start
+    /// </summary>
+    public void Restart()
+    {
+        Debug.Log("Reseting Game");
+        
+        // make list of all transforms that need to be deleted
+        List<Transform> toBeDeleted = new List<Transform>();
+        toBeDeleted.AddRange(enemies.GetComponentsInChildren<Transform>().ToList());
+        toBeDeleted.AddRange(towers.GetComponentsInChildren<Transform>().ToList());
+        toBeDeleted.AddRange(bullets.GetComponentsInChildren<Transform>().ToList());
+
+        foreach (var tra in toBeDeleted)
+        {
+            if (tra.gameObject == enemies || tra.gameObject == towers || tra.gameObject == bullets) continue; // dont delete parrent
+            
+            Destroy(tra.gameObject);
+        }
+        
+        // reset all Controllers
+        waveController.GetComponent<WaveController>().Reset();
+        GetComponent<GameStatisticsController>().Reset();
+        GetComponent<CreditController>().Start();
+        Start();
     }
 
     public void StartBuilding()
