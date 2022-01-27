@@ -9,72 +9,78 @@ using UnityEngine.Serialization;
 public class TurretController : MonoBehaviour
 {
     private float _cooldown;
-    private float _rotation;
+    private float _headRotation;
     private GameObject _target;
 
-    [Header("Geometry")]
-    [FormerlySerializedAs("head")] public GameObject Head;
-    [Header("Config")]
-    [FormerlySerializedAs("range")] public float Range;
-    public float CooldownSec;
-    public GameObject BulletGameObject;
-    public bool Active;
+    [Header("Geometry")] 
+    public GameObject head;
 
-    public float Cooldown
-    {
-        get => _cooldown;
-        private set => _cooldown = Mathf.Clamp(value, 0, 1);
-    }
-    
-    public float Rotation
-    {
-        get => _rotation;
-        set => _rotation = value;
-    }
+    [Header("Config")] 
+    public float range;
+
+    [Header("Attack")]
+    [FormerlySerializedAs("FireGameObject")] public GameObject fireGameObject;
+    public FireCallOptions fireCallOptions;
+    [Space]
+    public Vector3 fireOffset;
+    [Space]
+    [FormerlySerializedAs("AttackCooldownSec")] public float attackCooldownSec;
 
     void Start()
     {
-        Active = true;
+        InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
 
-    public void Fire()
+    public void Attack()
     {
-        if (!Active) return;
-
         GameObject bullet = Instantiate(
-            BulletGameObject, 
-            transform.position + new Vector3(0, 1.4f, 0), 
-            Quaternion.Euler(0, _rotation + 90, 0), 
+            fireGameObject, 
+            transform.position + fireOffset, 
+            Quaternion.Euler(0, GeneralMath.AngleTowardsPoint2D(transform.position, _target.transform.position) + 90, 0), 
             GameObject.Find("Bullets").transform
         );
-        bullet.SendMessage("Fire");
-
-        Cooldown = CooldownSec;
+        
+        switch (fireCallOptions)
+        {
+            case FireCallOptions.CallFire:
+                bullet.SendMessage("Fire");
+                break;
+            case FireCallOptions.SendTarget:
+                bullet.SendMessage("Fire", _target);
+                break;
+        }
     }
     
     public void FixedUpdate()
     {
-        if (!Active) return;
-        
-        AutonomousAim();
-
-        // TODO Figgure out a way to have this not have hardcoded values
-        Head.transform.rotation = Quaternion.Euler(-90, 0, _rotation + 180);
-        
         if (_cooldown > 0)
         {
             _cooldown -= Time.fixedDeltaTime;
         }
         else if(_target)
         {
-            Fire();
+            _cooldown = attackCooldownSec;
+            
+            Attack();
         }
+
+
+        if (_target != null)
+        {
+            _headRotation += (GeneralMath.AngleTowardsPoint2D(head.transform.position, _target.transform.position) - _headRotation) / 10;
+            head.transform.rotation = Quaternion.Euler(-90, 0, _headRotation + 180);
+        }
+    }
+
+    private void UpdateTarget()
+    {
+        _target = FindClosest();
     }
 
     /// <summary>
     /// Rotate to closest enemy
     /// </summary>
-    public void AutonomousAim()
+    public GameObject FindClosest()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -85,30 +91,15 @@ public class TurretController : MonoBehaviour
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
 
             if (distance > closestDistance) continue; // skip if enemy is not closest
-            if (distance > Range) continue; // skip if enemy is outside of range
+            if (distance > range) continue; // skip if enemy is outside of range
 
             closest = enemy;
             closestDistance = distance;
         }
-        
-        _target = closest;
-        
-        if(_target) RotateTowards(_target.transform.position);
+
+        return closest;
     }
 
-    /// <summary>
-    /// Rotate towars a point
-    /// </summary>
-    public void RotateTowards(Vector3 point)
-    {
-        _rotation = GeneralMath.AngleTowardsPoint2D(Head.transform.position, point);
-    }
-
-    public void SetActive(bool value)
-    {
-        Active = value;
-    }
-    
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum GameState {
@@ -13,6 +14,7 @@ public enum GameState {
 public class GameStateController : MonoBehaviour
 {
     private GameState _gameState;
+    private bool _paused;
     private float _buildingTimer;
     private bool _firstWave;
     private bool _waitForWaveEnd;
@@ -31,15 +33,49 @@ public class GameStateController : MonoBehaviour
     [Header("Stronghold")] 
     public GameObject stronghold;
 
+    [Header("UI")] 
+    public GameObject canvas;
+    public GameObject gameOverCanvas;
+    
+
     public GameState GameState => _gameState;
     public float BuildingTimer => _buildingTimer;
     public bool FirstWave => _firstWave;
     public bool BuildingPhaseIsTimed => !_firstWave;
-    
+    public bool Paused => _paused;
+    public bool GameActive => _gameState == GameState.BuildingPhase || _gameState == GameState.EnemyWavePhase && !_paused;
+
     void Start()
     {
         _firstWave = true;
         StartBuilding();
+    }
+
+    /// <summary>
+    /// Reset entire game to start
+    /// </summary>
+    public void Restart()
+    {
+        Debug.Log("Reseting Game");
+        
+        // make list of all transforms that need to be deleted
+        List<Transform> toBeDeleted = new List<Transform>();
+        toBeDeleted.AddRange(enemies.GetComponentsInChildren<Transform>().ToList());
+        toBeDeleted.AddRange(towers.GetComponentsInChildren<Transform>().ToList());
+        toBeDeleted.AddRange(bullets.GetComponentsInChildren<Transform>().ToList());
+
+        foreach (var tra in toBeDeleted)
+        {
+            if (tra.gameObject == enemies || tra.gameObject == towers || tra.gameObject == bullets) continue; // dont delete parrent
+            
+            Destroy(tra.gameObject);
+        }
+        
+        // reset all Controllers
+        waveController.GetComponent<WaveController>().Reset();
+        GetComponent<GameStatisticsController>().Reset();
+        GetComponent<CreditController>().Start();
+        Start();
     }
 
     public void StartBuilding()
@@ -48,6 +84,9 @@ public class GameStateController : MonoBehaviour
         
         _gameState = GameState.BuildingPhase;
         
+        canvas.SetActive(true);
+        gameOverCanvas.SetActive(false);
+        
         Debug.Log("Starting building phase");
     }
 
@@ -55,6 +94,9 @@ public class GameStateController : MonoBehaviour
     {
         _gameState = GameState.EnemyWavePhase;
         _waitForWaveEnd = false;
+        
+        canvas.SetActive(true);
+        gameOverCanvas.SetActive(false);
         
         Debug.Log("Starting enemy wave phase");
 
@@ -74,6 +116,8 @@ public class GameStateController : MonoBehaviour
         _waitForWaveEnd = false;
         
         Debug.Log("Ended enemy wave phase");
+            
+        gameObject.SendMessage("ReportWaveEnd");
         
         StartBuilding();
     }
@@ -83,7 +127,12 @@ public class GameStateController : MonoBehaviour
         _gameState = GameState.GameOver;
         _waitForWaveEnd = false;
         
+        canvas.SetActive(false);
+        gameOverCanvas.SetActive(true);
+        
         Debug.Log("Game Over");
+        
+        gameObject.SendMessage("CalculateStatistics");
     }
 
     private void FixedUpdate()

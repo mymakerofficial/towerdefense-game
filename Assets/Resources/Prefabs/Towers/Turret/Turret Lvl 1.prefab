@@ -81,11 +81,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 698187cef8b403743a0e5d1978f1f7a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Head: {fileID: 2401913209852526855}
-  Range: 10
-  CooldownSec: 0.3
-  BulletGameObject: {fileID: 1422610889946738639, guid: beb90da1680cc454b87303d00b08ee0b, type: 3}
-  Active: 0
+  head: {fileID: 2401913209852526855}
+  range: 10
+  fireGameObject: {fileID: 1422610889946738639, guid: beb90da1680cc454b87303d00b08ee0b, type: 3}
+  fireCallOptions: 1
+  fireOffset: {x: 0, y: 1.4, z: 0}
+  attackCooldownSec: 0.3
 --- !u!65 &3333053906344147755
 BoxCollider:
   m_ObjectHideFlags: 0

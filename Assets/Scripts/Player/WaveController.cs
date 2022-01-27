@@ -93,6 +93,17 @@ public class WaveController : MonoBehaviour
     public int CurrentWaveIndex => _currentWaveIndex;
     public int CurrentSectionIndex => _currentSectionIndex;
 
+    public void Reset()
+    {
+        _currentWaveIndex = 0;
+        _currentSectionIndex = 0;
+        _active = false;
+        _sectionTimer = 0;
+        _nextWaveIndex = 0;
+        
+        DeleteOldSpawners();
+    }
+    
     public void StartNextWave()
     {
         StartWave(_nextWaveIndex);

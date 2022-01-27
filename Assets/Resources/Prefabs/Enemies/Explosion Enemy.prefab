@@ -91,7 +91,10 @@ MonoBehaviour:
   moveRange: 20
   moveTowardsWhenInRange: 1
   moveTowardsWhenDamaged: 1
+  stopDistance: 1
   fireGameObject: {fileID: 6399894181811631949, guid: 1b4da318e0c399f4e9b00e7c7f59ad2c, type: 3}
+  fireCallOptions: 1
+  fireOffset: {x: 0, y: 0, z: 0}
   attackCooldownSec: 1
   selfDestructOnAttack: 1
 --- !u!114 &6034153033960322290
