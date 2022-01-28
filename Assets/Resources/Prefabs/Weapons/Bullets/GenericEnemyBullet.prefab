@@ -44,18 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d269701ec5c02a841b30c0a021a38116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxTravelDistance: 40
-  TravelVelocity: 50
-  IsHitscan: 0
-  MaxHits: 1
-  DamageOnContact: 6
-  TargetTags:
-  - Name: Tower
-    Solid: 1
-    DealDamage: 1
-  - Name: Enemy
-    Solid: 1
-    DealDamage: 0
+  maxTravelDistance: 40
+  travelVelocity: 50
+  isHitscan: 0
+  maxHits: 1
+  damageOnContact: 6
+  targetTags:
+  - name: Tower
+    solid: 1
+    dealDamage: 1
+  - name: Enemy
+    solid: 1
+    dealDamage: 0
 --- !u!1 &1422610890872642335
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,7 +115,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c8cdf53c54e278740b5f9139419cb469, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

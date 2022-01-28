@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c8cdf53c54e278740b5f9139419cb469, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -172,6 +172,7 @@ MonoBehaviour:
   moveRange: 0
   moveTowardsWhenInRange: 0
   moveTowardsWhenDamaged: 0
+  stopDistance: 0
   fireGameObject: {fileID: 1422610889946738639, guid: 47170d9a244773a499b5073104cb56f2, type: 3}
   fireCallOptions: 1
   fireOffset: {x: 0, y: 1.4, z: 0}
@@ -189,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 42
+  maxHealth: 42
 --- !u!136 &4927150603594342777
 CapsuleCollider:
   m_ObjectHideFlags: 0
