@@ -16,10 +16,17 @@ public class TowerModifyController : MonoBehaviour
     private GameObject _closeTower;
     private GameObject _selectedTower;
 
+    private GameObject _healthBarOuter;
+    private GameObject _healthBarInner;
+
     [Space]
-    [FormerlySerializedAs("SelectRadiusFactor")] public float selectRadiusFactor = 1.5f;
-    [Space]
-    [FormerlySerializedAs("UiElement")] public GameObject uiElement;
+    public float selectRadiusFactor = 1.2f;
+    [Header("UI")]
+    public GameObject infoPanel;
+    public GameObject healthBar;
+    [Space] 
+    public float healthBarOffset;
+    public float healthBarPadding;
 
     public GameObject SelectedTower => _selectedTower;
     
@@ -28,6 +35,9 @@ public class TowerModifyController : MonoBehaviour
         _camera = Camera.main; // get active camera i guess
         _controls = new InputMaster();
         _gameDirector = GameObject.Find("GameDirector");
+
+        _healthBarOuter = healthBar.transform.GetChild(0).gameObject;
+        _healthBarInner = _healthBarOuter.transform.GetChild(0).gameObject;
         
         // create circle
         _circle = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
@@ -48,16 +58,16 @@ public class TowerModifyController : MonoBehaviour
     {
         if (_gameDirector.GetComponent<GameStateController>().Paused) return;
         
-        if (!_selectedTower) FindCloseset();
+        if (_selectedTower == null) FindCloseset();
 
-        if (_selectedTower)
+        if (_selectedTower != null)
         {
             _circle.SetActive(true);
             float scale = _closeTower.GetComponent<TowerDescriptor>().placementRadius * 100;
             _circle.transform.localScale = new Vector3(scale, scale, scale);
             _circle.transform.position = _selectedTower.transform.position  + new Vector3(0, 0.1f, 0);;
         }
-        else if (_closeTower)
+        else if (_closeTower != null)
         {
             _circle.SetActive(true);
             float scale = _closeTower.GetComponent<TowerDescriptor>().placementRadius * 100;
@@ -67,6 +77,24 @@ public class TowerModifyController : MonoBehaviour
         else
         {
             _circle.SetActive(false);
+        }
+        
+        GameObject focusedTower = _selectedTower != null ? _selectedTower : _closeTower;
+
+        if (focusedTower != null)
+        {
+            Vector3 point = _camera.WorldToScreenPoint(focusedTower.transform.position);
+
+            healthBar.SetActive(true);
+            healthBar.transform.position = point + new Vector3(0, healthBarOffset, 0);
+            float maxWidth = _healthBarOuter.GetComponent<RectTransform>().sizeDelta.x -
+                             healthBarPadding * 2;
+            float width = maxWidth * focusedTower.GetComponent<HealthController>().HealthPercent;
+            _healthBarInner.GetComponent<RectTransform>().sizeDelta = new Vector2(width, -healthBarPadding * 2);
+        }
+        else
+        {
+            healthBar.SetActive(false);
         }
     }
 
@@ -78,14 +106,14 @@ public class TowerModifyController : MonoBehaviour
         {
             _selectedTower = _closeTower;
             _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
-            uiElement.SetActive(true);
-            uiElement.transform.Find("Name").GetComponent<UnityEngine.UI.Text>().text =
+            infoPanel.SetActive(true);
+            infoPanel.transform.Find("Name").GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().name;
-            uiElement.transform.Find("Description").GetComponent<UnityEngine.UI.Text>().text =
+            infoPanel.transform.Find("Description").GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().description;
-            uiElement.transform.Find("Upgrade").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
+            infoPanel.transform.Find("Upgrade").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
                 $"Upgrade -{UpgradeCreditAmount}c";
-            uiElement.transform.Find("Sell").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
+            infoPanel.transform.Find("Sell").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
                 $"Sell +{SellCreditAmount}c";
         }
     }
@@ -96,7 +124,7 @@ public class TowerModifyController : MonoBehaviour
         
         _selectedTower = null;
         _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/SelectCircle"));
-        uiElement.SetActive(false);
+        infoPanel.SetActive(false);
     }
 
     public int SellCreditAmount
