@@ -8,6 +8,8 @@ using UnityEngine.Serialization;
 
 public class TurretController : MonoBehaviour
 {
+    private GameObject _gameDirector;
+    
     private float _cooldown;
     private float _headRotation;
     private GameObject _target;
@@ -28,6 +30,8 @@ public class TurretController : MonoBehaviour
 
     void Start()
     {
+        _gameDirector = GameObject.Find("GameDirector");
+        
         InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
 
@@ -53,6 +57,8 @@ public class TurretController : MonoBehaviour
     
     public void FixedUpdate()
     {
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        
         if (_cooldown > 0)
         {
             _cooldown -= Time.fixedDeltaTime;
@@ -60,11 +66,10 @@ public class TurretController : MonoBehaviour
         else if(_target)
         {
             _cooldown = attackCooldownSec;
-            
+        
             Attack();
         }
-
-
+    
         if (_target != null)
         {
             _headRotation += (GeneralMath.AngleTowardsPoint2D(head.transform.position, _target.transform.position) - _headRotation) / 10;

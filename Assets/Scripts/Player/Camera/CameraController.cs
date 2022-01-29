@@ -68,6 +68,8 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
+        _gameState = GameObject.Find("GameDirector").GetComponent<GameStateController>();
+        
         _controls = new InputMaster();
         
         // scroll... duh'
@@ -87,11 +89,6 @@ public class CameraController : MonoBehaviour
         };
 
         AbsoluteZoom = startZoom;
-    }
-
-    void Start()
-    {
-        _gameState = GameObject.Find("GameDirector").GetComponent<GameStateController>();
     }
 
     private void OnEnable() => _controls.Enable();
@@ -158,6 +155,12 @@ public class CameraController : MonoBehaviour
         
             // movement with everything that is not the mouse
             Position += _controls.Camera.Move.ReadValue<Vector2>() * movementSpeed;
+            
+            // change absolute zoom
+            AbsoluteZoom += _scrollVel * (Time.fixedDeltaTime / 0.016f);
+
+            // move scroll velocity to 0
+            _scrollVel -= _scrollVel / 10 * (Time.fixedDeltaTime / 0.016f);
         }
 
         Vector3 targetPosition = PositionCurrent;
@@ -183,11 +186,5 @@ public class CameraController : MonoBehaviour
         // smooth translation for rotation
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles +
                                               (targetRotation - transform.rotation.eulerAngles) * easing);
-
-        // change absolute zoom
-        AbsoluteZoom += _scrollVel * (Time.fixedDeltaTime / 0.016f);
-
-        // move scroll velocity to 0
-        _scrollVel -= _scrollVel / 10 * (Time.fixedDeltaTime / 0.016f);
     }
 }

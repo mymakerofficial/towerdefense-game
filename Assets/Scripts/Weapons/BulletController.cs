@@ -45,6 +45,13 @@ public class BulletController : MonoBehaviour
     private float _distance;
     private int _hitCount;
 
+    private GameObject _gameDirector;
+
+    void Start()
+    {
+        _gameDirector = GameObject.Find("GameDirector");
+    }
+
     public void Fire()
     {
         _origin = transform.position;
@@ -53,6 +60,8 @@ public class BulletController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(_gameDirector.GetComponent<GameStateController>().Paused) return;
+        
         // dont do anything when not active
         if(!_active) return;
         

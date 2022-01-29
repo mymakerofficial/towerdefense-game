@@ -12,6 +12,16 @@ public class GrenadeController : MonoBehaviour
     public GameObject explosion;
 
     private Vector3 _target;
+    
+    private GameObject _gameDirector;
+    private Vector3 _pausedVelocity;
+    private Vector3 _pausedAngularVelocity;
+    private bool _isPaused;
+
+    void Start()
+    {
+        _gameDirector = GameObject.Find("GameDirector");
+    }
 
     private Vector3 CalculateVelocity(Vector3 target)
     {
@@ -45,9 +55,27 @@ public class GrenadeController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_target != null)
+        if (!_gameDirector.GetComponent<GameStateController>().Paused)
         {
-            if (Vector3.Distance(transform.position, _target) < triggerDistance) Explode();
+            if (_isPaused)
+            {
+                GetComponent<Rigidbody>().WakeUp();
+                GetComponent<Rigidbody>().AddForce( _pausedVelocity, ForceMode.Impulse );
+                GetComponent<Rigidbody>().AddTorque( _pausedAngularVelocity, ForceMode.Impulse );
+                _isPaused = false;
+            }
+            
+            if (_target != null)
+            {
+                if (Vector3.Distance(transform.position, _target) < triggerDistance) Explode();
+            }
+        }
+        else if(!_isPaused)
+        {
+            _pausedVelocity = GetComponent<Rigidbody>().velocity;
+            _pausedAngularVelocity = GetComponent<Rigidbody>().angularVelocity;
+            GetComponent<Rigidbody>().Sleep();
+            _isPaused = true;
         }
     }
 }
