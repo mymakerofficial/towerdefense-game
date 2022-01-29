@@ -7,11 +7,13 @@ public class GrenadeController : MonoBehaviour
 {
     [Space]
     public float angle;
-    public float triggerDistance;
+    public float minDistance;
+    public float radius;
     [Space] 
     public GameObject explosion;
 
     private Vector3 _target;
+    private Vector3 _spawnPosition;
     
     private GameObject _gameDirector;
     private Vector3 _pausedVelocity;
@@ -21,6 +23,7 @@ public class GrenadeController : MonoBehaviour
     void Start()
     {
         _gameDirector = GameObject.Find("GameDirector");
+        _spawnPosition = transform.position;
     }
 
     private Vector3 CalculateVelocity(Vector3 target)
@@ -65,9 +68,10 @@ public class GrenadeController : MonoBehaviour
                 _isPaused = false;
             }
             
-            if (_target != null)
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
+            if (hitColliders.Length > 0 && Vector3.Distance(transform.position, _spawnPosition) > minDistance)
             {
-                if (Vector3.Distance(transform.position, _target) < triggerDistance) Explode();
+                Explode();
             }
         }
         else if(!_isPaused)
