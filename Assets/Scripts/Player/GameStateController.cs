@@ -39,6 +39,7 @@ public class GameStateController : MonoBehaviour
     [Header("UI")] 
     public GameObject canvas;
     public GameObject gameOverCanvas;
+    public GameObject pauseCanvas;
 
     [Header("Post Processing")] 
     public GameObject blurVolume;
@@ -117,6 +118,7 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(true);
         gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(false);
         blurVolume.SetActive(false);
         
         Debug.Log("Starting building phase");
@@ -129,6 +131,7 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(true);
         gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(false);
         blurVolume.SetActive(false);
         
         Debug.Log("Starting enemy wave phase");
@@ -155,13 +158,16 @@ public class GameStateController : MonoBehaviour
         StartBuilding();
     }
 
-    private void GameOver()
+    public void GameOver()
     {
+        ResumeGame();
+        
         _gameState = GameState.GameOver;
         _waitForWaveEnd = false;
         
         canvas.SetActive(false);
         gameOverCanvas.SetActive(true);
+        pauseCanvas.SetActive(false);
         blurVolume.SetActive(true);
         
         Debug.Log("Game Over");
@@ -182,6 +188,7 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(false);
         blurVolume.SetActive(true);
+        pauseCanvas.SetActive(true);
 
         Debug.Log("Paused Game!");
     }
@@ -192,6 +199,7 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(true);
         blurVolume.SetActive(false);
+        pauseCanvas.SetActive(false);
         
         Debug.Log("Resumed Game!");
     }
