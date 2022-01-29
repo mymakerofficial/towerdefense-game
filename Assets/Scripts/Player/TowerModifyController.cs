@@ -2,9 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class TowerModifyController : MonoBehaviour
 {
+    private GameObject _gameDirector;
+    
     private Camera _camera;
     private InputMaster _controls;
 
@@ -13,8 +16,10 @@ public class TowerModifyController : MonoBehaviour
     private GameObject _closeTower;
     private GameObject _selectedTower;
 
-    public float SelectRadiusFactor = 1.5f;
-    public GameObject UiElement;
+    [Space]
+    [FormerlySerializedAs("SelectRadiusFactor")] public float selectRadiusFactor = 1.5f;
+    [Space]
+    [FormerlySerializedAs("UiElement")] public GameObject uiElement;
 
     public GameObject SelectedTower => _selectedTower;
     
@@ -22,6 +27,7 @@ public class TowerModifyController : MonoBehaviour
     {
         _camera = Camera.main; // get active camera i guess
         _controls = new InputMaster();
+        _gameDirector = GameObject.Find("GameDirector");
         
         // create circle
         _circle = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
@@ -40,6 +46,8 @@ public class TowerModifyController : MonoBehaviour
     
     void FixedUpdate()
     {
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        
         if (!_selectedTower) FindCloseset();
 
         if (_selectedTower)
@@ -64,27 +72,31 @@ public class TowerModifyController : MonoBehaviour
 
     private void Select()
     {
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        
         if(_closeTower != null)
         {
             _selectedTower = _closeTower;
             _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
-            UiElement.SetActive(true);
-            UiElement.transform.Find("Name").GetComponent<UnityEngine.UI.Text>().text =
+            uiElement.SetActive(true);
+            uiElement.transform.Find("Name").GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().name;
-            UiElement.transform.Find("Description").GetComponent<UnityEngine.UI.Text>().text =
+            uiElement.transform.Find("Description").GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().description;
-            UiElement.transform.Find("Upgrade").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
+            uiElement.transform.Find("Upgrade").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
                 $"Upgrade -{UpgradeCreditAmount}c";
-            UiElement.transform.Find("Sell").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
+            uiElement.transform.Find("Sell").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
                 $"Sell +{SellCreditAmount}c";
         }
     }
 
     private void UnSelect()
     {
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        
         _selectedTower = null;
         _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/SelectCircle"));
-        UiElement.SetActive(false);
+        uiElement.SetActive(false);
     }
 
     public int SellCreditAmount
@@ -159,7 +171,7 @@ public class TowerModifyController : MonoBehaviour
         if(closest == null) return;
 
         // set if in radius
-        if (closestDistance < closest.GetComponent<TowerDescriptor>().placementRadius * SelectRadiusFactor)
+        if (closestDistance < closest.GetComponent<TowerDescriptor>().placementRadius * selectRadiusFactor)
         {
             _closeTower = closest;
         }

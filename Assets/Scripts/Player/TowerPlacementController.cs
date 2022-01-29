@@ -33,6 +33,8 @@ public class TowerPlacementController : MonoBehaviour
 {
     private Camera _camera;
     private InputMaster _controls;
+    
+    private GameObject _gameDirector;
 
     private Placement _placement;
 
@@ -54,6 +56,8 @@ public class TowerPlacementController : MonoBehaviour
     {
         _camera = Camera.main; // get active camera i guess
         _controls = new InputMaster();
+        
+        _gameDirector = GameObject.Find("GameDirector");
 
         // register control events
         _controls.Editor.Next.performed += _ => Next();
@@ -112,6 +116,8 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void Next()
     {
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        
         if(!_placement.available || _mode == PlacementMode.Idle) return;
         
         _mode++; // next step
@@ -124,6 +130,8 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void Back()
     {
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        
         _mode--; // previous step
 
         if (_mode == PlacementMode.Idle) Reset(); // go to sleep
@@ -171,6 +179,8 @@ public class TowerPlacementController : MonoBehaviour
     
     void FixedUpdate()
     {
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        
         // TODO currently only supports mouse input. It should support other input methods too.
         
         if(_mode == PlacementMode.Position)
