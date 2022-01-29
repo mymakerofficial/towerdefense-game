@@ -43,12 +43,16 @@ public class GenericEnemyController : MonoBehaviour
     private float _cooldown;
     private GameObject _lastCheckpoint;
 
+    private Vector3 _pausedVelocity;
+
     private static GameObject _stronghold;
+    private GameObject _gameDirector;
 
     void Start()
     {
         _cooldown = 1;
         _stronghold = GameObject.FindGameObjectsWithTag("Stronghold")[0];
+        _gameDirector = GameObject.Find("GameDirector");
         _agent = GetComponent<NavMeshAgent>();
         InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
@@ -173,19 +177,37 @@ public class GenericEnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_activeAttackTarget != null)
+        if (!_gameDirector.GetComponent<GameStateController>().Paused)
         {
-            if (Vector3.Distance(transform.position, _activeAttackTarget.transform.position) > attackRange)
-                _activeAttackTarget = null;
+            if (_activeAttackTarget != null)
+            {
+                if (Vector3.Distance(transform.position, _activeAttackTarget.transform.position) > attackRange)
+                    _activeAttackTarget = null;
            
-            if (_cooldown > 0)
-            {
-               _cooldown -= Time.fixedDeltaTime;
+                if (_cooldown > 0)
+                {
+                    _cooldown -= Time.fixedDeltaTime;
+                }
+                else
+                {
+                    Attack();
+                } 
             }
-            else
+            
+            if(_agent.isStopped)
             {
-               Attack();
-            } 
+                _agent.Resume();
+                _pausedVelocity = _agent.velocity;
+            }
+        }
+        else
+        {
+            if(!_agent.isStopped)
+            {
+                _pausedVelocity = _agent.velocity;
+                _agent.Stop();
+                _agent.velocity = Vector3.zero;
+            }
         }
         
     }

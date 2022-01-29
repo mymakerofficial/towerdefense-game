@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public enum GameState {
     Idle,
@@ -18,6 +19,8 @@ public class GameStateController : MonoBehaviour
     private float _buildingTimer;
     private bool _firstWave;
     private bool _waitForWaveEnd;
+
+    private InputMaster _controls;
 
     [Header("BuildingPhase")]
     public int buildingTime;
@@ -36,20 +39,48 @@ public class GameStateController : MonoBehaviour
     [Header("UI")] 
     public GameObject canvas;
     public GameObject gameOverCanvas;
-    
+    public GameObject pauseCanvas;
+
+    [Header("Post Processing")] 
+    public GameObject blurVolume;
 
     public GameState GameState => _gameState;
     public float BuildingTimer => _buildingTimer;
     public bool FirstWave => _firstWave;
     public bool BuildingPhaseIsTimed => !_firstWave;
-    public bool Paused => _paused;
-    public bool GameActive => _gameState == GameState.BuildingPhase || _gameState == GameState.EnemyWavePhase && !_paused;
+
+    public bool Paused
+    {
+        get => _paused;
+        set
+        {
+            if (value)
+            {
+                PauseGame();
+            }
+            else
+            {
+                ResumeGame();
+            }
+        }
+    }
+    
+    public bool GameActive => (_gameState == GameState.BuildingPhase || _gameState == GameState.EnemyWavePhase) && !_paused;
 
     void Start()
     {
         _firstWave = true;
         StartBuilding();
     }
+    
+    void Awake()
+    {
+        _controls = new InputMaster();
+        _controls.General.Pause.performed += _ => TogglePause();
+    }
+    
+    private void OnEnable() => _controls.Enable();
+    private void OnDestroy() => _controls.Disable();
 
     /// <summary>
     /// Reset entire game to start
@@ -87,6 +118,8 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(true);
         gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(false);
+        blurVolume.SetActive(false);
         
         Debug.Log("Starting building phase");
     }
@@ -98,6 +131,8 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(true);
         gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(false);
+        blurVolume.SetActive(false);
         
         Debug.Log("Starting enemy wave phase");
 
@@ -123,44 +158,83 @@ public class GameStateController : MonoBehaviour
         StartBuilding();
     }
 
-    private void GameOver()
+    public void GameOver()
     {
+        ResumeGame();
+        
         _gameState = GameState.GameOver;
         _waitForWaveEnd = false;
         
         canvas.SetActive(false);
         gameOverCanvas.SetActive(true);
+        pauseCanvas.SetActive(false);
+        blurVolume.SetActive(true);
         
         Debug.Log("Game Over");
         
         gameObject.SendMessage("CalculateStatistics");
     }
 
+    private void TogglePause()
+    {
+        Paused = !Paused;
+    }
+
+    public void PauseGame()
+    {
+        if(_gameState == GameState.GameOver) return;
+        
+        _paused = true;
+        
+        canvas.SetActive(false);
+        blurVolume.SetActive(true);
+        pauseCanvas.SetActive(true);
+
+        Debug.Log("Paused Game!");
+    }
+
+    public void ResumeGame()
+    {
+        _paused = false;
+        
+        canvas.SetActive(true);
+        blurVolume.SetActive(false);
+        pauseCanvas.SetActive(false);
+        
+        Debug.Log("Resumed Game!");
+    }
+
     private void FixedUpdate()
     {
-        if (_gameState == GameState.BuildingPhase && BuildingPhaseIsTimed)
+        if (!_paused)
         {
-            if (_buildingTimer > 0)
+            if (_gameState == GameState.BuildingPhase && BuildingPhaseIsTimed)
             {
-                _buildingTimer -= Time.fixedDeltaTime;
+                if (_buildingTimer > 0)
+                {
+                    _buildingTimer -= Time.fixedDeltaTime;
+                }
+                else
+                {
+                    StartEnemyWave();
+                }
             }
-            else
+
+            if (_gameState == GameState.EnemyWavePhase)
             {
-                StartEnemyWave();
+                if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
+                {
+                    EndWave();
+                }
+
+                if (stronghold.GetComponent<StrongholdController>().HealthPercent == 0)
+                {
+                    GameOver();
+                }
             }
         }
 
-        if (_gameState == GameState.EnemyWavePhase)
-        {
-            if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
-            {
-                EndWave();
-            }
-
-            if (stronghold.GetComponent<StrongholdController>().HealthPercent == 0)
-            {
-                GameOver();
-            }
-        }
+        // fade blur effect
+        blurVolume.GetComponent<Volume>().weight += ((GameActive ? 0 : 1) - blurVolume.GetComponent<Volume>().weight) / 10;
     }
 }

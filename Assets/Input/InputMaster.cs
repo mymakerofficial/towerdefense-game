@@ -1049,6 +1049,33 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""General"",
+            ""id"": ""da1873f3-fdaf-4ccd-b07a-a7db56b857ef"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""f56c410f-cb29-4cca-8f7d-377010d380d0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""451e95d6-6f06-418d-82d1-a40fb5a3f0b4"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1082,6 +1109,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Camera_Scroll = m_Camera.FindAction("Scroll", throwIfNotFound: true);
         m_Camera_MousePosition = m_Camera.FindAction("MousePosition", throwIfNotFound: true);
         m_Camera_MouseMoveButton = m_Camera.FindAction("MouseMoveButton", throwIfNotFound: true);
+        // General
+        m_General = asset.FindActionMap("General", throwIfNotFound: true);
+        m_General_Pause = m_General.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1395,6 +1425,39 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public CameraActions @Camera => new CameraActions(this);
+
+    // General
+    private readonly InputActionMap m_General;
+    private IGeneralActions m_GeneralActionsCallbackInterface;
+    private readonly InputAction m_General_Pause;
+    public struct GeneralActions
+    {
+        private @InputMaster m_Wrapper;
+        public GeneralActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Pause => m_Wrapper.m_General_Pause;
+        public InputActionMap Get() { return m_Wrapper.m_General; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GeneralActions set) { return set.Get(); }
+        public void SetCallbacks(IGeneralActions instance)
+        {
+            if (m_Wrapper.m_GeneralActionsCallbackInterface != null)
+            {
+                @Pause.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnPause;
+            }
+            m_Wrapper.m_GeneralActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+            }
+        }
+    }
+    public GeneralActions @General => new GeneralActions(this);
     public interface IJeffActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -1427,5 +1490,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnScroll(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnMouseMoveButton(InputAction.CallbackContext context);
+    }
+    public interface IGeneralActions
+    {
+        void OnPause(InputAction.CallbackContext context);
     }
 }

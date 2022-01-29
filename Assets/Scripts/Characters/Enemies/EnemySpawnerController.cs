@@ -7,6 +7,7 @@ public class EnemySpawnerController : MonoBehaviour
     private float _cooldown;
     private bool _active;
     private int _count;
+    private GameObject _gameDirector;
 
     [Space]
     [Space]
@@ -28,10 +29,13 @@ public class EnemySpawnerController : MonoBehaviour
     {
         _cooldown = startDelay;
         _active = false;
+        _gameDirector = GameObject.Find("GameDirector");
     }
     
     private void FixedUpdate()
     {
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+            
         if (_active)
         {
             if (_cooldown > 0)
@@ -44,7 +48,7 @@ public class EnemySpawnerController : MonoBehaviour
                 _cooldown = interval;
                 _count++;
             }
-            
+        
             if (_count >= amount && !infiniteAmount) _active = false;
         }
         else

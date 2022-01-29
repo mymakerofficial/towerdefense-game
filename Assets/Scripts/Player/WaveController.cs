@@ -191,17 +191,16 @@ public class WaveController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_active)
+        if (!_active || gameDirector.GetComponent<GameStateController>().Paused) return;
+
+        // timer for sections
+        if (_sectionTimer > 0)
         {
-            // timer for sections
-            if (_sectionTimer > 0)
-            {
-                _sectionTimer -= Time.fixedDeltaTime;
-            }
-            else
-            {
-                StartSection(_currentSectionIndex + 1);
-            }
+            _sectionTimer -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            StartSection(_currentSectionIndex + 1);
         }
     }
 
