@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public enum GameState {
     Idle,
@@ -18,7 +19,7 @@ public class GameStateController : MonoBehaviour
     private float _buildingTimer;
     private bool _firstWave;
     private bool _waitForWaveEnd;
-    
+
     private InputMaster _controls;
 
     [Header("BuildingPhase")]
@@ -38,7 +39,9 @@ public class GameStateController : MonoBehaviour
     [Header("UI")] 
     public GameObject canvas;
     public GameObject gameOverCanvas;
-    
+
+    [Header("Post Processing")] 
+    public GameObject blurVolume;
 
     public GameState GameState => _gameState;
     public float BuildingTimer => _buildingTimer;
@@ -114,6 +117,7 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(true);
         gameOverCanvas.SetActive(false);
+        blurVolume.SetActive(false);
         
         Debug.Log("Starting building phase");
     }
@@ -125,6 +129,7 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(true);
         gameOverCanvas.SetActive(false);
+        blurVolume.SetActive(false);
         
         Debug.Log("Starting enemy wave phase");
 
@@ -157,6 +162,7 @@ public class GameStateController : MonoBehaviour
         
         canvas.SetActive(false);
         gameOverCanvas.SetActive(true);
+        blurVolume.SetActive(true);
         
         Debug.Log("Game Over");
         
@@ -175,6 +181,7 @@ public class GameStateController : MonoBehaviour
         _paused = true;
         
         canvas.SetActive(false);
+        blurVolume.SetActive(true);
 
         Debug.Log("Paused Game!");
     }
@@ -184,6 +191,7 @@ public class GameStateController : MonoBehaviour
         _paused = false;
         
         canvas.SetActive(true);
+        blurVolume.SetActive(false);
         
         Debug.Log("Resumed Game!");
     }
@@ -217,5 +225,8 @@ public class GameStateController : MonoBehaviour
                 }
             }
         }
+
+        // fade blur effect
+        blurVolume.GetComponent<Volume>().weight += ((GameActive ? 0 : 1) - blurVolume.GetComponent<Volume>().weight) / 10;
     }
 }
