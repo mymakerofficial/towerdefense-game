@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 500
+  maxHealth: 500
 --- !u!114 &2991696838164619484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   description: Shoots at enemies
   placementRadius: 1.5
   level: 1
-  nextUpgrade: {fileID: 0}
+  nextUpgrade: {fileID: 2991696838164619490, guid: 62fe3f05c1b1da845aa1dc0bc4c05183, type: 3}
   levelDescription: 
   cost: 100
   levelUpgradeCost: 0
