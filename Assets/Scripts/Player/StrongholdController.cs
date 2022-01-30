@@ -6,9 +6,9 @@ using UnityEngine.Serialization;
 
 public class StrongholdController : MonoBehaviour
 {
-    [Header("Enemies")]
-    public GameObject enemyParrent;
-    public float affectDistance;
+    [FormerlySerializedAs("enemyParrent")] [Header("Enemies")]
+    public GameObject enemyParent;
+    [FormerlySerializedAs("affectDistance")] public float effectDistance;
     [Header("Health")]
     public int fullHealth;
     
@@ -43,9 +43,9 @@ public class StrongholdController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        foreach (Transform enemyTransform in enemyParrent.transform) // loop through all enemies
+        foreach (Transform enemyTransform in enemyParent.transform) // loop through all enemies
         {
-            if (Vector3.Distance(transform.position, enemyTransform.position) < affectDistance) // check if enemy is in range
+            if (Vector3.Distance(transform.position, enemyTransform.position) < effectDistance) // check if enemy is in range
             {
                 Destroy(enemyTransform.gameObject);
                 Health--;
@@ -58,6 +58,6 @@ public class StrongholdController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, affectDistance);
+        Gizmos.DrawWireSphere(transform.position, effectDistance);
     }
 }
