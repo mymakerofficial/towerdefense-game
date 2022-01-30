@@ -1074,6 +1074,10 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8385345858846927386, guid: 4f5a1945776289240bd7c33eed797f79, type: 3}
+      propertyPath: scrollSpeed
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385345858846927386, guid: 4f5a1945776289240bd7c33eed797f79, type: 3}
       propertyPath: gameOverPosition.x
       value: 7
       objectReference: {fileID: 0}
