@@ -91,6 +91,12 @@ public class TowerPlacementController : MonoBehaviour
         _mode = PlacementMode.Position;
     }
 
+    public void CancelPlacement()
+    {
+        _mode = PlacementMode.Idle;
+        Reset();
+    }
+
     /// <summary>
     /// Creates a dummy object of the object to place
     /// </summary>

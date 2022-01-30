@@ -118,7 +118,7 @@ public class TowerModifyController : MonoBehaviour
         }
     }
 
-    private void UnSelect()
+    public void UnSelect()
     {
         if (_gameDirector.GetComponent<GameStateController>().Paused) return;
         

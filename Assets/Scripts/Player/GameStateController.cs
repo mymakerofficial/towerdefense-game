@@ -19,9 +19,19 @@ public class GameStateController : MonoBehaviour
     private float _buildingTimer;
     private bool _firstWave;
     private bool _waitForWaveEnd;
+    private bool _mainMenuActive;
 
     private InputMaster _controls;
 
+    [Header("MainMenu")]
+    public GameObject mainMenuEnemyDestroyer;
+    public GameObject mainMenuDesktopButtons;
+    public GameObject mainMenuWebButtons;
+
+    [Header("Towers")]
+    public GameObject towerPlacementController;
+    public GameObject towerModifyController;
+    
     [Header("BuildingPhase")]
     public int buildingTime;
 
@@ -40,6 +50,11 @@ public class GameStateController : MonoBehaviour
     public GameObject canvas;
     public GameObject gameOverCanvas;
     public GameObject pauseCanvas;
+    public GameObject mainMenuCanvas;
+
+    [Header("Cameras")] 
+    public GameObject mainCamera;
+    public GameObject menuCamera;
 
     [Header("Post Processing")] 
     public GameObject blurVolume;
@@ -69,7 +84,59 @@ public class GameStateController : MonoBehaviour
 
     void Start()
     {
+        MainMenu();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void MainMenu()
+    {
+        _mainMenuActive = true;
+        _paused = false;
+
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            mainMenuDesktopButtons.SetActive(false);
+            mainMenuWebButtons.SetActive(true);
+        }
+        else
+        {
+            mainMenuDesktopButtons.SetActive(true);
+            mainMenuWebButtons.SetActive(false);
+        }
+        
+        towerPlacementController.GetComponent<TowerPlacementController>().CancelPlacement();
+        
+        mainMenuEnemyDestroyer.SetActive(true);
+        
+        EnableMainMenuCanvas();
+        
+        mainCamera.GetComponent<Camera>().enabled = false;
+        menuCamera.GetComponent<Camera>().enabled = true;
+        
+        Debug.Log(Application.platform.ToString());
+        
+        Reset();
+        StartEnemyWave();
+    }
+    
+    public void StartGame()
+    {
+        Reset();
+        
+        _mainMenuActive = false;
+        _paused = false;
+        mainMenuEnemyDestroyer.SetActive(false);
+        mainCamera.GetComponent<Camera>().enabled = true;
+        menuCamera.GetComponent<Camera>().enabled = false;
+
         _firstWave = true;
+        
+        EnableInGameCanvas();
+        
         StartBuilding();
     }
     
@@ -82,13 +149,8 @@ public class GameStateController : MonoBehaviour
     private void OnEnable() => _controls.Enable();
     private void OnDestroy() => _controls.Disable();
 
-    /// <summary>
-    /// Reset entire game to start
-    /// </summary>
-    public void Restart()
+    private void Reset()
     {
-        Debug.Log("Reseting Game");
-        
         // make list of all transforms that need to be deleted
         List<Transform> toBeDeleted = new List<Transform>();
         toBeDeleted.AddRange(enemies.GetComponentsInChildren<Transform>().ToList());
@@ -107,7 +169,43 @@ public class GameStateController : MonoBehaviour
         stronghold.GetComponent<StrongholdController>().Reset();
         GetComponent<GameStatisticsController>().Reset();
         GetComponent<CreditController>().Start();
-        Start();
+        towerModifyController.GetComponent<TowerModifyController>().UnSelect();
+    }
+
+    private void EnableInGameCanvas()
+    {
+        canvas.SetActive(true);
+        gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(false);
+        mainMenuCanvas.SetActive(false);
+        blurVolume.SetActive(false);
+    }
+    
+    private void EnablePauseCanvas()
+    {
+        canvas.SetActive(false);
+        gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(true);
+        mainMenuCanvas.SetActive(false);
+        blurVolume.SetActive(true);
+    }
+    
+    private void EnableGameOverCanvas()
+    {
+        canvas.SetActive(false);
+        gameOverCanvas.SetActive(true);
+        pauseCanvas.SetActive(false);
+        mainMenuCanvas.SetActive(false);
+        blurVolume.SetActive(true);
+    }
+    
+    private void EnableMainMenuCanvas()
+    {
+        canvas.SetActive(false);
+        gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(false);
+        mainMenuCanvas.SetActive(true);
+        blurVolume.SetActive(true);
     }
 
     public void StartBuilding()
@@ -115,12 +213,7 @@ public class GameStateController : MonoBehaviour
         _buildingTimer = buildingTime;
         
         _gameState = GameState.BuildingPhase;
-        
-        canvas.SetActive(true);
-        gameOverCanvas.SetActive(false);
-        pauseCanvas.SetActive(false);
-        blurVolume.SetActive(false);
-        
+
         Debug.Log("Starting building phase");
     }
 
@@ -128,12 +221,7 @@ public class GameStateController : MonoBehaviour
     {
         _gameState = GameState.EnemyWavePhase;
         _waitForWaveEnd = false;
-        
-        canvas.SetActive(true);
-        gameOverCanvas.SetActive(false);
-        pauseCanvas.SetActive(false);
-        blurVolume.SetActive(false);
-        
+
         Debug.Log("Starting enemy wave phase");
 
         waveController.SendMessage("StartNextWave");
@@ -164,11 +252,8 @@ public class GameStateController : MonoBehaviour
         
         _gameState = GameState.GameOver;
         _waitForWaveEnd = false;
-        
-        canvas.SetActive(false);
-        gameOverCanvas.SetActive(true);
-        pauseCanvas.SetActive(false);
-        blurVolume.SetActive(true);
+
+        EnableGameOverCanvas();
         
         Debug.Log("Game Over");
         
@@ -182,13 +267,13 @@ public class GameStateController : MonoBehaviour
 
     public void PauseGame()
     {
-        if(_gameState == GameState.GameOver) return;
+        if(_gameState == GameState.GameOver || _mainMenuActive) return;
         
         _paused = true;
         
-        canvas.SetActive(false);
-        blurVolume.SetActive(true);
-        pauseCanvas.SetActive(true);
+        
+        
+        EnablePauseCanvas();
 
         Debug.Log("Paused Game!");
     }
@@ -197,9 +282,7 @@ public class GameStateController : MonoBehaviour
     {
         _paused = false;
         
-        canvas.SetActive(true);
-        blurVolume.SetActive(false);
-        pauseCanvas.SetActive(false);
+        EnableInGameCanvas();
         
         Debug.Log("Resumed Game!");
     }
@@ -222,19 +305,36 @@ public class GameStateController : MonoBehaviour
 
             if (_gameState == GameState.EnemyWavePhase)
             {
-                if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
+                if (!_mainMenuActive)
                 {
-                    EndWave();
-                }
+                    if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
+                    {
+                        EndWave();
+                    }
 
-                if (stronghold.GetComponent<StrongholdController>().HealthPercent == 0)
+                    if (stronghold.GetComponent<StrongholdController>().HealthPercent == 0)
+                    {
+                        GameOver();
+                    }
+                }
+                else
                 {
-                    GameOver();
+                    if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
+                    {
+                        _firstWave = false;
+                        _waitForWaveEnd = false;
+        
+                        Debug.Log("Ended enemy wave phase");
+            
+                        gameObject.SendMessage("ReportWaveEnd");
+                        
+                        StartEnemyWave();
+                    }
                 }
             }
         }
 
         // fade blur effect
-        blurVolume.GetComponent<Volume>().weight += ((GameActive ? 0 : 1) - blurVolume.GetComponent<Volume>().weight) / 10;
+        blurVolume.GetComponent<Volume>().weight += ((GameActive && !_mainMenuActive ? 0 : 1) - blurVolume.GetComponent<Volume>().weight) / 10;
     }
 }
