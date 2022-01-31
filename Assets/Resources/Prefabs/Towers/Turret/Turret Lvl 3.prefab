@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3333053906344147755}
   - component: {fileID: 6077609842773181522}
   m_Layer: 7
-  m_Name: GrenadeThrower Lvl 1
+  m_Name: Turret Lvl 3
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2799575768814276943}
+  - {fileID: 8142071058060442750}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -61,14 +61,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21c3a1e8c386be46969c448c89560a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Grenade Thrower
-  description: throws grenades
+  name: Turret
+  description: Shoots at enemies
   placementRadius: 1.5
-  level: 1
-  nextUpgrade: {fileID: 2991696838164619490, guid: d2801787160d4d1488cad1f82bb5e511, type: 3}
+  level: 3
+  nextUpgrade: {fileID: 0}
   levelDescription: 
-  cost: 150
-  levelUpgradeCost: 0
+  cost: 300
+  levelUpgradeCost: 100
 --- !u!114 &2991696838164619485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,12 +81,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 698187cef8b403743a0e5d1978f1f7a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
-  range: 15
-  fireGameObject: {fileID: 5305491943199489257, guid: ad6294bbb69e7244ab7bffc86aa88c3c, type: 3}
-  fireCallOptions: 2
-  fireOffset: {x: 0, y: 2, z: 0}
-  attackCooldownSec: 1
+  head: {fileID: 9197793250744238077}
+  range: 10
+  fireGameObject: {fileID: 1422610889946738639, guid: beb90da1680cc454b87303d00b08ee0b, type: 3}
+  fireCallOptions: 1
+  fireOffset: {x: 0, y: 1.4, z: 0}
+  attackCooldownSec: 0.3
 --- !u!65 &3333053906344147755
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -116,65 +116,70 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.9, z: 0}
   m_TimeToStationary: 0.5
---- !u!1001 &2400610093768521380
+--- !u!1001 &8607727990300941205
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 2991696838164619486}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+    - target: {fileID: 919132149155446097, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
       propertyPath: m_Name
-      value: GranadeTowerLv1
+      value: TowerLv3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
---- !u!4 &2799575768814276943 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
+--- !u!4 &8142071058060442750 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
-  m_PrefabInstance: {fileID: 2400610093768521380}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
+  m_PrefabInstance: {fileID: 8607727990300941205}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9197793250744238077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 635547659545568360, guid: ff798cb7bfbe64d4dbc35ca64ba51fea, type: 3}
+  m_PrefabInstance: {fileID: 8607727990300941205}
   m_PrefabAsset: {fileID: 0}
