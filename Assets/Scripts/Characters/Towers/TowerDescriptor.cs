@@ -9,6 +9,7 @@ public class TowerDescriptor : MonoBehaviour
     public string description;
     [Header("Placement")]
     public float placementRadius;
+    public bool requiresRotation;
     [Header("Level")]
     public int level;
     public GameObject nextUpgrade;

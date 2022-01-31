@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 1000
+  maxHealth: 1000
 --- !u!114 &7463916891102011178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,8 +62,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Blockade
   description: It blocks the enemies
-  level: 1
   placementRadius: 1.12
+  requiresRotation: 1
+  level: 1
   nextUpgrade: {fileID: 4152713646383364980, guid: 64d77eb15ce49294188e4626f0d975cf, type: 3}
   levelDescription: 
   cost: 10

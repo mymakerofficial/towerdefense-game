@@ -128,6 +128,12 @@ public class TowerPlacementController : MonoBehaviour
         
         _mode++; // next step
 
+        // skip rotation if not needed
+        if (_mode == PlacementMode.Rotation && !_placement.tower.GetComponent<TowerDescriptor>().requiresRotation)
+        {
+            _mode++;
+        }
+
         if (_mode == PlacementMode.Done) Place(); // place tower
     }
     
@@ -210,6 +216,12 @@ public class TowerPlacementController : MonoBehaviour
         // check if position is to close to other towers
         _placement.available = true;
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower"); // get every tower in the scene
+
+        if (GameObject.Find("GameDirector").GetComponent<CreditController>().CurrentCredits <
+            _placement.tower.GetComponent<TowerDescriptor>().cost)
+        {
+            _placement.available = false;
+        }
 
         foreach (GameObject tower in towers)
         {
