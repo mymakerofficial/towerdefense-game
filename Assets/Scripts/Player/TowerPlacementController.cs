@@ -217,6 +217,12 @@ public class TowerPlacementController : MonoBehaviour
         _placement.available = true;
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower"); // get every tower in the scene
 
+        if (GameObject.Find("GameDirector").GetComponent<CreditController>().CurrentCredits <
+            _placement.tower.GetComponent<TowerDescriptor>().cost)
+        {
+            _placement.available = false;
+        }
+
         foreach (GameObject tower in towers)
         {
             float distance =  Vector3.Distance(tower.transform.position, _placement.position);
