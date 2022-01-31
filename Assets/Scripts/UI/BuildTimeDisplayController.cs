@@ -28,6 +28,7 @@ public class BuildTimeDisplayController : MonoBehaviour
     [Header("Config")] 
     public float warningTime;
     public float blinkInterval;
+    public float blinkEasing;
 
     void Start()
     {
@@ -68,7 +69,7 @@ public class BuildTimeDisplayController : MonoBehaviour
                         _blinkTimer = blinkInterval;
                     }
 
-                    _blinkAlpha += ((_blinkState ? _blinkOriginalAlpha : 0) - _blinkAlpha) / 4;
+                    _blinkAlpha += ((_blinkState ? _blinkOriginalAlpha : 0) - _blinkAlpha) * blinkEasing;
                     gradient.GetComponent<Image>().color = new Color(1, 1, 1, _blinkAlpha);
                 }
             }
