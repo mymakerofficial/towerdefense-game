@@ -28,6 +28,8 @@ public class TowerModifyController : MonoBehaviour
     public GameObject infoPanelDescription;
     public GameObject infoPanelUpgrade;
     public GameObject infoPanelSell;
+    public GameObject infoPanelUpgradeCredits;
+    public GameObject infoPanelSellCredits;
     [Space]
     public GameObject healthBar;
     [Space] 
@@ -102,6 +104,15 @@ public class TowerModifyController : MonoBehaviour
         {
             healthBar.SetActive(false);
         }
+
+        // update menu information
+        if (_selectedTower)
+        {
+            infoPanelUpgradeCredits.GetComponent<UnityEngine.UI.Text>().text = $"-{UpgradeCreditAmount}";
+            infoPanelSellCredits.GetComponent<UnityEngine.UI.Text>().text = $"+{SellCreditAmount}";
+            
+            infoPanelUpgrade.SetActive(_closeTower.GetComponent<TowerDescriptor>().nextUpgrade != null);
+        }
     }
 
     private void Select()
@@ -113,17 +124,12 @@ public class TowerModifyController : MonoBehaviour
             _selectedTower = _closeTower;
             _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
             infoPanel.SetActive(true);
+            
             infoPanelName.GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().name;
             infoPanelLevel.GetComponent<UnityEngine.UI.Text>().text = $"Lvl. {_closeTower.GetComponent<TowerDescriptor>().level}";
             infoPanelDescription.GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().description;
-            infoPanelUpgrade.transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
-                $"Upgrade [ -{UpgradeCreditAmount} ]";
-            infoPanelSell.transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
-                $"Sell [ +{SellCreditAmount} ]";
-            
-            infoPanelUpgrade.SetActive(_closeTower.GetComponent<TowerDescriptor>().nextUpgrade != null);
         }
     }
 
