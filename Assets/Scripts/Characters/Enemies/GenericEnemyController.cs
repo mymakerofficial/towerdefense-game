@@ -36,12 +36,18 @@ public class GenericEnemyController : MonoBehaviour
     [Space]
     [FormerlySerializedAs("AttackCooldownSec")] public float attackCooldownSec;
     [FormerlySerializedAs("SelfDestructOnAttack")] public bool selfDestructOnAttack; // yes it does what you think it does
+    [Header("Geometry")] 
+    public GameObject head;
+    public Vector3 headRotationOffset;
+    public float headRotationDefault;
 
     private GameObject _activeMovementTarget;
     private GameObject _activeAttackTarget;
     private NavMeshAgent _agent;
     private float _cooldown;
     private GameObject _lastCheckpoint;
+    
+    private float _headRotation;
 
     private Vector3 _pausedVelocity;
 
@@ -191,8 +197,18 @@ public class GenericEnemyController : MonoBehaviour
                 else
                 {
                     Attack();
-                } 
+                }
             }
+            
+            // set head rotation
+            float rotation = headRotationDefault;
+            if (_activeMovementTarget != null) rotation = 
+                GeneralMath.AngleTowardsPoint2D(head.transform.position, _activeMovementTarget.transform.position);
+            if (_activeAttackTarget != null)
+                rotation = GeneralMath.AngleTowardsPoint2D(head.transform.position,
+                    _activeAttackTarget.transform.position);
+            _headRotation += (rotation - _headRotation) / 10;
+            head.transform.rotation = Quaternion.Euler(headRotationOffset.x, headRotationOffset.y, _headRotation + headRotationOffset.z);
             
             if(_agent.isStopped)
             {
