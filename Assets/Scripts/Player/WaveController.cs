@@ -81,7 +81,9 @@ public class WaveController : MonoBehaviour
     [Header("Spawners")] 
     public GameObject spawnerParrent;
     public GameObject enemyParrent;
+    [Space]
     public Vector3 spawnerPosition;
+    public Vector3 spawnerRotation;
 
     [Header("GameDirector")] 
     public GameObject gameDirector;
@@ -174,6 +176,7 @@ public class WaveController : MonoBehaviour
         // setup gameobject
         obj.transform.SetParent(spawnerParrent.transform);
         obj.transform.position = spawnerPosition;
+        obj.transform.rotation = Quaternion.Euler(spawnerRotation);
         obj.name = $"EnemySpawner ({enemy.enemy.GetComponent<EnemyDescriptor>().name})";
         
         // add controller

@@ -1867,6 +1867,7 @@ MonoBehaviour:
   spawnerParrent: {fileID: 104990955}
   enemyParrent: {fileID: 1025087702}
   spawnerPosition: {x: 0, y: 0, z: 58}
+  spawnerRotation: {x: 0, y: 180, z: 0}
   gameDirector: {fileID: 2100159332}
 --- !u!4 &573948474
 Transform:
