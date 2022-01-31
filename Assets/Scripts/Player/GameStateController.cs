@@ -21,6 +21,9 @@ public class GameStateController : MonoBehaviour
     private bool _waitForWaveEnd;
     private bool _mainMenuActive;
 
+    private bool _strongholdWarningShown;
+    private int _strongholdWaveStartHealth;
+    
     private InputMaster _controls;
 
     [Header("MainMenu")]
@@ -51,6 +54,7 @@ public class GameStateController : MonoBehaviour
     public GameObject gameOverCanvas;
     public GameObject pauseCanvas;
     public GameObject mainMenuCanvas;
+    public GameObject notificationPanel;
 
     [Header("Cameras")] 
     public GameObject mainCamera;
@@ -58,6 +62,11 @@ public class GameStateController : MonoBehaviour
 
     [Header("Post Processing")] 
     public GameObject blurVolume;
+
+    [Header("Notifications")] 
+    public string waveStartText;
+    public string waveEndText;
+    public string strongholdAttackText;
 
     public GameState GameState => _gameState;
     public float BuildingTimer => _buildingTimer;
@@ -221,8 +230,11 @@ public class GameStateController : MonoBehaviour
     {
         _gameState = GameState.EnemyWavePhase;
         _waitForWaveEnd = false;
+        _strongholdWaveStartHealth = stronghold.GetComponent<StrongholdController>().Health;
+        _strongholdWarningShown = false;
 
         Debug.Log("Starting enemy wave phase");
+        notificationPanel.SendMessage("ShowNotification", waveStartText);
 
         waveController.SendMessage("StartNextWave");
     }
@@ -240,6 +252,7 @@ public class GameStateController : MonoBehaviour
         _waitForWaveEnd = false;
         
         Debug.Log("Ended enemy wave phase");
+        notificationPanel.SendMessage("ShowNotification", waveEndText);
             
         gameObject.SendMessage("ReportWaveEnd");
         
@@ -254,6 +267,8 @@ public class GameStateController : MonoBehaviour
         _waitForWaveEnd = false;
 
         EnableGameOverCanvas();
+        
+        notificationPanel.SendMessage("Hide");
         
         Debug.Log("Game Over");
         
@@ -307,6 +322,13 @@ public class GameStateController : MonoBehaviour
             {
                 if (!_mainMenuActive)
                 {
+                    if (stronghold.GetComponent<StrongholdController>().Health < _strongholdWaveStartHealth &&
+                        !_strongholdWarningShown)
+                    {
+                        notificationPanel.SendMessage("ShowNotification", strongholdAttackText);
+                        _strongholdWarningShown = true;
+                    }
+                    
                     if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
                     {
                         EndWave();
