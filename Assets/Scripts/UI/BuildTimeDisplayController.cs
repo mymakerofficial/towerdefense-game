@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildTimeDisplayController : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class BuildTimeDisplayController : MonoBehaviour
     private float _blinkTimer;
     private bool _blinkState;
 
+    private float _blinkAlpha;
+    private float _blinkOriginalAlpha;
+
     [Space] 
     public GameObject gameDirector;
 
@@ -18,19 +22,18 @@ public class BuildTimeDisplayController : MonoBehaviour
     public GameObject time;
     public GameObject skipButton;
     public GameObject startButton;
+    public GameObject icon;
+    public GameObject gradient;
 
     [Header("Config")] 
     public float warningTime;
     public float blinkInterval;
 
-    [Header("Color")] 
-    public Color textDefaultColor;
-    public Color textWarningColor;
-
     void Start()
     {
         _stateController = gameDirector.GetComponent<GameStateController>();
         _timeTxt = time.GetComponent<UnityEngine.UI.Text>();
+        _blinkOriginalAlpha = gradient.GetComponent<Image>().color.a;
     }
     
     void FixedUpdate()
@@ -41,18 +44,20 @@ public class BuildTimeDisplayController : MonoBehaviour
             {
                 time.SetActive(true);
                 skipButton.SetActive(true);
+                icon.SetActive(true);
                 startButton.SetActive(false);
             
                 _timeTxt.text = $"{_stateController.BuildingTimer:f2}";
 
                 if (_stateController.BuildingTimer > warningTime)
                 {
-                    _timeTxt.color = textDefaultColor;
+                    gradient.SetActive(false);
+                    gradient.GetComponent<Image>().color = new Color(1, 1, 1, 0);
                 }
                 else
                 {
-                    _timeTxt.color = _blinkState ? textWarningColor : textDefaultColor;
-                
+                    gradient.SetActive(true);
+                    
                     if (_blinkTimer > 0)
                     {
                         _blinkTimer -= Time.fixedDeltaTime;
@@ -62,12 +67,18 @@ public class BuildTimeDisplayController : MonoBehaviour
                         _blinkState = !_blinkState;
                         _blinkTimer = blinkInterval;
                     }
+
+                    _blinkAlpha += ((_blinkState ? _blinkOriginalAlpha : 0) - _blinkAlpha) / 4;
+                    Debug.Log(_blinkAlpha);
+                    gradient.GetComponent<Image>().color = new Color(1, 1, 1, _blinkAlpha);
                 }
             }
             else
             {
                 time.SetActive(false);
                 skipButton.SetActive(false);
+                icon.SetActive(false);
+                gradient.SetActive(false);
                 startButton.SetActive(true);
             }
         }
@@ -75,6 +86,8 @@ public class BuildTimeDisplayController : MonoBehaviour
         {
             time.SetActive(false);
             skipButton.SetActive(false);
+            icon.SetActive(false);
+            gradient.SetActive(false);
             startButton.SetActive(false);
         }
         

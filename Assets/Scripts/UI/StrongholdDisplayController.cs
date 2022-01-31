@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreditDisplayController : MonoBehaviour
+public class StrongholdDisplayController : MonoBehaviour
 {
-    private CreditController cc;
+    private StrongholdController sh;
     private UnityEngine.UI.Text txt;
     
     void Start()
     {
-        cc = GameObject.Find("GameDirector").GetComponent<CreditController>();
+        sh = GameObject.Find("Stronghold").GetComponent<StrongholdController>();
         txt = GetComponent<UnityEngine.UI.Text>();
     }
     
     void Update()
     {
-        txt.text = cc.CurrentCredits.ToString();
+        txt.text = sh.Health.ToString();
     }
 }
