@@ -64,6 +64,8 @@ public class GameStateController : MonoBehaviour
     public GameObject blurVolume;
 
     [Header("Notifications")] 
+    public bool showNotifications;
+    [Space]
     public string waveStartText;
     public string waveEndText;
     public string strongholdAttackText;
@@ -234,7 +236,7 @@ public class GameStateController : MonoBehaviour
         _strongholdWarningShown = false;
 
         Debug.Log("Starting enemy wave phase");
-        notificationPanel.SendMessage("ShowNotification", waveStartText);
+        if(showNotifications) notificationPanel.SendMessage("ShowNotification", waveStartText);
 
         waveController.SendMessage("StartNextWave");
     }
@@ -252,7 +254,7 @@ public class GameStateController : MonoBehaviour
         _waitForWaveEnd = false;
         
         Debug.Log("Ended enemy wave phase");
-        notificationPanel.SendMessage("ShowNotification", waveEndText);
+        if(showNotifications) notificationPanel.SendMessage("ShowNotification", waveEndText);
             
         gameObject.SendMessage("ReportWaveEnd");
         
@@ -325,7 +327,7 @@ public class GameStateController : MonoBehaviour
                     if (stronghold.GetComponent<StrongholdController>().Health < _strongholdWaveStartHealth &&
                         !_strongholdWarningShown)
                     {
-                        notificationPanel.SendMessage("ShowNotification", strongholdAttackText);
+                        if(showNotifications) notificationPanel.SendMessage("ShowNotification", strongholdAttackText);
                         _strongholdWarningShown = true;
                     }
                     
