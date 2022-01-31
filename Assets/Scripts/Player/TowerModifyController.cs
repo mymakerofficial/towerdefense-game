@@ -23,6 +23,12 @@ public class TowerModifyController : MonoBehaviour
     public float selectRadiusFactor = 1.2f;
     [Header("UI")]
     public GameObject infoPanel;
+    public GameObject infoPanelName;
+    public GameObject infoPanelLevel;
+    public GameObject infoPanelDescription;
+    public GameObject infoPanelUpgrade;
+    public GameObject infoPanelSell;
+    [Space]
     public GameObject healthBar;
     [Space] 
     public float healthBarOffset;
@@ -107,14 +113,17 @@ public class TowerModifyController : MonoBehaviour
             _selectedTower = _closeTower;
             _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
             infoPanel.SetActive(true);
-            infoPanel.transform.Find("Name").GetComponent<UnityEngine.UI.Text>().text =
+            infoPanelName.GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().name;
-            infoPanel.transform.Find("Description").GetComponent<UnityEngine.UI.Text>().text =
+            infoPanelLevel.GetComponent<UnityEngine.UI.Text>().text = $"Lvl. {_closeTower.GetComponent<TowerDescriptor>().level}";
+            infoPanelDescription.GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().description;
-            infoPanel.transform.Find("Upgrade").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
-                $"Upgrade -{UpgradeCreditAmount}c";
-            infoPanel.transform.Find("Sell").transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
-                $"Sell +{SellCreditAmount}c";
+            infoPanelUpgrade.transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
+                $"Upgrade [ -{UpgradeCreditAmount} ]";
+            infoPanelSell.transform.Find("Text").GetComponent<UnityEngine.UI.Text>().text =
+                $"Sell [ +{SellCreditAmount} ]";
+            
+            infoPanelUpgrade.SetActive(_closeTower.GetComponent<TowerDescriptor>().nextUpgrade != null);
         }
     }
 
