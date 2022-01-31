@@ -128,6 +128,12 @@ public class TowerPlacementController : MonoBehaviour
         
         _mode++; // next step
 
+        // skip rotation if not needed
+        if (_mode == PlacementMode.Rotation && !_placement.tower.GetComponent<TowerDescriptor>().requiresRotation)
+        {
+            _mode++;
+        }
+
         if (_mode == PlacementMode.Done) Place(); // place tower
     }
     

@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 10
+  maxHealth: 10
 --- !u!114 &1427628318752552274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,8 +62,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Spike Blockade
   description: Blocks enemies and hurts them with spikes
-  level: 2
   placementRadius: 1.12
+  requiresRotation: 1
+  level: 2
   nextUpgrade: {fileID: 0}
   levelDescription: Now with spikes!
   cost: 40
