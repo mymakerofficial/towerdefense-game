@@ -69,7 +69,6 @@ public class BuildTimeDisplayController : MonoBehaviour
                     }
 
                     _blinkAlpha += ((_blinkState ? _blinkOriginalAlpha : 0) - _blinkAlpha) / 4;
-                    Debug.Log(_blinkAlpha);
                     gradient.GetComponent<Image>().color = new Color(1, 1, 1, _blinkAlpha);
                 }
             }
