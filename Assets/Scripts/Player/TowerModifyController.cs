@@ -76,7 +76,7 @@ public class TowerModifyController : MonoBehaviour
     {
         if (_gameDirector.GetComponent<GameStateController>().Paused) return;
 
-        if (towerPlacer.GetComponent<TowerPlacementController>().PlacementMode != PlacementMode.Idle)
+        if (towerPlacer.GetComponent<TowerPlacementController>().PlacementMode != PlacementMode.Idle || _gameDirector.GetComponent<GameStateController>().GameState == GameState.GameOver)
         {
             UnSelect();
         }else

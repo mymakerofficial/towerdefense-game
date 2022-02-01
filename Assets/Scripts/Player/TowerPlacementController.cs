@@ -218,6 +218,8 @@ public class TowerPlacementController : MonoBehaviour
     {
         if (_gameDirector.GetComponent<GameStateController>().Paused) return;
         
+        if(_gameDirector.GetComponent<GameStateController>().GameState == GameState.GameOver) Reset();
+        
         // TODO currently only supports mouse input. It should support other input methods too.
         
         if(_mode == PlacementMode.Position)
