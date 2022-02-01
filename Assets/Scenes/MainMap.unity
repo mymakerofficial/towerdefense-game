@@ -7847,6 +7847,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 555033926}
     - target: {fileID: 7374997891597008419, guid: 993b8b83433f4b74f86d0c7c11fd98f2, type: 3}
+      propertyPath: circleRange
+      value: 
+      objectReference: {fileID: 2800000, guid: 1205807ae56ebb14188285a1c27f45e9, type: 3}
+    - target: {fileID: 7374997891597008419, guid: 993b8b83433f4b74f86d0c7c11fd98f2, type: 3}
+      propertyPath: towerPlacer
+      value: 
+      objectReference: {fileID: 39076057}
+    - target: {fileID: 7374997891597008419, guid: 993b8b83433f4b74f86d0c7c11fd98f2, type: 3}
+      propertyPath: circleOutline
+      value: 
+      objectReference: {fileID: 2800000, guid: cdcb8b6c328721f4383d33082479c4e5, type: 3}
+    - target: {fileID: 7374997891597008419, guid: 993b8b83433f4b74f86d0c7c11fd98f2, type: 3}
       propertyPath: infoPanelName
       value: 
       objectReference: {fileID: 880968634}
@@ -7854,6 +7866,10 @@ PrefabInstance:
       propertyPath: infoPanelSell
       value: 
       objectReference: {fileID: 1475802601}
+    - target: {fileID: 7374997891597008419, guid: 993b8b83433f4b74f86d0c7c11fd98f2, type: 3}
+      propertyPath: circleSelected
+      value: 
+      objectReference: {fileID: 2800000, guid: 800c0610785022343a7110a713c0fe81, type: 3}
     - target: {fileID: 7374997891597008419, guid: 993b8b83433f4b74f86d0c7c11fd98f2, type: 3}
       propertyPath: infoPanelLevel
       value: 
@@ -9188,6 +9204,18 @@ PrefabInstance:
       propertyPath: parrent
       value: 
       objectReference: {fileID: 1392174334}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: circleRange
+      value: 
+      objectReference: {fileID: 2800000, guid: 1205807ae56ebb14188285a1c27f45e9, type: 3}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: circleOutline
+      value: 
+      objectReference: {fileID: 2800000, guid: 800c0610785022343a7110a713c0fe81, type: 3}
+    - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
+      propertyPath: circleOutlineWarning
+      value: 
+      objectReference: {fileID: 2800000, guid: 8c30ea4bfe752f447a6afa4acffe6228, type: 3}
     - target: {fileID: 2467957537997868514, guid: b52f7f85509eeca409fee00edf2f14f4, type: 3}
       propertyPath: distanceToMapObjects
       value: 0.4

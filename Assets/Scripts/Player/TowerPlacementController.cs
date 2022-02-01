@@ -40,14 +40,23 @@ public class TowerPlacementController : MonoBehaviour
 
     private GameObject _dummy;
     private GameObject _circle;
+    private GameObject _circleRange;
     private PlacementMode _mode = PlacementMode.Idle;
 
-    [Space]
+    [Header("Config")]
     public GameObject parrent;
     [Space]
     public float distanceToMapObjects;
     [Space]
     public List<ProtectedZone> protectedZones;
+    
+    [Header("Textures")] 
+    public Texture circleOutline;
+    public Texture circleOutlineWarning;
+    public Texture circleRange;
+
+    public Placement Placement => _placement;
+    public PlacementMode PlacementMode => _mode;
 
     /// <summary>
     /// Initialize the basics
@@ -65,6 +74,12 @@ public class TowerPlacementController : MonoBehaviour
         
         // create circle
         _circle = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
+        _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleOutline);
+        _circle.SetActive(false);
+        
+        _circleRange = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
+        _circleRange.GetComponent<Renderer>().material.SetTexture("_MainTex", circleRange);
+        _circleRange.SetActive(false);
         
         Reset();
     }
@@ -81,11 +96,20 @@ public class TowerPlacementController : MonoBehaviour
         Reset();
 
         _placement.tower = obj;
-
-        float scale = 100;
-        if (_placement.tower.GetComponent<TowerDescriptor>()) scale = _placement.tower.GetComponent<TowerDescriptor>().placementRadius * 100;
-        _circle.transform.localScale = new Vector3(scale, scale, scale);
-        _circle.SetActive(true);
+        
+        if (_placement.tower.GetComponent<TowerDescriptor>())
+        {
+            float scale = _placement.tower.GetComponent<TowerDescriptor>().placementRadius * 100;
+            _circle.transform.localScale = new Vector3(scale, scale, scale);
+            _circle.SetActive(true);
+        }
+        if (_placement.tower.GetComponent<TurretController>())
+        {
+            float scale = _placement.tower.GetComponent<TurretController>().range * 100;
+            _circleRange.transform.localScale = new Vector3(scale, scale, scale);
+            _circleRange.SetActive(true);
+        }
+        
         
         CreateDummy();
         _mode = PlacementMode.Position;
@@ -144,7 +168,7 @@ public class TowerPlacementController : MonoBehaviour
     {
         if (_gameDirector.GetComponent<GameStateController>().Paused) return;
         
-        _mode--; // previous step
+        if(_mode != 0) _mode--; // previous step
 
         if (_mode == PlacementMode.Idle) Reset(); // go to sleep
     }
@@ -178,6 +202,7 @@ public class TowerPlacementController : MonoBehaviour
         
         // hide circle
         _circle.SetActive(false);
+        _circleRange.SetActive(false);
         
         // reset mode
         _mode = PlacementMode.Idle;
@@ -262,16 +287,17 @@ public class TowerPlacementController : MonoBehaviour
         // set positions
         _dummy.transform.position = _placement.position;
         _circle.transform.position = _placement.position + new Vector3(0, 0.1f, 0);
+        _circleRange.transform.position = _placement.position + new Vector3(0, 0.1f, 0);
 
         // change circle texture
         // TODO Optimize this!
         if (_placement.available)
         {
-            _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
+            _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleOutline);
         }
         else
         {
-            _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircleRed"));
+            _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleOutlineWarning);
         }
     }
 
