@@ -6,6 +6,13 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 
+public enum Axis
+{
+    X,
+    Y,
+    Z
+}
+
 public class TurretController : MonoBehaviour
 {
     private GameObject _gameDirector;
@@ -16,6 +23,8 @@ public class TurretController : MonoBehaviour
 
     [Header("Geometry")] 
     public GameObject head;
+    public Vector3 headRotationOffset;
+    public Axis rotateAxis;
 
     [Header("Config")] 
     public float range;
@@ -70,10 +79,10 @@ public class TurretController : MonoBehaviour
             Attack();
         }
     
-        if (_target != null)
+        if (_target != null && head != null)
         {
             _headRotation += (GeneralMath.AngleTowardsPoint2D(head.transform.position, _target.transform.position) - _headRotation) / 10;
-            head.transform.rotation = Quaternion.Euler(-90, 0, _headRotation + 180);
+            head.transform.rotation = Quaternion.Euler(headRotationOffset.x + (rotateAxis == Axis.X ? _headRotation : 0), headRotationOffset.y + (rotateAxis == Axis.Y ? _headRotation : 0), headRotationOffset.z + (rotateAxis == Axis.Z ? _headRotation : 0));
         }
     }
 
@@ -113,5 +122,11 @@ public class TurretController : MonoBehaviour
             Gizmos.DrawLine(transform.position, _target.transform.position);
             Gizmos.DrawSphere(_target.transform.position, 0.2f);
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.gray;
+        Gizmos.DrawSphere(transform.position + fireOffset, 0.2f);
     }
 }

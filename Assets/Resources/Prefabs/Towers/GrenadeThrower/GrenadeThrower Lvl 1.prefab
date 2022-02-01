@@ -64,6 +64,7 @@ MonoBehaviour:
   name: Grenade Thrower
   description: throws grenades
   placementRadius: 1.5
+  requiresRotation: 0
   level: 1
   nextUpgrade: {fileID: 2991696838164619490, guid: d2801787160d4d1488cad1f82bb5e511, type: 3}
   levelDescription: 
@@ -81,11 +82,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 698187cef8b403743a0e5d1978f1f7a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
+  head: {fileID: 3088569554344346816}
+  headRotationOffset: {x: -135, y: 90, z: 90}
+  rotateAxis: 1
   range: 15
   fireGameObject: {fileID: 5305491943199489257, guid: ad6294bbb69e7244ab7bffc86aa88c3c, type: 3}
   fireCallOptions: 2
-  fireOffset: {x: 0, y: 2, z: 0}
+  fireOffset: {x: 0, y: 1.65, z: 0}
   attackCooldownSec: 1
 --- !u!65 &3333053906344147755
 BoxCollider:
@@ -176,5 +179,10 @@ PrefabInstance:
 --- !u!4 &2799575768814276943 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
+  m_PrefabInstance: {fileID: 2400610093768521380}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3088569554344346816 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8391222552659086748, guid: 899ef2bdf2e4d53418de1be6c8b48450, type: 3}
   m_PrefabInstance: {fileID: 2400610093768521380}
   m_PrefabAsset: {fileID: 0}
