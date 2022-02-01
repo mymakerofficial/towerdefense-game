@@ -21,6 +21,8 @@ public class GameStateController : MonoBehaviour
     private bool _waitForWaveEnd;
     private bool _mainMenuActive;
 
+    private int _waveCount;
+    
     private bool _strongholdWarningShown;
     private int _strongholdWaveStartHealth;
     
@@ -76,6 +78,7 @@ public class GameStateController : MonoBehaviour
     public float BuildingTimer => _buildingTimer;
     public bool FirstWave => _firstWave;
     public bool BuildingPhaseIsTimed => !_firstWave;
+    public int WaveCount => _waveCount;
 
     public bool Paused
     {
@@ -147,6 +150,7 @@ public class GameStateController : MonoBehaviour
         menuCamera.GetComponent<Camera>().enabled = false;
 
         _firstWave = true;
+        _waveCount = 0;
         
         EnableInGameCanvas();
         
@@ -244,6 +248,7 @@ public class GameStateController : MonoBehaviour
         _waitForWaveEnd = false;
         _strongholdWaveStartHealth = stronghold.GetComponent<StrongholdController>().Health;
         _strongholdWarningShown = false;
+        _waveCount++;
 
         Debug.Log("Starting enemy wave phase");
         if(showNotifications) notificationPanel.SendMessage("ShowNotification", waveStartText);
