@@ -12,6 +12,7 @@ public class TowerModifyController : MonoBehaviour
     private InputMaster _controls;
 
     private GameObject _circle;
+    private GameObject _circleRange;
 
     private GameObject _closeTower;
     private GameObject _selectedTower;
@@ -21,6 +22,9 @@ public class TowerModifyController : MonoBehaviour
 
     [Space]
     public float selectRadiusFactor = 1.2f;
+    [Space] 
+    public GameObject towerPlacer;
+    
     [Header("UI")]
     public GameObject infoPanel;
     public GameObject infoPanelName;
@@ -36,6 +40,11 @@ public class TowerModifyController : MonoBehaviour
     public float healthBarOffset;
     public float healthBarPadding;
 
+    [Header("Textures")] 
+    public Texture circleOutline;
+    public Texture circleSelected;
+    public Texture circleRange;
+
     public GameObject SelectedTower => _selectedTower;
     
     void Awake()
@@ -49,10 +58,11 @@ public class TowerModifyController : MonoBehaviour
         
         // create circle
         _circle = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
-        float scale = 100;
-        _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/SelectCircle"));
-        _circle.transform.localScale = new Vector3(100, 100, 100);
         _circle.SetActive(false);
+        
+        _circleRange = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
+        _circleRange.GetComponent<Renderer>().material.SetTexture("_MainTex", circleRange);
+        _circleRange.SetActive(false);
 
         // register control events
         _controls.Editor.Next.performed += _ => Select();
@@ -65,32 +75,60 @@ public class TowerModifyController : MonoBehaviour
     void FixedUpdate()
     {
         if (_gameDirector.GetComponent<GameStateController>().Paused) return;
-        
-        if (_selectedTower == null) FindCloseset();
+
+        if (towerPlacer.GetComponent<TowerPlacementController>().PlacementMode != PlacementMode.Idle || _gameDirector.GetComponent<GameStateController>().GameState == GameState.GameOver)
+        {
+            UnSelect();
+        }else
+        {
+            FindCloseset();
+        }
 
         if (_selectedTower != null)
         {
+            // set selection circle for selected tower
             _circle.SetActive(true);
-            float scale = _closeTower.GetComponent<TowerDescriptor>().placementRadius * 100;
-            _circle.transform.localScale = new Vector3(scale, scale, scale);
+            float scalePlacement = _selectedTower.GetComponent<TowerDescriptor>().placementRadius * 100;
+            _circle.transform.localScale = new Vector3(scalePlacement, scalePlacement, scalePlacement);
             _circle.transform.position = _selectedTower.transform.position  + new Vector3(0, 0.1f, 0);;
+
+            // show range if availabe
+            if (_selectedTower.GetComponent<TurretController>())
+            {
+                _circleRange.SetActive(true);
+                float scaleRange = _selectedTower.GetComponent<TurretController>().range * 100;
+                _circleRange.transform.localScale = new Vector3(scaleRange, scaleRange, scaleRange);
+                _circleRange.transform.position = _selectedTower.transform.position  + new Vector3(0, 0.1f, 0);;
+            }
         }
         else if (_closeTower != null)
         {
+            // show outline on nearest tower
             _circle.SetActive(true);
             float scale = _closeTower.GetComponent<TowerDescriptor>().placementRadius * 100;
             _circle.transform.localScale = new Vector3(scale, scale, scale);
             _circle.transform.position = _closeTower.transform.position  + new Vector3(0, 0.1f, 0);;
+            
+            // show range if availabe
+            if (_closeTower.GetComponent<TurretController>())
+            {
+                _circleRange.SetActive(true);
+                float scaleRange = _closeTower.GetComponent<TurretController>().range * 100;
+                _circleRange.transform.localScale = new Vector3(scaleRange, scaleRange, scaleRange);
+                _circleRange.transform.position = _closeTower.transform.position  + new Vector3(0, 0.1f, 0);;
+            }
         }
         else
         {
             _circle.SetActive(false);
+            _circleRange.SetActive(false);
         }
         
         GameObject focusedTower = _selectedTower != null ? _selectedTower : _closeTower;
 
         if (focusedTower != null)
         {
+            // show tower health bar
             Vector3 point = _camera.WorldToScreenPoint(focusedTower.transform.position);
 
             healthBar.SetActive(true);
@@ -111,7 +149,7 @@ public class TowerModifyController : MonoBehaviour
             infoPanelUpgradeCredits.GetComponent<UnityEngine.UI.Text>().text = $"-{UpgradeCreditAmount}";
             infoPanelSellCredits.GetComponent<UnityEngine.UI.Text>().text = $"+{SellCreditAmount}";
             
-            infoPanelUpgrade.SetActive(_closeTower.GetComponent<TowerDescriptor>().nextUpgrade != null);
+            infoPanelUpgrade.SetActive(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade != null);
         }
     }
 
@@ -122,7 +160,8 @@ public class TowerModifyController : MonoBehaviour
         if(_closeTower != null)
         {
             _selectedTower = _closeTower;
-            _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/PlacementCircle"));
+            _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleSelected);
+            
             infoPanel.SetActive(true);
             
             infoPanelName.GetComponent<UnityEngine.UI.Text>().text =
@@ -138,7 +177,7 @@ public class TowerModifyController : MonoBehaviour
         if (_gameDirector.GetComponent<GameStateController>().Paused) return;
         
         _selectedTower = null;
-        _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture>("Textures/UI/SelectCircle"));
+        _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleOutline);
         infoPanel.SetActive(false);
     }
 

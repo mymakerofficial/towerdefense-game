@@ -45,6 +45,8 @@ public class GameStateController : MonoBehaviour
     public GameObject enemies;
     public GameObject towers;
     public GameObject bullets;
+    [Space] 
+    public GameObject protectedZonesCircles;
 
     [Header("Stronghold")] 
     public GameObject stronghold;
@@ -190,6 +192,8 @@ public class GameStateController : MonoBehaviour
         pauseCanvas.SetActive(false);
         mainMenuCanvas.SetActive(false);
         blurVolume.SetActive(false);
+        
+        protectedZonesCircles.SetActive(true);
     }
     
     private void EnablePauseCanvas()
@@ -199,6 +203,8 @@ public class GameStateController : MonoBehaviour
         pauseCanvas.SetActive(true);
         mainMenuCanvas.SetActive(false);
         blurVolume.SetActive(true);
+        
+        //protectedZonesCircles.SetActive(false);
     }
     
     private void EnableGameOverCanvas()
@@ -208,6 +214,8 @@ public class GameStateController : MonoBehaviour
         pauseCanvas.SetActive(false);
         mainMenuCanvas.SetActive(false);
         blurVolume.SetActive(true);
+        
+        protectedZonesCircles.SetActive(false);
     }
     
     private void EnableMainMenuCanvas()
@@ -217,6 +225,8 @@ public class GameStateController : MonoBehaviour
         pauseCanvas.SetActive(false);
         mainMenuCanvas.SetActive(true);
         blurVolume.SetActive(true);
+        
+        protectedZonesCircles.SetActive(false);
     }
 
     public void StartBuilding()
