@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public struct Placement
@@ -41,6 +42,7 @@ public class TowerPlacementController : MonoBehaviour
     private GameObject _dummy;
     private GameObject _circle;
     private GameObject _circleRange;
+    private List<GameObject> _protectedZoneCircles = new List<GameObject>();
     private PlacementMode _mode = PlacementMode.Idle;
 
     [Header("Config")]
@@ -54,6 +56,7 @@ public class TowerPlacementController : MonoBehaviour
     public Texture circleOutline;
     public Texture circleOutlineWarning;
     public Texture circleRange;
+    public Texture circleRangeWarning;
 
     public Placement Placement => _placement;
     public PlacementMode PlacementMode => _mode;
@@ -80,6 +83,18 @@ public class TowerPlacementController : MonoBehaviour
         _circleRange = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
         _circleRange.GetComponent<Renderer>().material.SetTexture("_MainTex", circleRange);
         _circleRange.SetActive(false);
+
+        foreach (var zone in protectedZones)
+        {
+            GameObject circle = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
+            circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleRangeWarning);
+            float scale = zone.radius * 100;
+            circle.transform.position = zone.position + new Vector3(0, 0.1f, 0);
+            circle.transform.localScale = new Vector3(scale, scale, scale);
+            circle.SetActive(false);
+            
+            _protectedZoneCircles.Add(circle);
+        }
         
         Reset();
     }
