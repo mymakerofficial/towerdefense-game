@@ -64,6 +64,7 @@ MonoBehaviour:
   name: Turret
   description: Shoots at enemies
   placementRadius: 1.5
+  requiresRotation: 0
   level: 3
   nextUpgrade: {fileID: 0}
   levelDescription: 
@@ -82,6 +83,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 9197793250744238077}
+  headRotationOffset: {x: -90, y: 0, z: 180}
+  rotateAxis: 2
   range: 10
   fireGameObject: {fileID: 1422610889946738639, guid: beb90da1680cc454b87303d00b08ee0b, type: 3}
   fireCallOptions: 1
