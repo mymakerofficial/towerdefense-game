@@ -40,6 +40,9 @@ public class BulletController : MonoBehaviour
     [FormerlySerializedAs("DamageOnContact")] public float damageOnContact; // the amount of damage to deal to the hit object
     [FormerlySerializedAs("TargetTags")] public List<BulletTargetTag> targetTags;
 
+    [Header("Visuals")] 
+    public GameObject particleSystem;
+
     private bool _active;
     private Vector3 _origin;
     private float _distance;
@@ -94,7 +97,7 @@ public class BulletController : MonoBehaviour
                 if (_hitCount < maxHits && !tag.solid) continue;
 
                 transform.position = hit.point;
-                Disolve();
+                StartCoroutine(DestroyAfterTime());
                 break;
             }
         }
@@ -108,16 +111,15 @@ public class BulletController : MonoBehaviour
         // if distance to far destroy
         if (_distance >= maxTravelDistance)
         {
-            Disolve();
+            StartCoroutine(DestroyAfterTime());
         }
     }
 
-    private void Disolve()
+    IEnumerator DestroyAfterTime()
     {
-        /*
-         *  Insert code that needs to run before destruction here
-         */
-        
+        travelVelocity = 0;
+        if(particleSystem != null) particleSystem.GetComponent<ParticleSystem>().Stop();
+        yield return new WaitForSeconds(3);
         Destroy(gameObject);
     }
 }

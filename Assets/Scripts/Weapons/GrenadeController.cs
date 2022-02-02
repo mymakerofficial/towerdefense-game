@@ -19,6 +19,7 @@ public class GrenadeController : MonoBehaviour
     private Vector3 _pausedVelocity;
     private Vector3 _pausedAngularVelocity;
     private bool _isPaused;
+    private bool _isStopped;
 
     void Start()
     {
@@ -53,12 +54,19 @@ public class GrenadeController : MonoBehaviour
     void Explode()
     {
         Instantiate(explosion, transform.position, transform.rotation, transform.parent).SendMessage("Fire");
-        //Destroy(gameObject);
+        _isStopped = true;
+        StartCoroutine(DestroyAfterTime());
+    }
+    
+    IEnumerator DestroyAfterTime()
+    {
+        yield return new WaitForSeconds(3);
+        Destroy(gameObject);
     }
 
     private void FixedUpdate()
     {
-        if (!_gameDirector.GetComponent<GameStateController>().Paused)
+        if (!_gameDirector.GetComponent<GameStateController>().Paused || _isStopped)
         {
             if (_isPaused)
             {
