@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5305491943199489259}
   - component: {fileID: 5305491943199489258}
   m_Layer: 0
-  m_Name: TowerGrenade
+  m_Name: TowerGrenade 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

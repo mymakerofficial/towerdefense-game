@@ -23,7 +23,13 @@ public class ExplosionController : MonoBehaviour
                 obj.SendMessage("ApplyDamage", damage);
             }
         }
-        
+
+        StartCoroutine(DestroyAfterTime());
+    }
+
+    IEnumerator DestroyAfterTime()
+    {
+        yield return new WaitForSeconds(3);
         Destroy(gameObject);
     }
 
