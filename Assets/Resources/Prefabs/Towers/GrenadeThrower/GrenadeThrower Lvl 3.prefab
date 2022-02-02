@@ -88,7 +88,7 @@ MonoBehaviour:
   range: 15
   fireGameObject: {fileID: 5305491943199489257, guid: cef6244f07b42f84e8217341fc9088af, type: 3}
   fireCallOptions: 2
-  fireOffset: {x: 0, y: 2, z: 0}
+  fireOffset: {x: 0, y: 1.5, z: 0}
   attackCooldownSec: 0.5
 --- !u!65 &3333053906344147755
 BoxCollider:

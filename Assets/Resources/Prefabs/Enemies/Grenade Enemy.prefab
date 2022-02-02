@@ -175,9 +175,12 @@ MonoBehaviour:
   stopDistance: 7
   fireGameObject: {fileID: 5305491943199489257, guid: 04286757831240340ae6214f7855eec1, type: 3}
   fireCallOptions: 2
-  fireOffset: {x: 0, y: 2, z: 0}
+  fireOffset: {x: 0, y: 1.2, z: 0}
   attackCooldownSec: 2
   selfDestructOnAttack: 0
+  head: {fileID: 0}
+  headRotationOffset: {x: 0, y: 0, z: 0}
+  headRotationDefault: 0
 --- !u!114 &2577514617457882207
 MonoBehaviour:
   m_ObjectHideFlags: 0

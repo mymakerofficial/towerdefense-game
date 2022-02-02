@@ -53,7 +53,7 @@ public class GrenadeController : MonoBehaviour
     void Explode()
     {
         Instantiate(explosion, transform.position, transform.rotation, transform.parent).SendMessage("Fire");
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     private void FixedUpdate()
