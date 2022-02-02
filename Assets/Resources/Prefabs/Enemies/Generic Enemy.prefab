@@ -181,6 +181,7 @@ MonoBehaviour:
   head: {fileID: 6629810228388666311}
   headRotationOffset: {x: -90, y: 0, z: 90}
   headRotationDefault: 90
+  rotateAxis: 2
 --- !u!114 &2577514617457882207
 MonoBehaviour:
   m_ObjectHideFlags: 0

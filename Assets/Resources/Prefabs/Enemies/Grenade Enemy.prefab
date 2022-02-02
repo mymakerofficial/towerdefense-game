@@ -98,8 +98,9 @@ MonoBehaviour:
   attackCooldownSec: 2
   selfDestructOnAttack: 0
   head: {fileID: 4077125766172196016}
-  headRotationOffset: {x: 0, y: 0, z: 0}
+  headRotationOffset: {x: -130, y: 90, z: 90}
   headRotationDefault: 0
+  rotateAxis: 1
 --- !u!114 &2577514617457882207
 MonoBehaviour:
   m_ObjectHideFlags: 0

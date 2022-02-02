@@ -40,6 +40,7 @@ public class GenericEnemyController : MonoBehaviour
     public GameObject head;
     public Vector3 headRotationOffset;
     public float headRotationDefault;
+    public Axis rotateAxis;
 
     private GameObject _activeMovementTarget;
     private GameObject _activeAttackTarget;
@@ -210,7 +211,7 @@ public class GenericEnemyController : MonoBehaviour
                     rotation = GeneralMath.AngleTowardsPoint2D(head.transform.position,
                         _activeAttackTarget.transform.position);
                 _headRotation += (rotation - _headRotation) / 10;
-                head.transform.rotation = Quaternion.Euler(headRotationOffset.x, headRotationOffset.y, _headRotation + headRotationOffset.z);
+                head.transform.rotation = Quaternion.Euler(headRotationOffset.x + (rotateAxis == Axis.X ? _headRotation : 0), headRotationOffset.y + (rotateAxis == Axis.Y ? _headRotation : 0), headRotationOffset.z + (rotateAxis == Axis.Z ? _headRotation : 0));
             }
 
             if(_agent.isStopped)
