@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 500
+  maxHealth: 250
 --- !u!114 &2991696838164619484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,11 +85,11 @@ MonoBehaviour:
   head: {fileID: 9197793250744238077}
   headRotationOffset: {x: -90, y: 0, z: 180}
   rotateAxis: 2
-  range: 10
-  fireGameObject: {fileID: 1422610889946738639, guid: beb90da1680cc454b87303d00b08ee0b, type: 3}
+  range: 12
+  fireGameObject: {fileID: 1422610889946738639, guid: 531171596283be246be38b01d249bb7f, type: 3}
   fireCallOptions: 1
   fireOffset: {x: 0, y: 1.4, z: 0}
-  attackCooldownSec: 0.3
+  attackCooldownSec: 0.2
 --- !u!65 &3333053906344147755
 BoxCollider:
   m_ObjectHideFlags: 0
