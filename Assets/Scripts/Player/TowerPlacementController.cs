@@ -253,10 +253,15 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void UpdatePosition()
     {
-        _placement.position = RaycastCursorPosition();
+        _placement.available = true;
+        
+        Vector3? pos = RaycastCursorPosition();
+        
+        if(pos == null) _placement.available = false;
+
+        _placement.position = pos != null ? (Vector3)pos : new Vector3(0, 0, 100); 
             
         // check if position is to close to other towers
-        _placement.available = true;
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower"); // get every tower in the scene
 
         if (GameObject.Find("GameDirector").GetComponent<CreditController>().CurrentCredits <
@@ -323,11 +328,18 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void UpdateRotation()
     {
-        Vector3 hitPoint = RaycastCursorPosition();
+        Vector3? hitPoint = RaycastCursorPosition();
+
+        if (hitPoint == null)
+        {
+            _placement.rotation = Quaternion.Euler(Vector3.zero);
+            _dummy.transform.rotation = _placement.rotation;
+            return;
+        }
         
         // calculate angle
         Vector2 dir2 = (new Vector2(_placement.position.x, _placement.position.z) -
-                        new Vector2(hitPoint.x, hitPoint.z)).normalized;
+                        new Vector2(((Vector3)hitPoint).x, ((Vector3)hitPoint).z)).normalized;
 
         float angle = (float)(Math.Atan2(dir2.y, -dir2.x) * (180 / Math.PI) + 90);
             
@@ -340,7 +352,7 @@ public class TowerPlacementController : MonoBehaviour
     /// Raycasts a point from the mouse position
     /// </summary>
     /// <returns>Raycasted point</returns>
-    private Vector3 RaycastCursorPosition()
+    private Vector3? RaycastCursorPosition()
     {
         RaycastHit hit;
         Ray ray = _camera.ScreenPointToRay(_controls.Editor.Point.ReadValue<Vector2>());//Mouse.current.position.ReadValue()
@@ -348,7 +360,7 @@ public class TowerPlacementController : MonoBehaviour
         {
             return hit.point;
         }
-        return Vector3.zero;
+        return null;
     }
 
     private void OnDrawGizmosSelected()
