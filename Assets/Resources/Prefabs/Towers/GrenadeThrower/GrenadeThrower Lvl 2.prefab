@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 500
+  maxHealth: 250
 --- !u!114 &2991696838164619484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,8 +68,8 @@ MonoBehaviour:
   level: 2
   nextUpgrade: {fileID: 2991696838164619490, guid: 8b88732f8e6a5694989eb43ce0513a90, type: 3}
   levelDescription: 
-  cost: 300
-  levelUpgradeCost: 150
+  cost: 700
+  levelUpgradeCost: 300
 --- !u!114 &2991696838164619485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,11 +85,11 @@ MonoBehaviour:
   head: {fileID: 4271867588674830487}
   headRotationOffset: {x: -135, y: 90, z: 90}
   rotateAxis: 1
-  range: 15
+  range: 17
   fireGameObject: {fileID: 5305491943199489257, guid: e85b3f24c5eb3224ba8e515a1c3e22d1, type: 3}
   fireCallOptions: 2
   fireOffset: {x: 0, y: 1.5, z: 0}
-  attackCooldownSec: 1
+  attackCooldownSec: 1.3
 --- !u!65 &3333053906344147755
 BoxCollider:
   m_ObjectHideFlags: 0

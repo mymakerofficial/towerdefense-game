@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 010c098a67e93464cb39865177c2975a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 20
   radius: 3
   dealDamageTo:
   - Enemy
