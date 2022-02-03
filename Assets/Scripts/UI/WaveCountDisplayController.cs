@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class WaveCountDisplayController : MonoBehaviour
 {
     private GameStateController _gameState;
-    private UnityEngine.UI.Text _txt;
+    private Text _txt;
     
     private bool _blinkTemporary;
     
