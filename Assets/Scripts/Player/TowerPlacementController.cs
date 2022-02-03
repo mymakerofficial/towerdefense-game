@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -20,14 +21,6 @@ public struct ProtectedZone
 {
     public Vector3 position;
     public float radius;
-}
-
-public enum PlacementMode
-{
-    Idle,
-    Position,
-    Rotation,
-    Done
 }
 
 public class TowerPlacementController : MonoBehaviour

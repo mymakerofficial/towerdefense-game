@@ -2,15 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Player;
 using UnityEngine;
 using UnityEngine.Rendering;
-
-public enum GameState {
-    Idle,
-    BuildingPhase,
-    EnemyWavePhase,
-    GameOver
-}
 
 public class GameStateController : MonoBehaviour
 {
