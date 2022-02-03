@@ -34,7 +34,10 @@ public class NotificationController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        if(_active == false) return;
+        if (!_active)
+        {
+            return;
+        }
         
         if (_timer > 0)
         {

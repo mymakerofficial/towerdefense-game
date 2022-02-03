@@ -28,7 +28,7 @@ public class WaveCountDisplayController : MonoBehaviour
     void Start()
     {
         _gameState = GameObject.Find("GameDirector").GetComponent<GameStateController>();
-        _txt = text.GetComponent<UnityEngine.UI.Text>();
+        _txt = text.GetComponent<Text>();
         _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a;
     }
     

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class CreditDisplayController : MonoBehaviour
 {
     private CreditController _creditController;
-    private UnityEngine.UI.Text _txt;
+    private Text _txt;
     
     private float _blinkTimer;
     private bool _blinkState;
@@ -25,7 +25,7 @@ public class CreditDisplayController : MonoBehaviour
     void Start()
     {
         _creditController = GameObject.Find("GameDirector").GetComponent<CreditController>();
-        _txt = text.GetComponent<UnityEngine.UI.Text>();
+        _txt = text.GetComponent<Text>();
         _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a;
     }
     
