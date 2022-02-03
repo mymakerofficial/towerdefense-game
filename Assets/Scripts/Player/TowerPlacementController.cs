@@ -1,26 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
-
-public struct Placement
-{
-    public GameObject tower;
-    public Vector3 position;
-    public Quaternion rotation;
-    public bool available;
-}
-
-[Serializable]
-public struct ProtectedZone
-{
-    public Vector3 position;
-    public float radius;
-}
 
 public class TowerPlacementController : MonoBehaviour
 {

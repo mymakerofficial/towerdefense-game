@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -295,8 +293,6 @@ public class GameStateController : MonoBehaviour
         if(_gameState == GameState.GameOver || _mainMenuActive) return;
         
         _paused = true;
-        
-        
         
         EnablePauseCanvas();
 

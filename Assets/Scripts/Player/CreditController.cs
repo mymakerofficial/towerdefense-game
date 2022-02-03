@@ -5,15 +5,6 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public enum CreditTransactionType
-{
-    Unknown,
-    EnemyDamage,
-    TowerBought,
-    TowerUpgrade,
-    TowerSold
-}
-
 public class CreditController : MonoBehaviour
 {
     private long _credit;
