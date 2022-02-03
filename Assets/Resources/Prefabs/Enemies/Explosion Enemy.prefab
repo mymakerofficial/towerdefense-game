@@ -100,6 +100,7 @@ MonoBehaviour:
   head: {fileID: 0}
   headRotationOffset: {x: 0, y: 0, z: 0}
   headRotationDefault: 0
+  rotateAxis: 0
 --- !u!114 &6034153033960322290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 22
+  maxHealth: 26
 --- !u!65 &2389086488025627773
 BoxCollider:
   m_ObjectHideFlags: 0
