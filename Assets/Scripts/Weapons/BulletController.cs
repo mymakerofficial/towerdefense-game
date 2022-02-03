@@ -1,32 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
-
-[Serializable]
-public struct TravelParameters
-{
-    [FormerlySerializedAs("MaxDistance")] public float maxDistance; // how far the bullet can travel
-    [FormerlySerializedAs("Velocity")] public float velocity; // bullet travel speed 
-    [FormerlySerializedAs("IsHitscan")] public bool isHitscan; // bullet has no travel time
-}
-
-[Serializable]
-public struct HitParameters
-{
-    [FormerlySerializedAs("Tags")] public List<BulletTargetTag> tags;
-    [FormerlySerializedAs("MaxHits")] public int maxHits; // amount of hits before bullet is destroyed
-    [FormerlySerializedAs("ContactDamage")] public float contactDamage; // the amount of damage to deal to the hit object
-}
-
-[Serializable]
-public struct BulletTargetTag
-{
-    [FormerlySerializedAs("Name")] public string name; // tag
-    [FormerlySerializedAs("Solid")] public bool solid; // will instantly destroy the bullet
-    [FormerlySerializedAs("DealDamage")] public bool dealDamage; // bullet will deal damage to object
-}
 
 public class BulletController : MonoBehaviour
 {

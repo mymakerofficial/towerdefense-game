@@ -1,21 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Events;
 using UnityEngine.Serialization;
-using Object = UnityEngine.Object;
-
-[Serializable]
-public enum FireCallOptions
-{
-    None,
-    CallFire,
-    SendTarget
-}
 
 public class GenericEnemyController : MonoBehaviour
 {

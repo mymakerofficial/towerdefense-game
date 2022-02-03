@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using Debug = UnityEngine.Debug;
-
 /*
  *      What is Jeff?
  *      Jeff is a objekt made for testing and refference

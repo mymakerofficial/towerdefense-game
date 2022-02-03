@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,7 +34,10 @@ public class NotificationController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        if(_active == false) return;
+        if (!_active)
+        {
+            return;
+        }
         
         if (_timer > 0)
         {

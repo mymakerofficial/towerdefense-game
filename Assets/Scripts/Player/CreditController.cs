@@ -3,16 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.Serialization;
-
-public enum CreditTransactionType
-{
-    Unknown,
-    EnemyDamage,
-    TowerBought,
-    TowerUpgrade,
-    TowerSold
-}
 
 public class CreditController : MonoBehaviour
 {
@@ -80,35 +70,5 @@ public class CreditController : MonoBehaviour
     public bool CheckSufficientCredits(long amount)
     {
         return _credit - amount >= 0;
-    }
-}
-
-public class InsufficientCreditException : Exception
-{
-    /// <summary>
-    /// Credits Needed for operation 
-    /// </summary>
-    public long CreditNeeded { get; }
-    /// <summary>
-    /// given Credits 
-    /// </summary>
-    public long CreditProvided { get; }
-    
-
-    public InsufficientCreditException(string message,Exception innerException, long creditNeeded, long creditProvided) : base(message,innerException)
-    {
-        this.CreditNeeded = creditNeeded;
-        this.CreditProvided = creditProvided;
-    }
-    public InsufficientCreditException(string message, long creditNeeded, long creditProvided) : base(message)
-    {
-        this.CreditNeeded = creditNeeded;
-        this.CreditProvided = creditProvided;
-    }
-    
-    public InsufficientCreditException(long creditNeeded, long creditProvided)
-    {
-        this.CreditNeeded = creditNeeded;
-        this.CreditProvided = creditProvided;
     }
 }

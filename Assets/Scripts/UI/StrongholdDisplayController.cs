@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StrongholdDisplayController : MonoBehaviour
 {
     private StrongholdController _strongholdController;
-    private UnityEngine.UI.Text _txt;
+    private Text _txt;
     
     private bool _blinkTemporary;
     
@@ -31,7 +29,7 @@ public class StrongholdDisplayController : MonoBehaviour
     void Start()
     {
         _strongholdController = GameObject.Find("Stronghold").GetComponent<StrongholdController>();
-        _txt = text.GetComponent<UnityEngine.UI.Text>();
+        _txt = text.GetComponent<Text>();
         _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a;
     }
     

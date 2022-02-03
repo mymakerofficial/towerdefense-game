@@ -1,15 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
-
-public enum CharacterFaction
-{
-    Tower,
-    Enemy
-}
 
 public class CharacterClassifier
 {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,7 +31,7 @@ public class BuildTimeDisplayController : MonoBehaviour
     void Start()
     {
         _stateController = gameDirector.GetComponent<GameStateController>();
-        _timeTxt = time.GetComponent<UnityEngine.UI.Text>();
+        _timeTxt = time.GetComponent<Text>();
         _blinkOriginalAlpha = gradient.GetComponent<Image>().color.a;
     }
     
