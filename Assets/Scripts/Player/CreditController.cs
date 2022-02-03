@@ -79,7 +79,7 @@ public class CreditController : MonoBehaviour
     /// <returns></returns>
     public bool CheckSufficientCredits(long amount)
     {
-        return _credit - amount > 0;
+        return _credit - amount >= 0;
     }
 }
 
