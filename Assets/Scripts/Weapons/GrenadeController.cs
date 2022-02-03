@@ -29,6 +29,7 @@ public class GrenadeController : MonoBehaviour
 
     private Vector3 CalculateVelocity(Vector3 target)
     {
+        // calculate force required to hit target
         // https://answers.unity.com/questions/148399/shooting-a-cannonball.html
         var dir = target - transform.position;  // get target direction
         var h = dir.y;  // get height difference
@@ -53,6 +54,7 @@ public class GrenadeController : MonoBehaviour
 
     void Explode()
     {
+        if (_isStopped) return; // dont explode multiple times
         Instantiate(explosion, transform.position, transform.rotation, transform.parent).SendMessage("Fire");
         _isStopped = true;
         StartCoroutine(DestroyAfterTime());
