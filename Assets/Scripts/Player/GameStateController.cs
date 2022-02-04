@@ -87,6 +87,9 @@ public class GameStateController : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// true when game is running, does not account for main menu
+    /// </summary>
     public bool GameActive => (_gameState == GameState.BuildingPhase || _gameState == GameState.EnemyWavePhase) && !_paused;
 
     void Start()
@@ -94,16 +97,23 @@ public class GameStateController : MonoBehaviour
         MainMenu();
     }
 
+    /// <summary>
+    /// Exit application
+    /// </summary>
     public void QuitGame()
     {
         Application.Quit();
     }
 
+    /// <summary>
+    /// Activates main menu
+    /// </summary>
     public void MainMenu()
     {
         _mainMenuActive = true;
         _paused = false;
 
+        // dont show exit to desktop button if game is running in browser
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
             mainMenuDesktopButtons.SetActive(false);
@@ -115,21 +125,26 @@ public class GameStateController : MonoBehaviour
             mainMenuWebButtons.SetActive(false);
         }
         
+        // disable towerplacer
         towerPlacementController.GetComponent<TowerPlacementController>().CancelPlacement();
         
+        // enable enemy despawner for main menu enemy sequence
         mainMenuEnemyDestroyer.SetActive(true);
         
         EnableMainMenuCanvas();
         
+        // toggle camera to main menu camera
         mainCamera.GetComponent<Camera>().enabled = false;
         menuCamera.GetComponent<Camera>().enabled = true;
-        
-        Debug.Log(Application.platform.ToString());
-        
+
+        // reset game for background enemy sequence
         Reset();
         StartEnemyWave();
     }
     
+    /// <summary>
+    /// Starts a game.
+    /// </summary>
     public void StartGame()
     {
         Reset();
@@ -137,9 +152,12 @@ public class GameStateController : MonoBehaviour
         _mainMenuActive = false;
         _paused = false;
         mainMenuEnemyDestroyer.SetActive(false);
+        
+        // toggle camera to ingame camera
         mainCamera.GetComponent<Camera>().enabled = true;
         menuCamera.GetComponent<Camera>().enabled = false;
 
+        // reset wave count and stuff
         _firstWave = true;
         _waveCount = 0;
         
@@ -154,9 +172,13 @@ public class GameStateController : MonoBehaviour
         _controls.General.Pause.performed += _ => TogglePause();
     }
     
+    // enable controls
     private void OnEnable() => _controls.Enable();
     private void OnDestroy() => _controls.Disable();
 
+    /// <summary>
+    /// Delete all current game objects and reset all game related values of all controllers
+    /// </summary>
     private void Reset()
     {
         // make list of all transforms that need to be deleted
@@ -180,6 +202,9 @@ public class GameStateController : MonoBehaviour
         towerModifyController.GetComponent<TowerModifyController>().UnSelect();
     }
 
+    /// <summary>
+    /// Switch Ui to in game
+    /// </summary>
     private void EnableInGameCanvas()
     {
         canvas.SetActive(true);
@@ -191,6 +216,9 @@ public class GameStateController : MonoBehaviour
         protectedZonesCircles.SetActive(true);
     }
     
+    /// <summary>
+    /// Switch Ui to pause menu
+    /// </summary>
     private void EnablePauseCanvas()
     {
         canvas.SetActive(false);
@@ -202,6 +230,9 @@ public class GameStateController : MonoBehaviour
         //protectedZonesCircles.SetActive(false);
     }
     
+    /// <summary>
+    /// Switch Ui to game over
+    /// </summary>
     private void EnableGameOverCanvas()
     {
         canvas.SetActive(false);
@@ -213,6 +244,9 @@ public class GameStateController : MonoBehaviour
         protectedZonesCircles.SetActive(false);
     }
     
+    /// <summary>
+    /// Switch Ui to main menu
+    /// </summary>
     private void EnableMainMenuCanvas()
     {
         canvas.SetActive(false);
@@ -224,6 +258,9 @@ public class GameStateController : MonoBehaviour
         protectedZonesCircles.SetActive(false);
     }
 
+    /// <summary>
+    /// Start building sequence
+    /// </summary>
     public void StartBuilding()
     {
         _buildingTimer = buildingTime;
@@ -233,6 +270,9 @@ public class GameStateController : MonoBehaviour
         Debug.Log("Starting building phase");
     }
 
+    /// <summary>
+    /// Start enemy wave sequence
+    /// </summary>
     public void StartEnemyWave()
     {
         _gameState = GameState.EnemyWavePhase;
@@ -247,6 +287,9 @@ public class GameStateController : MonoBehaviour
         waveController.SendMessage("StartNextWave");
     }
 
+    /// <summary>
+    /// Mark that no enemies are spawning anymore. End wave as soon as all enemies are despawned
+    /// </summary>
     public void WaitForWaveEnd()
     {
         _waitForWaveEnd = true;
@@ -254,6 +297,9 @@ public class GameStateController : MonoBehaviour
         Debug.Log("Waiting for all enemies to despawn");
     }
 
+    /// <summary>
+    /// Marks end of enemy wave and starts building phase
+    /// </summary>
     public void EndWave()
     {
         _firstWave = false;
@@ -267,6 +313,9 @@ public class GameStateController : MonoBehaviour
         StartBuilding();
     }
 
+    /// <summary>
+    /// Game over. Switches to game over screen and calculates statistics.
+    /// </summary>
     public void GameOver()
     {
         ResumeGame();
@@ -288,6 +337,9 @@ public class GameStateController : MonoBehaviour
         Paused = !Paused;
     }
 
+    /// <summary>
+    /// Pauses game and turns on pause screen
+    /// </summary>
     public void PauseGame()
     {
         if(_gameState == GameState.GameOver || _mainMenuActive) return;
@@ -299,6 +351,9 @@ public class GameStateController : MonoBehaviour
         Debug.Log("Paused Game!");
     }
 
+    /// <summary>
+    /// Resumes game, turns on in game Ui
+    /// </summary>
     public void ResumeGame()
     {
         _paused = false;
@@ -310,8 +365,9 @@ public class GameStateController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_paused)
+        if (!_paused) // dont do ingame checks if game is paused
         {
+            // timer for building phase
             if (_gameState == GameState.BuildingPhase && BuildingPhaseIsTimed)
             {
                 if (_buildingTimer > 0)
@@ -328,6 +384,7 @@ public class GameStateController : MonoBehaviour
             {
                 if (!_mainMenuActive)
                 {
+                    // show notification warning if stronghold is getting attacked (deprecated)
                     if (stronghold.GetComponent<StrongholdController>().Health < _strongholdWaveStartHealth &&
                         !_strongholdWarningShown)
                     {
@@ -335,11 +392,13 @@ public class GameStateController : MonoBehaviour
                         _strongholdWarningShown = true;
                     }
                     
+                    // when all enemies have stopped spawning and all enemies have despawned end wave
                     if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
                     {
                         EndWave();
                     }
 
+                    // when stronghold health at 0 game over
                     if (stronghold.GetComponent<StrongholdController>().HealthPercent == 0)
                     {
                         GameOver();
@@ -347,6 +406,8 @@ public class GameStateController : MonoBehaviour
                 }
                 else
                 {
+                    // during main menu
+                    // when all enemies have despawned start new wave
                     if(_waitForWaveEnd && enemies.GetComponentsInChildren<Transform>().Length == 1)
                     {
                         _firstWave = false;
