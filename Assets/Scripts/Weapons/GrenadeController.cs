@@ -5,12 +5,16 @@ using UnityEngine;
 
 public class GrenadeController : MonoBehaviour
 {
-    [Space]
+    [Header("Config")]
     public float angle;
     public float minDistance;
     public float radius;
     [Space] 
     public GameObject explosion;
+
+    [Header("Visuals")] 
+    public List<GameObject> particleSystems;
+    
 
     private GameObject _target;
     private Vector3 _spawnPosition;
@@ -80,7 +84,7 @@ public class GrenadeController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_gameDirector.GetComponent<GameStateController>().Paused || _isStopped)
+        if (!_gameDirector.GetComponent<GameStateController>().Paused)
         {
             if (_isPaused)
             {
@@ -88,38 +92,46 @@ public class GrenadeController : MonoBehaviour
                 GetComponent<Rigidbody>().WakeUp(); // unfreeze rigidbody
                 GetComponent<Rigidbody>().AddForce( _pausedVelocity, ForceMode.Impulse ); // add stored force to rigidbody
                 GetComponent<Rigidbody>().AddTorque( _pausedAngularVelocity, ForceMode.Impulse ); // add stored torque to rigidbody
+                // unpause particle systems
+                foreach (var particleSystem in particleSystems)
+                {
+                    particleSystem.GetComponent<ParticleSystem>().Play();
+                }
                 _isPaused = false;
             }
-            
-            // check if is colliding with something
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
-            if (Vector3.Distance(transform.position, _spawnPosition) > minDistance)
+
+            if (!_isStopped)
             {
-                // only explode when hitting target, map or floor
-                bool hasHit = false;
-                if (_target)
+                // check if is colliding with something
+                Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
+                if (hitColliders.Length > 0 && Vector3.Distance(transform.position, _spawnPosition) > minDistance)
                 {
-                    foreach (var hit in hitColliders)
+                    // only explode when hitting target, map or floor
+                    bool hasHit = false;
+                    if (_target)
                     {
-                        if (hit.gameObject.layer == _target.layer || 
-                            hit.gameObject.layer == LayerMask.GetMask("Map") ||
-                            hit.gameObject.layer == LayerMask.GetMask("Terrain"))
+                        foreach (var hit in hitColliders)
                         {
-                            hasHit = true;
+                            if (hit.gameObject.layer == _target.layer || 
+                                hit.gameObject.layer == LayerMask.GetMask("Map") ||
+                                hit.gameObject.layer == LayerMask.GetMask("Terrain"))
+                            {
+                                hasHit = true;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    // if target has been destroyed explode either way
-                    hasHit = true;
-                }
+                    else
+                    {
+                        // if target has been destroyed explode either way
+                        hasHit = true;
+                    }
                 
 
-                if (hasHit)
-                {
-                    // boom
-                    Explode();
+                    if (hasHit)
+                    {
+                        // boom
+                        Explode();
+                    }
                 }
             }
         }
@@ -128,6 +140,11 @@ public class GrenadeController : MonoBehaviour
             _pausedVelocity = GetComponent<Rigidbody>().velocity; // store rigidbody force
             _pausedAngularVelocity = GetComponent<Rigidbody>().angularVelocity; // store rigidbody torque
             GetComponent<Rigidbody>().Sleep(); // freeze rigidbody
+            // pause particle systems
+            foreach (var particleSystem in particleSystems)
+            {
+                particleSystem.GetComponent<ParticleSystem>().Pause();
+            }
             _isPaused = true;
         }
     }
