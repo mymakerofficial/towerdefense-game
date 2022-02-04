@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -4641902990795244941}
   - component: {fileID: 8300551295318211778}
   m_Layer: 7
-  m_Name: Blockade Lvl 2
+  m_Name: Blockade Lvl 3
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3054993722201548344}
+  - {fileID: 5179287122835292928}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 400
+  maxHealth: 600
 --- !u!114 &1427628318752552274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,14 +60,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21c3a1e8c386be46969c448c89560a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Wooden Blockade
-  description: It blocks the enemies
+  name: Spike Blockade
+  description: Blocks enemies and hurts them with spikes
   placementRadius: 1.12
   requiresRotation: 1
-  level: 2
-  nextUpgrade: {fileID: 4152713646383364980, guid: d731c0f74d1f4034aa8ceaec0c5323e7, type: 3}
-  levelDescription: Now with wood
-  cost: 40
+  level: 3
+  nextUpgrade: {fileID: 4152713646383364980, guid: 7139830a24a3d644c839ad06a716f1ec, type: 3}
+  levelDescription: Now with spikes!
+  cost: 70
   levelUpgradeCost: 30
 --- !u!65 &-4641902990795244941
 BoxCollider:
@@ -98,65 +98,65 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.65, z: 0}
   m_TimeToStationary: 0.5
---- !u!1001 &3309932316916335059
+--- !u!1001 &4641591974575940843
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 4175625404056755458}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: 919132149155446097, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
       propertyPath: m_Name
-      value: blockade_1
+      value: spike_blockade_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
---- !u!4 &3054993722201548344 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
+--- !u!4 &5179287122835292928 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
-  m_PrefabInstance: {fileID: 3309932316916335059}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 571f4d80535420c468f6e41a12bba67f, type: 3}
+  m_PrefabInstance: {fileID: 4641591974575940843}
   m_PrefabAsset: {fileID: 0}

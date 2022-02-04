@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -4641902990795244941}
   - component: {fileID: 8300551295318211778}
   m_Layer: 7
-  m_Name: Blockade Lvl 2
+  m_Name: Blockade Lvl 4
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3054993722201548344}
+  - {fileID: 7970341047018957492}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecfe2aede7e54245bb4e1a7e19cda07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 400
+  maxHealth: 10000
 --- !u!114 &1427628318752552274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,15 +60,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21c3a1e8c386be46969c448c89560a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Wooden Blockade
-  description: It blocks the enemies
+  name: THE CUBE
+  description: Forged in fire upon the oldest mountain for a million years just to
+    protect
   placementRadius: 1.12
   requiresRotation: 1
-  level: 2
-  nextUpgrade: {fileID: 4152713646383364980, guid: d731c0f74d1f4034aa8ceaec0c5323e7, type: 3}
-  levelDescription: Now with wood
-  cost: 40
-  levelUpgradeCost: 30
+  level: 4
+  nextUpgrade: {fileID: 0}
+  levelDescription: Now with 999999999% more Cube!
+  cost: 100070
+  levelUpgradeCost: 100000
 --- !u!65 &-4641902990795244941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -80,7 +81,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.24, y: 1.3, z: 1.22}
+  m_Size: {x: 2.24, y: 2, z: 2.24}
   m_Center: {x: 0, y: 0.65, z: 0}
 --- !u!208 &8300551295318211778
 NavMeshObstacle:
@@ -98,65 +99,69 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.65, z: 0}
   m_TimeToStationary: 0.5
---- !u!1001 &3309932316916335059
+--- !u!1001 &7572503196786675039
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 4175625404056755458}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071067
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
+    - target: {fileID: 919132149155446097, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
       propertyPath: m_Name
-      value: blockade_1
+      value: baricadeLevel4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
---- !u!4 &3054993722201548344 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
+--- !u!4 &7970341047018957492 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 219bce91c90c72d4cbc11800d857ae5d, type: 3}
-  m_PrefabInstance: {fileID: 3309932316916335059}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 74d32b8e0857d5847a610bf5a4d1ddb4, type: 3}
+  m_PrefabInstance: {fileID: 7572503196786675039}
   m_PrefabAsset: {fileID: 0}
