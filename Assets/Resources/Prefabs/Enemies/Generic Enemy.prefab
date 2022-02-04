@@ -234,7 +234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: generic
   description: generic
-  fullHealthCredits: 10
+  fullHealthCredits: 24
 --- !u!114 &2577514617457882192
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -89,7 +89,7 @@ public class WaveController : MonoBehaviour
         
         _currentSectionIndex = index; // set current section
 
-        Debug.Log($"Started wave {_currentWaveIndex}, section {_currentSectionIndex}");
+        Debug.Log($"Started wave ({_currentWaveIndex}) '{CurrentWave.name}', section {_currentSectionIndex}, loop {_loopCount}");
 
         foreach (var enemy in CurrentSection.enemies) // create all spawners for this section
         {

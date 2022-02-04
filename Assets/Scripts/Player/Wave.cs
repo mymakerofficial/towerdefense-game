@@ -5,6 +5,9 @@ using UnityEngine;
 [Serializable]
 public class Wave
 {
+    [Space]
+    public string name;
+    [Space]
     public List<WaveSection> sections;
 
     [Header("Modifier per loop")]
@@ -30,10 +33,10 @@ public class Wave
     {
         Wave newWave = new Wave
         {
+            name = this.name,
             sections = GetModifiedWaveSections(loop),
             amountMultiplier = this.amountMultiplier,
-            intervalDiminisher = this.intervalDiminisher,
-
+            intervalDiminisher = this.intervalDiminisher
         };
 
         return newWave;

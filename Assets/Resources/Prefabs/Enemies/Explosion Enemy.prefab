@@ -72,7 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: explosion generic
   description: explosion generic
-  fullHealthCredits: 10
+  fullHealthCredits: 28
 --- !u!114 &6034153033960322301
 MonoBehaviour:
   m_ObjectHideFlags: 0

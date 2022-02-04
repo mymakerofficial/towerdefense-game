@@ -72,7 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: granade
   description: granade
-  fullHealthCredits: 10
+  fullHealthCredits: 32
 --- !u!114 &2577514617457882192
 MonoBehaviour:
   m_ObjectHideFlags: 0

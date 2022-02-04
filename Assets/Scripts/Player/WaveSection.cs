@@ -5,10 +5,10 @@ using UnityEngine;
 [Serializable]
 public class WaveSection
 {
+    [Range(0, 50)] [Min(0)] public float startDelay;  
+    [Space]
     public List<WaveEnemy> enemies;
-    [Space] 
-    [Range(0, 50)] [Min(0)] public float startDelay;    
-
+    
     public float Duration
     {
         get

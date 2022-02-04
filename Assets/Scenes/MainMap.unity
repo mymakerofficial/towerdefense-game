@@ -1029,7 +1029,7 @@ MonoBehaviour:
   text: {fileID: 4733480874151702549}
   icon: {fileID: 4733480875055155506}
   warnGradient: {fileID: 1691155361}
-  warninAmount: 100
+  warningAmount: 100
   blinkInterval: 0.9
   blinkEasing: 0.08
 --- !u!1 &196504048
@@ -2020,92 +2020,228 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - sections:
-    - enemies:
+  - name: 1 Generic Enemy Intro
+    sections:
+    - startDelay: 0
+      enemies:
       - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
-        amount: 8
-        interval: 1
-        startDelay: 1
-  - sections:
-    - enemies:
+        amount: 7
+        interval: 3
+        startDelay: 0
+    amountMultiplier: 2
+    intervalDiminisher: 3
+  - name: 2 Explosion Enemy Intro
+    sections:
+    - startDelay: 0
+      enemies:
       - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 6
+        amount: 1
+        interval: 0.5
+        startDelay: 0
+    - startDelay: 5
+      enemies:
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 5
+        interval: 3
+        startDelay: 0
+    amountMultiplier: 1.2
+    intervalDiminisher: 2.2
+  - name: 3 Grenade Enemy Intro
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
+        amount: 3
         interval: 2
         startDelay: 0
-  - sections:
-    - enemies:
+    - startDelay: 3
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 2
+        interval: 4
+        startDelay: 0
+    amountMultiplier: 2
+    intervalDiminisher: 2
+  - name: 4 Generic Enemy Interlude
+    sections:
+    - startDelay: 0
+      enemies:
       - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
         amount: 10
+        interval: 2
+        startDelay: 1
+    amountMultiplier: 1.5
+    intervalDiminisher: 4
+  - name: 5 Tank Enemy Intro
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 1
         interval: 1
+        startDelay: 0
+    - startDelay: 6
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 2
+        interval: 4
+        startDelay: 0
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 3
+        interval: 4
+        startDelay: 6
+    amountMultiplier: 2
+    intervalDiminisher: 2
+  - name: 6 Generic + Tank Interlude
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
+        amount: 2
+        interval: 2
+        startDelay: 0
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 4
+        interval: 2
+        startDelay: 0
+    amountMultiplier: 1.2
+    intervalDiminisher: 1
+  - name: 7 Tank and Grenade
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 3
+        interval: 2
         startDelay: 0
       - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
-        amount: 10
-        interval: 1
-        startDelay: 1
-  - sections:
-    - enemies:
-      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 10
+        amount: 3
         interval: 2
-        startDelay: 1
-  - sections:
-    - enemies:
+        startDelay: 2
+    - startDelay: 3
+      enemies:
       - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
-        amount: 5
-        interval: 1
-        startDelay: 1
-    - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
-        amount: 10
+        amount: 4
         interval: 1
         startDelay: 0
-      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 5
+    amountMultiplier: 2
+    intervalDiminisher: 2
+  - name: 8 All
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 3
         interval: 2
-        startDelay: 1
-  - sections:
-    - enemies:
+        startDelay: 0
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 3
+        interval: 2
+        startDelay: 0
       - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
-        amount: 10
-        interval: 0.2
-        startDelay: 1
-  - sections:
-    - enemies:
+        amount: 3
+        interval: 2
+        startDelay: 0
       - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 20
-        interval: 0.1
-        startDelay: 1
-  - sections:
-    - enemies:
+        amount: 3
+        interval: 2
+        startDelay: 0
+    amountMultiplier: 2
+    intervalDiminisher: 2
+  - name: 9 Only Explosions
+    sections:
+    - startDelay: 0
+      enemies:
       - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
         amount: 6
-        interval: 1
-        startDelay: 0
-    - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
-        amount: 6
-        interval: 1
-        startDelay: 1
-    - enemies:
-      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
-        amount: 20
-        interval: 0.5
-        startDelay: 0
-      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
-        amount: 20
-        interval: 0.5
-        startDelay: 1
-      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
-        amount: 5
         interval: 2
         startDelay: 0
-    - enemies:
-      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 6
+        interval: 2
+        startDelay: 0
+    amountMultiplier: 2
+    intervalDiminisher: 2
+  - name: 10
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
         amount: 10
         interval: 0.5
-        startDelay: 1
-  spawnerParrent: {fileID: 104990955}
-  enemyParrent: {fileID: 1025087702}
+        startDelay: 0
+    - startDelay: 2
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 8
+        interval: 1
+        startDelay: 0
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 8
+        interval: 1
+        startDelay: 0
+    amountMultiplier: 2
+    intervalDiminisher: 2
+  - name: 11
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 6
+        interval: 0.5
+        startDelay: 0
+    - startDelay: 2
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
+        amount: 8
+        interval: 0.5
+        startDelay: 0
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 4
+        interval: 1
+        startDelay: 3
+    amountMultiplier: 2
+    intervalDiminisher: 2
+  - name: 12
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 6938b0ca9e6487846a005e5f6b196b65, type: 3}
+        amount: 8
+        interval: 0.5
+        startDelay: 0
+    - startDelay: 2
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: 86e80df64cbe01e4ab8ddb2d39d91a64, type: 3}
+        amount: 8
+        interval: 0.5
+        startDelay: 0
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 6
+        interval: 1
+        startDelay: 3
+    - startDelay: 2
+      enemies:
+      - enemy: {fileID: 2577514617457882195, guid: f6bbac4e8383fc046a18f72af03260c9, type: 3}
+        amount: 4
+        interval: 0.5
+        startDelay: 0
+    amountMultiplier: 1.5
+    intervalDiminisher: 2
+  - name: 13
+    sections:
+    - startDelay: 0
+      enemies:
+      - enemy: {fileID: 6034153033960322302, guid: af6f0c54b19491a4e9cac1c2300f1bae, type: 3}
+        amount: 8
+        interval: 0.5
+        startDelay: 0
+    amountMultiplier: 2
+    intervalDiminisher: 1
+  spawnerParent: {fileID: 104990955}
+  enemyParent: {fileID: 1025087702}
   spawnerPosition: {x: 10, y: 0, z: 65}
   spawnerRotation: {x: 0, y: 180, z: 0}
   gameDirector: {fileID: 2100159332}
@@ -6668,7 +6804,7 @@ MonoBehaviour:
   text: {fileID: 2014704965}
   icon: {fileID: 1172967932}
   warnGradient: {fileID: 732207552}
-  warninAmount: 5
+  warningAmount: 5
   blinkInterval: 0.9
   blinkEasing: 0.08
 --- !u!1 &1787727558
@@ -52460,6 +52596,10 @@ PrefabInstance:
     - target: {fileID: 1884008709085260348, guid: 69d2e1af432d61041987cc159fd166e9, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884008709085260350, guid: 69d2e1af432d61041987cc159fd166e9, type: 3}
+      propertyPath: startCredit
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 1884008709085260351, guid: 69d2e1af432d61041987cc159fd166e9, type: 3}
       propertyPath: m_RootOrder
