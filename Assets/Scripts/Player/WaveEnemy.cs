@@ -6,10 +6,10 @@ public class WaveEnemy
 {
     [Header("Enemy")]
     public GameObject enemy;
-    public int amount;
+    [Min(1)] public int amount;
     [Header("Timing")]
-    public float interval;
-    public float startDelay;
+    [Range(0.05f, 50)] [Min(0.001f)] public float interval;
+    [Range(0, 50)] [Min(0)] public float startDelay;
 
     public float Duration
     {

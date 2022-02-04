@@ -4,11 +4,15 @@ using UnityEngine.Serialization;
 
 public class WaveController : MonoBehaviour
 {
+    private Wave _currentModifiedWave;
+    
     private int _currentWaveIndex;
     private int _currentSectionIndex;
     private bool _active;
     private float _sectionTimer;
     private int _nextWaveIndex;
+
+    private int _loopCount;
     
     [Header("Waves")]
     public List<Wave> waves;
@@ -23,7 +27,7 @@ public class WaveController : MonoBehaviour
     [Header("GameDirector")] 
     public GameObject gameDirector;
 
-    public Wave CurrentWave => waves[_currentWaveIndex];
+    public Wave CurrentWave => _currentModifiedWave;
 
     public WaveSection CurrentSection => CurrentWave.sections[_currentSectionIndex];
 
@@ -40,6 +44,7 @@ public class WaveController : MonoBehaviour
         _active = false;
         _sectionTimer = 0;
         _nextWaveIndex = 0;
+        _loopCount = 0;
         
         DeleteOldSpawners();
     }
@@ -54,13 +59,21 @@ public class WaveController : MonoBehaviour
         if(_active) return; // dont start a wave while one is already running
         
         _currentWaveIndex = index; // set current wave
-        _nextWaveIndex = index + 1; // set next wave
-        if (_nextWaveIndex > waves.Count - 1) _nextWaveIndex = 0;
 
+        _currentModifiedWave = waves[_currentWaveIndex].GetModifiedWave(_loopCount);
+
+        // set next wave
+        _nextWaveIndex = index + 1; 
+        if (_nextWaveIndex > waves.Count - 1)
+        {
+            _nextWaveIndex = 0;
+            _loopCount++;
+        }
+        
         _active = true; // set active
 
         Debug.Log($"Started wave {index}");
-        
+
         StartSection(0); // start first section
     }
 
@@ -80,7 +93,7 @@ public class WaveController : MonoBehaviour
 
         foreach (var enemy in CurrentSection.enemies) // create all spawners for this section
         {
-            CreateSpawner(enemy);
+            CreateSpawner(enemy, CurrentSection.startDelay);
         }
 
         _sectionTimer = CurrentSection.Duration; // set timer for duration of section
@@ -107,7 +120,7 @@ public class WaveController : MonoBehaviour
         }
     }
     
-    private GameObject CreateSpawner(WaveEnemy enemy)
+    private GameObject CreateSpawner(WaveEnemy enemy, float startDelay = 0)
     {
         GameObject obj = new GameObject(); // create gameobject
         
@@ -123,7 +136,7 @@ public class WaveController : MonoBehaviour
         // set controller
         controller.enemyObject = enemy.enemy;
         controller.interval = enemy.interval;
-        controller.startDelay = enemy.startDelay;
+        controller.startDelay = enemy.startDelay + startDelay;
         controller.amount = enemy.amount;
         controller.parent = enemyParent;
 
