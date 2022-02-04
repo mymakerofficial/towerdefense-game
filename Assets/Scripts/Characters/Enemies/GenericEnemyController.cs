@@ -202,13 +202,16 @@ public class GenericEnemyController : MonoBehaviour
             // set head rotation
             if (head != null)
             {
+                // calculate head rotation
                 float rotation = headRotationDefault;
                 if (_activeMovementTarget != null) rotation = 
                     GeneralMath.AngleTowardsPoint2D(head.transform.position, _activeMovementTarget.transform.position);
                 if (_activeAttackTarget != null)
                     rotation = GeneralMath.AngleTowardsPoint2D(head.transform.position,
                         _activeAttackTarget.transform.position);
+                // ease head rotation
                 _headRotation += (rotation - _headRotation) / 10;
+                // set head rotation
                 head.transform.rotation = Quaternion.Euler(headRotationOffset.x + (rotateAxis == Axis.X ? _headRotation : 0), headRotationOffset.y + (rotateAxis == Axis.Y ? _headRotation : 0), headRotationOffset.z + (rotateAxis == Axis.Z ? _headRotation : 0));
             }
 
