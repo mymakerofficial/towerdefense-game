@@ -65,6 +65,8 @@ MonoBehaviour:
   minDistance: 2
   radius: 1
   explosion: {fileID: 6399894181811631949, guid: a233c5c62958d7b4db143fff98799f1e, type: 3}
+  particleSystems:
+  - {fileID: 5143900517927211633}
 --- !u!1001 &8516277554290054187
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122,6 +124,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b59f1b32a4f4b17499581156472fa707, type: 3}
+--- !u!1 &5143900517927211633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3552543050174072410, guid: b59f1b32a4f4b17499581156472fa707, type: 3}
+  m_PrefabInstance: {fileID: 8516277554290054187}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7821143145948234728 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1920131101577091011, guid: b59f1b32a4f4b17499581156472fa707, type: 3}
