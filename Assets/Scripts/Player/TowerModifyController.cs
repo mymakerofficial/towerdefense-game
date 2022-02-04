@@ -71,14 +71,15 @@ public class TowerModifyController : MonoBehaviour
     
     void FixedUpdate()
     {
-        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return; // dont do stuff when game is paused
 
         if (towerPlacer.GetComponent<TowerPlacementController>().PlacementMode != PlacementMode.Idle || _gameDirector.GetComponent<GameStateController>().GameState == GameState.GameOver)
         {
+            // unselect if tower placer is active or game over
             UnSelect();
         }else
         {
-            FindCloseset();
+            FindClosest();
         }
 
         if (_selectedTower != null)
@@ -92,7 +93,9 @@ public class TowerModifyController : MonoBehaviour
             // show range if availabe
             if (_selectedTower.GetComponent<TurretController>())
             {
+                // show range circle
                 _circleRange.SetActive(true);
+                // set range circle transform
                 float scaleRange = _selectedTower.GetComponent<TurretController>().range * 100;
                 _circleRange.transform.localScale = new Vector3(scaleRange, scaleRange, scaleRange);
                 _circleRange.transform.position = _selectedTower.transform.position  + new Vector3(0, 0.1f, 0);;
@@ -102,6 +105,7 @@ public class TowerModifyController : MonoBehaviour
         {
             // show outline on nearest tower
             _circle.SetActive(true);
+            // set circle transform
             float scale = _closeTower.GetComponent<TowerDescriptor>().placementRadius * 100;
             _circle.transform.localScale = new Vector3(scale, scale, scale);
             _circle.transform.position = _closeTower.transform.position  + new Vector3(0, 0.1f, 0);;
@@ -109,7 +113,9 @@ public class TowerModifyController : MonoBehaviour
             // show range if availabe
             if (_closeTower.GetComponent<TurretController>())
             {
+                // show range circle
                 _circleRange.SetActive(true);
+                // set range circle transform
                 float scaleRange = _closeTower.GetComponent<TurretController>().range * 100;
                 _circleRange.transform.localScale = new Vector3(scaleRange, scaleRange, scaleRange);
                 _circleRange.transform.position = _closeTower.transform.position  + new Vector3(0, 0.1f, 0);;
@@ -117,6 +123,7 @@ public class TowerModifyController : MonoBehaviour
         }
         else
         {
+            // hide all circles
             _circle.SetActive(false);
             _circleRange.SetActive(false);
         }
@@ -126,21 +133,27 @@ public class TowerModifyController : MonoBehaviour
         if (focusedTower != null)
         {
             // show tower health bar
+            
+            // get point on screen for focused tower position
             Vector3 point = _camera.WorldToScreenPoint(focusedTower.transform.position);
-
+            
             healthBar.SetActive(true);
             healthBar.transform.position = point + new Vector3(0, healthBarOffset, 0);
+            // calculate healthbar width
             float maxWidth = _healthBarOuter.GetComponent<RectTransform>().sizeDelta.x -
                              healthBarPadding * 2;
             float width = maxWidth * focusedTower.GetComponent<HealthController>().HealthPercent;
+            // set health bar
             _healthBarInner.GetComponent<RectTransform>().sizeDelta = new Vector2(width, -healthBarPadding * 2);
         }
         else
         {
+            // hide health bar
             healthBar.SetActive(false);
         }
 
         // update menu information
+        // credit amounts need to be updated real time
         if (_selectedTower)
         {
             infoPanelUpgradeCredits.GetComponent<UnityEngine.UI.Text>().text = $"-{UpgradeCreditAmount}";
@@ -152,15 +165,18 @@ public class TowerModifyController : MonoBehaviour
 
     private void Select()
     {
-        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return; // dont select when game is paused
         
         if(_closeTower != null)
         {
+            // select tower
             _selectedTower = _closeTower;
             _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleSelected);
             
+            // show info panel
             infoPanel.SetActive(true);
             
+            // set static information on info panel
             infoPanelName.GetComponent<UnityEngine.UI.Text>().text =
                 _closeTower.GetComponent<TowerDescriptor>().name;
             infoPanelLevel.GetComponent<UnityEngine.UI.Text>().text = $"Lvl. {_closeTower.GetComponent<TowerDescriptor>().level}";
@@ -171,14 +187,15 @@ public class TowerModifyController : MonoBehaviour
 
     public void UnSelect()
     {
-        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return; // dont unselect when game is paused
         
+        // clear selected tower
         _selectedTower = null;
         _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleOutline);
         infoPanel.SetActive(false);
     }
 
-    public int SellCreditAmount
+    private int SellCreditAmount
     {
         get
         {
@@ -191,11 +208,16 @@ public class TowerModifyController : MonoBehaviour
     public void Sell()
     {
         Destroy(_selectedTower);
-        GameObject.Find("GameDirector").GetComponent<CreditController>().DepositCredit(SellCreditAmount, CreditTransactionType.TowerSold, CharacterClassifier.FromTower(_selectedTower.GetComponent<TowerDescriptor>()));
+        // deposit credits
+        GameObject.Find("GameDirector").GetComponent<CreditController>().DepositCredit(
+            SellCreditAmount, 
+            CreditTransactionType.TowerSold, 
+            CharacterClassifier.FromTower(_selectedTower.GetComponent<TowerDescriptor>())
+        );
         UnSelect();
     }
 
-    public int UpgradeCreditAmount
+    private int UpgradeCreditAmount
     {
         get
         {
@@ -207,24 +229,35 @@ public class TowerModifyController : MonoBehaviour
     
     public void Upgrade()
     {
-        if (_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade)
+        if (_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade) // check for next upgrade
         {
             if (GameObject.Find("GameDirector").GetComponent<CreditController>()
-                .CheckSufficientCredits(UpgradeCreditAmount))
+                .CheckSufficientCredits(UpgradeCreditAmount)) // check if player has enough credits to perform transaction
             {
-                GameObject.Find("GameDirector").GetComponent<CreditController>().WithdrawCredit(UpgradeCreditAmount, CreditTransactionType.TowerUpgrade, CharacterClassifier.FromTower(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade.GetComponent<TowerDescriptor>()));
                 
+                // withdraw credits
+                GameObject.Find("GameDirector").GetComponent<CreditController>().WithdrawCredit(
+                    UpgradeCreditAmount,
+                    CreditTransactionType.TowerUpgrade,
+                    CharacterClassifier.FromTower(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade.GetComponent<TowerDescriptor>())
+                );
+                
+                // create new tower
                 GameObject newTower = Instantiate(_selectedTower.GetComponent<TowerDescriptor>().nextUpgrade, _selectedTower.transform.parent);
+                // set transform of new tower
                 newTower.transform.position = _selectedTower.transform.position;
                 newTower.transform.rotation = _selectedTower.transform.rotation;
             
+                // destroy old tower
                 Destroy(_selectedTower);
+                
+                // unselect tower
                 UnSelect();
             }
         }
     }
 
-    private void FindCloseset()
+    private void FindClosest()
     {
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower"); // get every tower in the scene
         
