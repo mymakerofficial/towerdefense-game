@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Wooden Blockade
-  description: It blocks the enemies
+  description: If it works, it works
   placementRadius: 1.12
   requiresRotation: 1
   level: 2

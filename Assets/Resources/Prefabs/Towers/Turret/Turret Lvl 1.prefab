@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Turret
-  description: Shoots at enemies
+  description: Shoots at enemies. A must have.
   placementRadius: 1.5
   requiresRotation: 0
   level: 1

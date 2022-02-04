@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Grenade Thrower
-  description: throws grenades
+  description: Bigger explosions!
   placementRadius: 1.5
   requiresRotation: 0
   level: 2

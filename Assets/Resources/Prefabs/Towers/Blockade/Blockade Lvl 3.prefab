@@ -60,8 +60,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21c3a1e8c386be46969c448c89560a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Spike Blockade
-  description: Blocks enemies and hurts them with spikes
+  name: Spiky Blockade
+  description: Blocks enemies even more then before... (the spikes are just for looks
+    *wink*)
   placementRadius: 1.12
   requiresRotation: 1
   level: 3
