@@ -12,7 +12,7 @@ public class GrenadeController : MonoBehaviour
     [Space] 
     public GameObject explosion;
 
-    private Vector3 _target;
+    private GameObject _target;
     private Vector3 _spawnPosition;
     
     private GameObject _gameDirector;
@@ -51,7 +51,7 @@ public class GrenadeController : MonoBehaviour
 
     public void Fire(GameObject target)
     {
-        _target = target.transform.position;
+        _target = target;
 
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         // apply force to rigidbody
@@ -93,10 +93,34 @@ public class GrenadeController : MonoBehaviour
             
             // check if is colliding with something
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
-            if (hitColliders.Length > 0 && Vector3.Distance(transform.position, _spawnPosition) > minDistance)
+            if (Vector3.Distance(transform.position, _spawnPosition) > minDistance)
             {
-                // boom
-                Explode();
+                // only explode when hitting target, map or floor
+                bool hasHit = false;
+                if (_target)
+                {
+                    foreach (var hit in hitColliders)
+                    {
+                        if (hit.gameObject.layer == _target.layer || 
+                            hit.gameObject.layer == LayerMask.GetMask("Map") ||
+                            hit.gameObject.layer == LayerMask.GetMask("Terrain"))
+                        {
+                            hasHit = true;
+                        }
+                    }
+                }
+                else
+                {
+                    // if target has been destroyed explode either way
+                    hasHit = true;
+                }
+                
+
+                if (hasHit)
+                {
+                    // boom
+                    Explode();
+                }
             }
         }
         else if(!_isPaused)
