@@ -25,4 +25,4 @@
 ### Download
 
 Go to the download section on our itch.io page [(here)](https://my-maker.itch.io/city-defender#download) and download the verion for your operating system.
-Unzip and run `City Defender.exe`
+Unzip and run `City Defender.exe` to play the game.
