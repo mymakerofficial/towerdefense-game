@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemySpawnerController : MonoBehaviour
 {
@@ -9,9 +10,9 @@ public class EnemySpawnerController : MonoBehaviour
     private int _count;
     private GameObject _gameDirector;
 
+    
     [Space]
-    [Space]
-    public GameObject parrent; // game ogject to instatiate enemy in
+    [FormerlySerializedAs("parrent")] public GameObject parent; // game object to instatiate enemy in
     
     [Header("Spawn")]
     public GameObject enemyObject; // game object to instantiate
@@ -38,23 +39,27 @@ public class EnemySpawnerController : MonoBehaviour
             
         if (_active)
         {
+            // timer for cooldown
             if (_cooldown > 0)
             {
                 _cooldown -= Time.fixedDeltaTime;
             }
             else
             {
+                // spawn enemy when timer is at 0
                 SpawnEnemy();
                 _cooldown = interval;
                 _count++;
             }
         
+            // stop when spawn amount has been reached
             if (_count >= amount && !infiniteAmount) _active = false;
         }
         else
         {
             _count = 0;
 
+            // wait for start delay
             if (_cooldown >= 0)
             {
                 _cooldown -= Time.fixedDeltaTime;
@@ -69,6 +74,6 @@ public class EnemySpawnerController : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        Instantiate(enemyObject, transform.position, transform.rotation, parrent.transform);
+        Instantiate(enemyObject, transform.position, transform.rotation, parent.transform);
     }
 }

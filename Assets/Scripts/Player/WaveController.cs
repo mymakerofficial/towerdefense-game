@@ -125,7 +125,7 @@ public class WaveController : MonoBehaviour
         controller.interval = enemy.interval;
         controller.startDelay = enemy.startDelay;
         controller.amount = enemy.amount;
-        controller.parrent = enemyParent;
+        controller.parent = enemyParent;
 
         return obj;
     }
