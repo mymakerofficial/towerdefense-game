@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class StrongholdDisplayController : MonoBehaviour
@@ -22,7 +23,7 @@ public class StrongholdDisplayController : MonoBehaviour
     public GameObject warnGradient;
     
     [Header("Config")] 
-    public int warninAmount;
+    [FormerlySerializedAs("warninAmount")] public int warningAmount;
     public float blinkInterval;
     public float blinkEasing;
     
@@ -30,17 +31,20 @@ public class StrongholdDisplayController : MonoBehaviour
     {
         _strongholdController = GameObject.Find("Stronghold").GetComponent<StrongholdController>();
         _txt = text.GetComponent<Text>();
-        _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a;
+        _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a;// save original alpha
     }
     
     void FixedUpdate()
     {
         int value = _strongholdController.Health;
         
+        // set text
         _txt.text = value.ToString();
 
+        // if value is max reset last value
         if (value == _strongholdController.fullHealth) _lastValue = _strongholdController.fullHealth;
 
+        // blink once if value decreased
         if (value < _lastValue && value < _strongholdController.fullHealth)
         {
             _blinkTemporary = true;
@@ -49,8 +53,10 @@ public class StrongholdDisplayController : MonoBehaviour
             _lastValue = value;
         }
 
-        if (value < warninAmount || (_blinkTemporary && _blinkState))
+        // blink if value is below warning amount or value changed
+        if (value < warningAmount || (_blinkTemporary && _blinkState))
         {
+            // changed blink state with timer
             if (_blinkTimer > 0)
             {
                 _blinkTimer -= Time.fixedDeltaTime;
@@ -62,6 +68,7 @@ public class StrongholdDisplayController : MonoBehaviour
             }
         }
 
+        // ease alpha value
         _blinkAlpha += ((_blinkState ? _blinkOriginalAlpha : 0) - _blinkAlpha) * blinkEasing;
         warnGradient.GetComponent<Image>().color = new Color(1, 1, 1, _blinkAlpha);
     }

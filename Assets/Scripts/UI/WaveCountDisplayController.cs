@@ -29,7 +29,7 @@ public class WaveCountDisplayController : MonoBehaviour
     {
         _gameState = GameObject.Find("GameDirector").GetComponent<GameStateController>();
         _txt = text.GetComponent<Text>();
-        _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a;
+        _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a; // save original alpha
     }
     
     void FixedUpdate()
@@ -38,8 +38,10 @@ public class WaveCountDisplayController : MonoBehaviour
         
         _txt.text = value.ToString();
 
+        // reset last value when value is 0
         if (value == 0) _lastValue = 0;
 
+        // blink if value increased
         if (value > _lastValue)
         {
             _blinkTemporary = true;
@@ -48,6 +50,7 @@ public class WaveCountDisplayController : MonoBehaviour
             _lastValue = value;
         }
 
+        // stay on for time
         if (_blinkTemporary && _blinkState)
         {
             if (_blinkTimer > 0)
@@ -61,6 +64,7 @@ public class WaveCountDisplayController : MonoBehaviour
             }
         }
 
+        // ease alpha value
         _blinkAlpha += ((_blinkState ? _blinkOriginalAlpha : 0) - _blinkAlpha) * blinkEasing;
         warnGradient.GetComponent<Image>().color = new Color(1, 1, 1, _blinkAlpha);
     }

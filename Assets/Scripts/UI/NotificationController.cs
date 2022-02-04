@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/* Notifications are deprecated */
+
 public class NotificationController : MonoBehaviour
 {
     private float _timer;
