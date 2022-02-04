@@ -47,7 +47,7 @@ public class TowerPlacementController : MonoBehaviour
         _controls.Editor.Next.performed += _ => Next();
         _controls.Editor.Back.performed += _ => Back();
         
-        // create circle
+        // create circles
         _circle = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PlacementCircle"), gameObject.transform);
         _circle.GetComponent<Renderer>().material.SetTexture("_MainTex", circleOutline);
         _circle.SetActive(false);
@@ -86,12 +86,15 @@ public class TowerPlacementController : MonoBehaviour
         
         if (_placement.tower.GetComponent<TowerDescriptor>())
         {
+            // set placement radius circle
             float scale = _placement.tower.GetComponent<TowerDescriptor>().placementRadius * 100;
             _circle.transform.localScale = new Vector3(scale, scale, scale);
             _circle.SetActive(true);
         }
+        
         if (_placement.tower.GetComponent<TurretController>())
         {
+            // set range circle if turret range exists
             float scale = _placement.tower.GetComponent<TurretController>().range * 100;
             _circleRange.transform.localScale = new Vector3(scale, scale, scale);
             _circleRange.SetActive(true);
@@ -133,9 +136,9 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void Next()
     {
-        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return; // dont go to next step if game is paused
         
-        if(!_placement.available || _mode == PlacementMode.Idle) return;
+        if(!_placement.available || _mode == PlacementMode.Idle) return; // dont go to next step if placement is not available or placement is idle 
         
         _mode++; // next step
 
@@ -153,7 +156,7 @@ public class TowerPlacementController : MonoBehaviour
     /// </summary>
     private void Back()
     {
-        if (_gameDirector.GetComponent<GameStateController>().Paused) return;
+        if (_gameDirector.GetComponent<GameStateController>().Paused) return; // dont go back if game is paused
         
         if(_mode != 0) _mode--; // previous step
 
@@ -167,9 +170,14 @@ public class TowerPlacementController : MonoBehaviour
     {
         long requiredCredits = _placement.tower.GetComponent<TowerDescriptor>().cost;
 
-        if (GameObject.Find("GameDirector").GetComponent<CreditController>().CurrentCredits >= requiredCredits)
+        if (GameObject.Find("GameDirector").GetComponent<CreditController>().CheckSufficientCredits(requiredCredits))
         {
-            GameObject.Find("GameDirector").GetComponent<CreditController>().WithdrawCredit(requiredCredits, CreditTransactionType.TowerBought, CharacterClassifier.FromTower(_placement.tower.GetComponent<TowerDescriptor>()));
+            // withdraw credits
+            GameObject.Find("GameDirector").GetComponent<CreditController>().WithdrawCredit(
+                requiredCredits, 
+                CreditTransactionType.TowerBought, 
+                CharacterClassifier.FromTower(_placement.tower.GetComponent<TowerDescriptor>())
+            );
             
             // Create real object
             Instantiate(_placement.tower, _placement.position, _placement.rotation, parrent.transform);
@@ -229,19 +237,21 @@ public class TowerPlacementController : MonoBehaviour
         
         Vector3? pos = RaycastCursorPosition();
         
-        if(pos == null) _placement.available = false;
+        if(pos == null) _placement.available = false; // placement is invalid if no mouse position is found
 
-        _placement.position = pos != null ? (Vector3)pos : new Vector3(0, 0, 100); 
+        _placement.position = pos != null ? (Vector3)pos : new Vector3(0, 0, 100); // set placement position if available. if no position is found set to value outside of screen
             
         // check if position is to close to other towers
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower"); // get every tower in the scene
 
-        if (GameObject.Find("GameDirector").GetComponent<CreditController>().CurrentCredits <
-            _placement.tower.GetComponent<TowerDescriptor>().cost)
+        // check player has enough money
+        if (!GameObject.Find("GameDirector").GetComponent<CreditController>()
+            .CheckSufficientCredits(_placement.tower.GetComponent<TowerDescriptor>().cost))
         {
             _placement.available = false;
         }
 
+        // check for collision with other towers
         foreach (GameObject tower in towers)
         {
             float distance =  Vector3.Distance(tower.transform.position, _placement.position);
@@ -302,7 +312,7 @@ public class TowerPlacementController : MonoBehaviour
     {
         Vector3? hitPoint = RaycastCursorPosition();
 
-        if (hitPoint == null)
+        if (hitPoint == null) // if no mouse position is found set rotation to default and stop
         {
             _placement.rotation = Quaternion.Euler(Vector3.zero);
             _dummy.transform.rotation = _placement.rotation;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class WaveController : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class WaveController : MonoBehaviour
     public List<Wave> waves;
 
     [Header("Spawners")] 
-    public GameObject spawnerParrent;
-    public GameObject enemyParrent;
+    [FormerlySerializedAs("spawnerParrent")] public GameObject spawnerParent;
+    [FormerlySerializedAs("enemyParrent")] public GameObject enemyParent;
     [Space]
     public Vector3 spawnerPosition;
     public Vector3 spawnerRotation;
@@ -29,6 +30,9 @@ public class WaveController : MonoBehaviour
     public int CurrentWaveIndex => _currentWaveIndex;
     public int CurrentSectionIndex => _currentSectionIndex;
 
+    /// <summary>
+    /// Reset all values and delete old spawners
+    /// </summary>
     public void Reset()
     {
         _currentWaveIndex = 0;
@@ -93,11 +97,11 @@ public class WaveController : MonoBehaviour
 
     void DeleteOldSpawners()
     {
-        Transform[] oldSpawners = spawnerParrent.GetComponentsInChildren<Transform>(); // get all spawners
+        Transform[] oldSpawners = spawnerParent.GetComponentsInChildren<Transform>(); // get all spawners
 
         foreach (var spawner in oldSpawners)
         {
-            if (spawner.gameObject == spawnerParrent) continue; // dont delete parrent
+            if (spawner.gameObject == spawnerParent) continue; // dont delete parent
             
             Destroy(spawner.gameObject);
         }
@@ -108,7 +112,7 @@ public class WaveController : MonoBehaviour
         GameObject obj = new GameObject(); // create gameobject
         
         // setup gameobject
-        obj.transform.SetParent(spawnerParrent.transform);
+        obj.transform.SetParent(spawnerParent.transform);
         obj.transform.position = spawnerPosition;
         obj.transform.rotation = Quaternion.Euler(spawnerRotation);
         obj.name = $"EnemySpawner ({enemy.enemy.GetComponent<EnemyDescriptor>().name})";
@@ -121,14 +125,14 @@ public class WaveController : MonoBehaviour
         controller.interval = enemy.interval;
         controller.startDelay = enemy.startDelay;
         controller.amount = enemy.amount;
-        controller.parrent = enemyParrent;
+        controller.parent = enemyParent;
 
         return obj;
     }
 
     private void FixedUpdate()
     {
-        if (!_active || gameDirector.GetComponent<GameStateController>().Paused) return;
+        if (!_active || gameDirector.GetComponent<GameStateController>().Paused) return; // dont continue timer when game is paused
 
         // timer for sections
         if (_sectionTimer > 0)
@@ -137,6 +141,7 @@ public class WaveController : MonoBehaviour
         }
         else
         {
+            // start next section when timer is at 0
             StartSection(_currentSectionIndex + 1);
         }
     }

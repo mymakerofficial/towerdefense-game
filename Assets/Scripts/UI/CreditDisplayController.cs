@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CreditDisplayController : MonoBehaviour
@@ -18,7 +19,7 @@ public class CreditDisplayController : MonoBehaviour
     public GameObject warnGradient;
     
     [Header("Config")] 
-    public int warninAmount;
+    [FormerlySerializedAs("warninAmount")] public int warningAmount;
     public float blinkInterval;
     public float blinkEasing;
     
@@ -26,24 +27,28 @@ public class CreditDisplayController : MonoBehaviour
     {
         _creditController = GameObject.Find("GameDirector").GetComponent<CreditController>();
         _txt = text.GetComponent<Text>();
-        _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a;
+        _blinkOriginalAlpha = warnGradient.GetComponent<Image>().color.a; // save original alpha
     }
     
     void FixedUpdate()
     {
         int value = (int)_creditController.CurrentCredits;
         
+        // set text
         _txt.text = value.ToString();
         
-        if (value >= warninAmount)
+        if (value >= warningAmount)
         {
+            // hide gradient
             warnGradient.SetActive(false);
             warnGradient.GetComponent<Image>().color = new Color(1, 1, 1, 0);
         }
         else
         {
+            // show gradient
             warnGradient.SetActive(true);
                     
+            // blink state with timer
             if (_blinkTimer > 0)
             {
                 _blinkTimer -= Time.fixedDeltaTime;
@@ -54,6 +59,7 @@ public class CreditDisplayController : MonoBehaviour
                 _blinkTimer = blinkInterval;
             }
 
+            // ease alpha value
             _blinkAlpha += ((_blinkState ? _blinkOriginalAlpha : 0) - _blinkAlpha) * blinkEasing;
             warnGradient.GetComponent<Image>().color = new Color(1, 1, 1, _blinkAlpha);
         }

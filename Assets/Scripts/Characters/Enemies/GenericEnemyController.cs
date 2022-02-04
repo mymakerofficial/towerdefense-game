@@ -66,7 +66,7 @@ public class GenericEnemyController : MonoBehaviour
         {
             _activeMovementTarget = closestMove;
             
-            // calculate position infront of target with stop distance
+            // calculate position in front of target with stop distance
             Vector3 dif = transform.position - _activeMovementTarget.transform.position;
             Vector3 targetPos = _activeMovementTarget.transform.position + dif.normalized * stopDistance;
 
@@ -75,7 +75,7 @@ public class GenericEnemyController : MonoBehaviour
         }
         else
         {
-            // move towars next checkpoint by default
+            // move towards next checkpoint by default
             _activeMovementTarget = NextCheckpoint();
             
             _agent.destination = _activeMovementTarget.transform.position;
@@ -93,20 +93,24 @@ public class GenericEnemyController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// find next checkpoint from current position
+    /// </summary>
+    /// <returns>next checkpoint</returns>
     private GameObject NextCheckpoint()
     {
         List<GameObject> checkpoints = GameObject.FindGameObjectsWithTag("Checkpoint").ToList();
 
         checkpoints.Add(_stronghold);
 
-        
         GameObject top = null;
         float topValue = Single.MaxValue;
         foreach (var checkpoint in checkpoints)
         {
             float distanceToSelf = Vector3.Distance(transform.position, checkpoint.transform.position);
             float distanceToStronghold = Vector3.Distance(checkpoint.transform.position, _stronghold.transform.position);
-
+            
+            // checkpoint with the highest value is the next checkpoint
             float value = distanceToSelf + distanceToStronghold / 1.5f; // 1.5 = random value that where i found out it works
             
             if (distanceToSelf < 3)
@@ -125,11 +129,14 @@ public class GenericEnemyController : MonoBehaviour
         return top;
     }
 
+    /// <summary>
+    /// finds closest target
+    /// </summary>
+    /// <param name="checkForCompletePath">checks for clear line of sight to target</param>
+    /// <returns>closest tower</returns>
     private GameObject FindClosest(bool checkForCompletePath)
     {
         List<GameObject> targets = GameObject.FindGameObjectsWithTag("Tower").ToList();
-
-        //targets.Add(_stronghold); // add stronghold so it gets attacked when closest
 
         bool success = false;
         GameObject closest = null;
@@ -144,7 +151,7 @@ public class GenericEnemyController : MonoBehaviour
 
             if (checkForCompletePath)
             {
-                if (distance > stopDistance) // no need to check if its gonna stop anyways
+                if (distance > stopDistance) // no need to check for clear line of sight if its gonna stop anyways
                 {
                     RaycastHit hit;
                     if(Physics.Raycast(transform.position, target.transform.position - transform.position,out hit))
@@ -177,9 +184,11 @@ public class GenericEnemyController : MonoBehaviour
         {
             if (_activeAttackTarget != null)
             {
+                // check if target is still in range
                 if (Vector3.Distance(transform.position, _activeAttackTarget.transform.position) > attackRange)
                     _activeAttackTarget = null;
            
+                // cooldown for attack
                 if (_cooldown > 0)
                 {
                     _cooldown -= Time.fixedDeltaTime;
@@ -193,18 +202,23 @@ public class GenericEnemyController : MonoBehaviour
             // set head rotation
             if (head != null)
             {
+                // calculate head rotation
                 float rotation = headRotationDefault;
                 if (_activeMovementTarget != null) rotation = 
                     GeneralMath.AngleTowardsPoint2D(head.transform.position, _activeMovementTarget.transform.position);
                 if (_activeAttackTarget != null)
                     rotation = GeneralMath.AngleTowardsPoint2D(head.transform.position,
                         _activeAttackTarget.transform.position);
+                // ease head rotation
                 _headRotation += (rotation - _headRotation) / 10;
+                // set head rotation
                 head.transform.rotation = Quaternion.Euler(headRotationOffset.x + (rotateAxis == Axis.X ? _headRotation : 0), headRotationOffset.y + (rotateAxis == Axis.Y ? _headRotation : 0), headRotationOffset.z + (rotateAxis == Axis.Z ? _headRotation : 0));
             }
 
+            // TODO this throws errors for some reason... it works tho?
             if(_agent.isStopped)
             {
+                // unpause agent
                 _agent.Resume();
                 _pausedVelocity = _agent.velocity;
             }
@@ -213,6 +227,7 @@ public class GenericEnemyController : MonoBehaviour
         {
             if(!_agent.isStopped)
             {
+                // pause agent
                 _pausedVelocity = _agent.velocity;
                 _agent.Stop();
                 _agent.velocity = Vector3.zero;
@@ -231,38 +246,33 @@ public class GenericEnemyController : MonoBehaviour
         {
             float angle = GeneralMath.AngleTowardsPoint2D(transform.position, _activeAttackTarget.transform.position);
             
-            GameObject bullet = Instantiate(
+            // instantiate fire game object
+            GameObject obj = Instantiate(
                 fireGameObject, 
                 transform.position + fireOffset, 
                 Quaternion.Euler(0, angle + 90, 0), 
                 GameObject.Find("Bullets").transform
             );
             
+            // call fire method on fired object
             switch (fireCallOptions)
             {
                 case FireCallOptions.CallFire:
-                    bullet.SendMessage("Fire");
+                    obj.SendMessage("Fire");
                     break;
                 case FireCallOptions.SendTarget:
-                    bullet.SendMessage("Fire", _activeAttackTarget);
+                    obj.SendMessage("Fire", _activeAttackTarget);
                     break;
             }
         }
 
+        // you know what... i think you know what this does...
         if (selfDestructOnAttack)
         {
-            CommitDie();
+            Destroy(gameObject);
         }
     }
 
-    /// <summary>
-    /// you know what... i think you know what this does...
-    /// </summary>
-    private void CommitDie()
-    {
-        Destroy(gameObject);
-    }
-    
     void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;

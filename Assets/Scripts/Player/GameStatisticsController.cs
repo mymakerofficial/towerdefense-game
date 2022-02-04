@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class CharacterClassifier
 {
+    /// <summary>
+    /// If character is either tower or enemy
+    /// </summary>
     public CharacterFaction ?Faction { get; }
     public string Name { get; }
     public int Level { get; }
@@ -17,12 +20,22 @@ public class CharacterClassifier
         Level = level;
     }
 
+    /// <summary>
+    /// Returns CharacterClassifier from EnemyDescriptor
+    /// </summary>
+    /// <param name="descriptor">EnemyDescriptor to generate CharacterClassifier from</param>
+    /// <returns>new CharacterClassifier</returns>
     public static CharacterClassifier FromEnemy(EnemyDescriptor descriptor)
     {
         if (descriptor == null) return null;
         return new CharacterClassifier(CharacterFaction.Enemy, descriptor.name);
     }
     
+    /// <summary>
+    /// Returns CharacterClassifier from TowerDescriptor
+    /// </summary>
+    /// <param name="descriptor">TowerDescriptor to generate CharacterClassifier from</param>
+    /// <returns>new CharacterClassifier</returns>
     public static CharacterClassifier FromTower(TowerDescriptor descriptor)
     {
         if (descriptor == null) return null;
@@ -113,6 +126,9 @@ public class GameStatisticsController : MonoBehaviour
         _wavesSurvived = 0;
     }
 
+    /// <summary>
+    /// Reset all values
+    /// </summary>
     public void Reset() => Start();
 
     public void ReportCreditTransaction(float amount, CreditTransactionType type, CharacterClassifier classifier)
@@ -150,21 +166,29 @@ public class GameStatisticsController : MonoBehaviour
 
             if (creditTransaction.Type == CreditTransactionType.TowerBought)
             {
+                // count credits spend on tower
                 creditsSpend += -creditTransaction.Amount;
                 
+                // count tower bought
                 towersBought++;
             }
             else if (creditTransaction.Type == CreditTransactionType.TowerSold)
             {
+                // tower sales dont count towards credits earned
+                
+                // count tower sold
                 towersSold++;
             }
             else if (creditTransaction.Type == CreditTransactionType.TowerUpgrade)
             {
+                // count credits spend on tower upgrades
                 creditsSpend += -creditTransaction.Amount;
                 
+                // count tower upgrade
                 towersUpgraded++;
             }else if (creditTransaction.Type == CreditTransactionType.EnemyDamage)
             {
+                // count credits earned from enemy damage
                 creditsEarned += creditTransaction.Amount;
             }
         }
@@ -173,14 +197,18 @@ public class GameStatisticsController : MonoBehaviour
         {
             if (damageTransaction.ItemClassification.Faction == CharacterFaction.Enemy)
             {
+                // count damage dealt to enemies
                 damageToEnemies += damageTransaction.Amount;
 
+                // count enemies destroyed
                 if (damageTransaction.Fatal) enemiesDestroyed++;
             }
             else
             {
+                // count damage dealt to towers
                 damageToTowers += damageTransaction.Amount;
                 
+                // count tower destroyed
                 if (damageTransaction.Fatal) towersDestroyed++;
             }
         }
@@ -212,6 +240,9 @@ public class GameStatisticsController : MonoBehaviour
         ShowStats();
     }
 
+    /// <summary>
+    /// Set values on Ui
+    /// </summary>
     void ShowStats()
     {
         creditsSpendUiElement.GetComponent<Text>().text = $"{_creditsSpend}c";

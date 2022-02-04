@@ -46,20 +46,22 @@ public class TurretController : MonoBehaviour
 
     public void Attack()
     {
-        GameObject bullet = Instantiate(
+        // instantiate fire game object
+        GameObject obj = Instantiate(
             fireGameObject, 
             transform.position + fireOffset, 
             Quaternion.Euler(0, GeneralMath.AngleTowardsPoint2D(transform.position, _target.transform.position) + 90, 0), 
             GameObject.Find("Bullets").transform
         );
         
+        // call fire method on fire object
         switch (fireCallOptions)
         {
             case FireCallOptions.CallFire:
-                bullet.SendMessage("Fire");
+                obj.SendMessage("Fire");
                 break;
             case FireCallOptions.SendTarget:
-                bullet.SendMessage("Fire", _target);
+                obj.SendMessage("Fire", _target);
                 break;
         }
     }
@@ -81,7 +83,11 @@ public class TurretController : MonoBehaviour
     
         if (_target != null && head != null)
         {
-            _headRotation += (GeneralMath.AngleTowardsPoint2D(head.transform.position, _target.transform.position) - _headRotation) / 10;
+            // calculate head rotation
+            float rotation = GeneralMath.AngleTowardsPoint2D(head.transform.position, _target.transform.position);
+            // ease head rotation
+            _headRotation += (rotation - _headRotation) / 10;
+            // set head rotation
             head.transform.rotation = Quaternion.Euler(headRotationOffset.x + (rotateAxis == Axis.X ? _headRotation : 0), headRotationOffset.y + (rotateAxis == Axis.Y ? _headRotation : 0), headRotationOffset.z + (rotateAxis == Axis.Z ? _headRotation : 0));
         }
     }
@@ -92,7 +98,7 @@ public class TurretController : MonoBehaviour
     }
 
     /// <summary>
-    /// Rotate to closest enemy
+    /// finds closest enemy
     /// </summary>
     public GameObject FindClosest()
     {
