@@ -16,7 +16,7 @@ public class ExplosionController : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
         foreach (var hitCollider in hitColliders)
         {
-            GameObject obj = hitCollider.gameObject; // get gameobject from collider
+            GameObject obj = hitCollider.gameObject; // get game object from collider
 
             if (dealDamageTo.Contains(obj.tag)) // check if tag is in list of tags to apply damage to
             {
@@ -27,6 +27,10 @@ public class ExplosionController : MonoBehaviour
         StartCoroutine(DestroyAfterTime());
     }
 
+    /// <summary>
+    /// Destroy this game object after 3 seconds to let particle animation play
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DestroyAfterTime()
     {
         yield return new WaitForSeconds(3);

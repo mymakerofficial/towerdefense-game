@@ -38,7 +38,7 @@ public class BulletController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(_gameDirector.GetComponent<GameStateController>().Paused) return;
+        if(_gameDirector.GetComponent<GameStateController>().Paused) return; // dont do anything when game is paused
         
         // dont do anything when not active
         if(!_active) return;
@@ -49,7 +49,7 @@ public class BulletController : MonoBehaviour
         // hitscan bullets travel entire distance in one frame
         if (isHitscan) stepDistance = maxTravelDistance;
         
-        // raycast between current possition and next position
+        // raycast between current position and next position
         RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward, stepDistance);
         
         
@@ -90,6 +90,10 @@ public class BulletController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destroy this game object after 3 seconds to let particle animation play
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DestroyAfterTime()
     {
         travelVelocity = 0;
